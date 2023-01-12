@@ -13,12 +13,12 @@ Why pool and reuse libcurl handles? Doing so enables reusing Keep-Alive connecti
 Curly is intended for use in multi-threaded HTTP servers like [Mummy](https://github.com/guzba/mummy).
 
 ```nim
-let curlPool = newCurlPool(3)
+let curl = newCurlPool(3)
 
-curlPool.withHandle curl:
-  let response = curl.get("https://www.google.com")
-  doAssert response.code == 200
-  doAssert response.body.len > 0
+# This call borrows a libcurl handle from the pool to make the request
+let response = curl.get("https://www.google.com")
+doAssert response.code == 200
+doAssert response.body.len > 0
 ```
 
 Check out the [examples/](https://github.com/guzba/curly/tree/master/examples) folder for examples using Curly.

@@ -189,3 +189,52 @@ proc delete*(
   timeout: float32 = 60
 ): Response =
   curl.makeRequest("DELETE", url, headers, "", timeout)
+
+proc get*(
+  pool: CurlPool,
+  url: string,
+  headers = emptyHttpHeaders(),
+  timeout: float32 = 60
+): Response =
+  pool.withHandle curl:
+    result = curl.makeRequest("GET", url, headers, "", timeout)
+
+proc post*(
+  pool: CurlPool,
+  url: string,
+  headers = emptyHttpHeaders(),
+  body: sink string = "",
+  timeout: float32 = 60
+): Response =
+  pool.withHandle curl:
+    result = curl.makeRequest("POST", url, headers, body, timeout)
+
+proc put*(
+  pool: CurlPool,
+  url: string,
+  headers = emptyHttpHeaders(),
+  body: sink string = "",
+  timeout: float32 = 60
+): Response =
+  pool.withHandle curl:
+    result = curl.makeRequest("PUT", url, headers, body, timeout)
+
+proc patch*(
+  pool: CurlPool,
+  url: string,
+  verb: string,
+  headers = emptyHttpHeaders(),
+  body: sink string = "",
+  timeout: float32 = 60
+): Response =
+  pool.withHandle curl:
+    result = curl.makeRequest("PATCH", url, headers, body, timeout)
+
+proc delete*(
+  pool: CurlPool,
+  url: string,
+  headers = emptyHttpHeaders(),
+  timeout: float32 = 60
+): Response =
+  pool.withHandle curl:
+    result = curl.makeRequest("DELETE", url, headers, "", timeout)

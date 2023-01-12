@@ -7,12 +7,11 @@ import mummy, mummy/routers, curly
 ## Using a pool of handles here means we can take advantage of Keep-Alive,
 ## reusing the connection instead of always opening a new one.
 
-let curlPool = newCurlPool(3)
+let curl = newCurlPool(3)
 
 proc handler(request: Request) =
-  curlPool.withHandle curl:
-    let response = curl.get("https://www.google.com")
-    request.respond(200, emptyHttpHeaders(), $response.body.len)
+  let response = curl.get("https://www.google.com")
+  request.respond(200, emptyHttpHeaders(), $response.body.len)
 
 var router: Router
 router.get("/", handler)
