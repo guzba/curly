@@ -1,6 +1,6 @@
 version     = "0.1.0"
 author      = "Ryan Oldenburg"
-description = "Reuse libcurl handles"
+description = "Makes using libcurl efficiently easy"
 license     = "MIT"
 
 srcDir = "src"
