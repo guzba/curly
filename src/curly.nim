@@ -111,7 +111,9 @@ proc makeRequest*(
 
   discard curl.easy_setopt(OPT_HTTPHEADER, headerList)
 
-  if verb.toUpperAscii() == "POST" or body.len > 0:
+  if verb.toUpperAscii() == "HEAD":
+    discard curl.easy_setopt(OPT_NOBODY, 1)
+  elif verb.toUpperAscii() == "POST" or body.len > 0:
     discard curl.easy_setopt(OPT_POSTFIELDSIZE, body.len)
     discard curl.easy_setopt(OPT_POSTFIELDS, body.cstring)
 
@@ -190,6 +192,14 @@ proc delete*(
 ): Response =
   curl.makeRequest("DELETE", url, headers, "", timeout)
 
+proc head*(
+  curl: PCurl,
+  url: string,
+  headers = emptyHttpHeaders(),
+  timeout: float32 = 60
+): Response =
+  curl.makeRequest("HEAD", url, headers, "", timeout)
+
 proc get*(
   pool: CurlPool,
   url: string,
@@ -238,3 +248,12 @@ proc delete*(
 ): Response =
   pool.withHandle curl:
     result = curl.makeRequest("DELETE", url, headers, "", timeout)
+
+proc head*(
+  pool: CurlPool,
+  url: string,
+  headers = emptyHttpHeaders(),
+  timeout: float32 = 60
+): Response =
+  pool.withHandle curl:
+    result = curl.makeRequest("HEAD", url, headers, "", timeout)
