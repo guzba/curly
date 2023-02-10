@@ -61,6 +61,10 @@ proc borrow*(pool: CurlPool): PCurl {.inline, raises: [], gcsafe.} =
   withLock pool.createdLock:
     created = pool.created.getOrDefault(result)
   if epochTime() - created > 10 * 60:
+    # TMP
+    echo "Curl handle refresh"
+    withLock pool.createdLock:
+      pool.created.del(result)
     result.easy_cleanup()
     result = pool.makeHandle()
 
