@@ -1,4 +1,4 @@
-import waterpark, libcurl, std/sequtils, std/strutils, webby, zippy, std/locks, std/tables, std/times
+import waterpark, libcurl, std/sequtils, std/strutils, webby, zippy, std/locks, std/tables, std/times, std/random
 
 block:
   let ret = global_init(GLOBAL_DEFAULT)
@@ -10,6 +10,7 @@ type
     pool: Pool[PCurl]
     created: Table[PCurl, float]
     createdLock: Lock
+    r: Rand
 
   CurlPool* = ptr CurlPoolObj
 
@@ -57,12 +58,11 @@ proc newCurlPool*(size: int): CurlPool =
 
 proc borrow*(pool: CurlPool): PCurl {.inline, raises: [], gcsafe.} =
   result = pool.pool.borrow()
-  var created: float
+  var created, slop: float
   withLock pool.createdLock:
     created = pool.created.getOrDefault(result)
-  if epochTime() - created > 10 * 60:
-    # TMP
-    echo "Curl handle refresh"
+    slop = pool.r.rand(10.0 .. 60.0)
+  if epochTime() - created > 10 * 60 - slop:
     withLock pool.createdLock:
       pool.created.del(result)
     result.easy_cleanup()
