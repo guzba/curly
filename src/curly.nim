@@ -131,7 +131,7 @@ proc makeRequest*(
   try:
     let
       ret = curl.easy_perform()
-      headerData = headerWrap.str
+      headerData = move headerWrap.str
     if ret == E_OK:
       var httpCode: uint32
       discard curl.easy_getinfo(INFO_RESPONSE_CODE, httpCode.addr)
@@ -140,7 +140,7 @@ proc makeRequest*(
         let arr = headerLine.split(":", 1)
         if arr.len == 2:
           result.headers.add((arr[0].strip(), arr[1].strip()))
-      result.body = bodyWrap.str
+      result.body = move bodyWrap.str
       if result.headers["Content-Encoding"] == "gzip":
         result.body = uncompress(result.body, dfGzip)
     else:
