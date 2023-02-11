@@ -61,8 +61,8 @@ proc borrow*(pool: CurlPool): PCurl {.inline, raises: [], gcsafe.} =
   var created, slop: float
   withLock pool.createdLock:
     created = pool.created.getOrDefault(result)
-    slop = pool.r.rand(10.0 .. 60.0)
-  if epochTime() - created > 10 * 60 - slop:
+    slop = pool.r.rand(10.0 .. 120.0)
+  if epochTime() - created > 15 * 60 - slop:
     withLock pool.createdLock:
       pool.created.del(result)
     result.easy_cleanup()
