@@ -79,6 +79,23 @@ template withHandle*(pool: CurlPool, handle, body) =
     finally:
       pool.recycle(handle)
 
+{.push stackTrace: off.}
+
+proc curlWriteFn(
+  buffer: cstring,
+  size: int,
+  count: int,
+  outstream: pointer
+): int {.cdecl.} =
+  let
+    outbuf = cast[ptr StringWrap](outstream)
+    i = outbuf.str.len
+  outbuf.str.setLen(outbuf.str.len + count)
+  copyMem(outbuf.str[i].addr, buffer, count)
+  result = size * count
+
+{.pop.}
+
 proc makeRequest*(
   curl: PCurl,
   verb: string,
@@ -87,24 +104,6 @@ proc makeRequest*(
   body: sink string = "",
   timeout: float32 = 60
 ): Response =
-
-  {.push stackTrace: off.}
-
-  proc curlWriteFn(
-    buffer: cstring,
-    size: int,
-    count: int,
-    outstream: pointer
-  ): int {.cdecl.} =
-    let
-      outbuf = cast[ptr StringWrap](outstream)
-      i = outbuf.str.len
-    outbuf.str.setLen(outbuf.str.len + count)
-    copyMem(outbuf.str[i].addr, buffer, count)
-    result = size * count
-
-  {.pop.}
-
   var strings: seq[string]
   strings.add url
   strings.add verb.toUpperAscii()
@@ -151,14 +150,15 @@ proc makeRequest*(
   discard curl.easy_setopt(OPT_MAXREDIRS, 10)
 
   try:
-    let
-      ret = curl.easy_perform()
-      headerData = move headerWrap.str
+    let ret = curl.easy_perform()
     if ret == E_OK:
+      let tmp = allocShared0(4) # SIGSEGV on Mac with -d:release, punning issue?
+      discard curl.easy_getinfo(INFO_RESPONSE_CODE, tmp)
       var httpCode: uint32
-      discard curl.easy_getinfo(INFO_RESPONSE_CODE, httpCode.addr)
+      copyMem(httpCode.addr, tmp, 4)
+      deallocShared(tmp)
       result.code = httpCode.int
-      for headerLine in headerData.split("\r\n"):
+      for headerLine in headerWrap.str.split("\r\n"):
         let arr = headerLine.split(":", 1)
         if arr.len == 2:
           result.headers.add((arr[0].strip(), arr[1].strip()))
