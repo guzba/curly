@@ -1,4 +1,4 @@
-import waterpark, libcurl, std/sequtils, std/strutils, webby, zippy, std/locks, std/tables, std/times, std/random
+import waterpark, libcurl, std/sequtils, std/strutils, webby, zippy
 
 block:
   let ret = global_init(GLOBAL_DEFAULT)
@@ -6,13 +6,8 @@ block:
     raise newException(Defect, $easy_strerror(ret))
 
 type
-  CurlPoolObj = object
+  CurlPool* = object
     pool: Pool[PCurl]
-    created: Table[PCurl, float]
-    createdLock: Lock
-    r: Rand
-
-  CurlPool* = ptr CurlPoolObj
 
   Response* = object
     code*: int
@@ -32,23 +27,15 @@ proc close*(pool: CurlPool) =
     entry.easy_cleanup()
     pool.pool.delete(entry)
   pool.pool.close()
-  `=destroy`(pool[])
-  deallocShared(pool)
-
-proc makeHandle(pool: CurlPool): PCurl =
-  result = easy_init()
-  withLock pool.createdLock:
-    pool.created[result] = epochTime()
 
 proc newCurlPool*(size: int): CurlPool =
   ## Creates a new thead-safe pool of libcurl handles.
   if size <= 0:
     raise newException(CatchableError, "Invalid pool size")
-  result = cast[CurlPool](allocShared0(sizeof(CurlPoolObj)))
   result.pool = newPool[PCurl]()
   try:
     for _ in 0 ..< size:
-      result.pool.recycle(result.makeHandle())
+      result.pool.recycle(easy_init())
   except:
     try:
       result.close()
@@ -57,16 +44,7 @@ proc newCurlPool*(size: int): CurlPool =
     raise getCurrentException()
 
 proc borrow*(pool: CurlPool): PCurl {.inline, raises: [], gcsafe.} =
-  result = pool.pool.borrow()
-  var created, slop: float
-  withLock pool.createdLock:
-    created = pool.created.getOrDefault(result)
-    slop = pool.r.rand(60.0 .. 600.0) # 1 to 10 minutes
-  if epochTime() - created > (60 * 60) - slop: # Around every hour
-    withLock pool.createdLock:
-      pool.created.del(result)
-    result.easy_cleanup()
-    result = pool.makeHandle()
+  pool.pool.borrow()
 
 proc recycle*(pool: CurlPool, handle: PCurl) {.inline, raises: [], gcsafe.} =
   pool.pool.recycle(handle)
