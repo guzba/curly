@@ -61,8 +61,8 @@ proc borrow*(pool: CurlPool): PCurl {.inline, raises: [], gcsafe.} =
   var created, slop: float
   withLock pool.createdLock:
     created = pool.created.getOrDefault(result)
-    slop = pool.r.rand(10.0 .. 120.0)
-  if epochTime() - created > 15 * 60 - slop:
+    slop = pool.r.rand(60.0 .. 600.0) # 1 to 10 minutes
+  if epochTime() - created > (60 * 60) - slop: # Around every hour
     withLock pool.createdLock:
       pool.created.del(result)
     result.easy_cleanup()
@@ -152,7 +152,8 @@ proc makeRequest*(
   try:
     let ret = curl.easy_perform()
     if ret == E_OK:
-      let tmp = allocShared0(4) # SIGSEGV on Mac with -d:release, punning issue?
+      # This avoids a SIGSEGV on Mac with -d:release and a memory leak on Linux
+      let tmp = allocShared0(4)
       discard curl.easy_getinfo(INFO_RESPONSE_CODE, tmp)
       var httpCode: uint32
       copyMem(httpCode.addr, tmp, 4)
