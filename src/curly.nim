@@ -178,7 +178,6 @@ proc put*(
 proc patch*(
   curl: PCurl,
   url: string,
-  verb: string,
   headers = emptyHttpHeaders(),
   body: sink string = "",
   timeout: float32 = 60
@@ -233,7 +232,6 @@ proc put*(
 proc patch*(
   pool: CurlPool,
   url: string,
-  verb: string,
   headers = emptyHttpHeaders(),
   body: sink string = "",
   timeout: float32 = 60
