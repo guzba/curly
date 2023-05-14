@@ -1,0 +1,20 @@
+CurlPool	curly.html#CurlPool	curly: CurlPool	
+Response	curly.html#Response	curly: Response	
+close	curly.html#close,CurlPool	curly: close(pool: CurlPool)	
+newCurlPool	curly.html#newCurlPool,int	curly: newCurlPool(size: int): CurlPool	
+borrow	curly.html#borrow,CurlPool	curly: borrow(pool: CurlPool): PCurl	
+recycle	curly.html#recycle,CurlPool,PCurl	curly: recycle(pool: CurlPool; handle: PCurl)	
+withHandle	curly.html#withHandle.t,CurlPool,,	curly: withHandle(pool: CurlPool; handle, body)	
+makeRequest	curly.html#makeRequest,PCurl,string,string,sinkstring,float32	curly: makeRequest(curl: PCurl; verb: string; url: string;\n            headers = emptyHttpHeaders(); body: sink string = &quot;&quot;;\n            timeout: float32 = 60): Response	
+get	curly.html#get,PCurl,string,float32	curly: get(curl: PCurl; url: string; headers = emptyHttpHeaders();\n    timeout: float32 = 60): Response	
+post	curly.html#post,PCurl,string,sinkstring,float32	curly: post(curl: PCurl; url: string; headers = emptyHttpHeaders();\n     body: sink string = &quot;&quot;; timeout: float32 = 60): Response	
+put	curly.html#put,PCurl,string,sinkstring,float32	curly: put(curl: PCurl; url: string; headers = emptyHttpHeaders();\n    body: sink string = &quot;&quot;; timeout: float32 = 60): Response	
+patch	curly.html#patch,PCurl,string,sinkstring,float32	curly: patch(curl: PCurl; url: string; headers = emptyHttpHeaders();\n      body: sink string = &quot;&quot;; timeout: float32 = 60): Response	
+delete	curly.html#delete,PCurl,string,float32	curly: delete(curl: PCurl; url: string; headers = emptyHttpHeaders();\n       timeout: float32 = 60): Response	
+head	curly.html#head,PCurl,string,float32	curly: head(curl: PCurl; url: string; headers = emptyHttpHeaders();\n     timeout: float32 = 60): Response	
+get	curly.html#get,CurlPool,string,float32	curly: get(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n    timeout: float32 = 60): Response	
+post	curly.html#post,CurlPool,string,sinkstring,float32	curly: post(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n     body: sink string = &quot;&quot;; timeout: float32 = 60): Response	
+put	curly.html#put,CurlPool,string,sinkstring,float32	curly: put(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n    body: sink string = &quot;&quot;; timeout: float32 = 60): Response	
+patch	curly.html#patch,CurlPool,string,sinkstring,float32	curly: patch(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n      body: sink string = &quot;&quot;; timeout: float32 = 60): Response	
+delete	curly.html#delete,CurlPool,string,float32	curly: delete(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n       timeout: float32 = 60): Response	
+head	curly.html#head,CurlPool,string,float32	curly: head(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n     timeout: float32 = 60): Response	
