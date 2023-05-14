@@ -4,7 +4,7 @@
 
 ![Github Actions](https://github.com/guzba/curly/workflows/Github%20Actions/badge.svg)
 
-[API reference](https://nimdocs.com/guzba/curly)
+[API reference](https://guzba.github.io/curly/)
 
 Curly makes pooling and reusing libcurl handles easy.
 
