@@ -1,5 +1,7 @@
 import waterpark, libcurl, std/sequtils, std/strutils, webby, zippy
 
+export webby
+
 block:
   let ret = global_init(GLOBAL_DEFAULT)
   if ret != E_OK:
