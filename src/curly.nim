@@ -81,7 +81,7 @@ proc makeRequest*(
   verb: string,
   url: string,
   headers = emptyHttpHeaders(),
-  body: sink string = "",
+  body: openarray[char] = "".toOpenArray(0, -1),
   timeout: float32 = 60
 ): Response =
   var strings: seq[string]
@@ -112,11 +112,12 @@ proc makeRequest*(
 
   discard curl.easy_setopt(OPT_HTTPHEADER, headerList)
 
-  if verb.toUpperAscii() == "HEAD":
+  if cmpIgnoreCase(verb, "HEAD") == 0:
     discard curl.easy_setopt(OPT_NOBODY, 1)
-  elif verb.toUpperAscii() == "POST" or body.len > 0:
+  elif cmpIgnoreCase(verb, "POST") == 0 or body.len > 0:
     discard curl.easy_setopt(OPT_POSTFIELDSIZE, body.len)
-    discard curl.easy_setopt(OPT_POSTFIELDS, body.cstring)
+    if body.len > 0:
+      discard curl.easy_setopt(OPT_POSTFIELDS, body[0].unsafeAddr)
 
   # Setup writers
   var headerWrap, bodyWrap: StringWrap
@@ -163,7 +164,7 @@ proc post*(
   curl: PCurl,
   url: string,
   headers = emptyHttpHeaders(),
-  body: sink string = "",
+  body: openarray[char] = "".toOpenArray(0, -1),
   timeout: float32 = 60
 ): Response =
   curl.makeRequest("POST", url, headers, body, timeout)
@@ -172,7 +173,7 @@ proc put*(
   curl: PCurl,
   url: string,
   headers = emptyHttpHeaders(),
-  body: sink string = "",
+  body: openarray[char] = "".toOpenArray(0, -1),
   timeout: float32 = 60
 ): Response =
   curl.makeRequest("PUT", url, headers, body, timeout)
@@ -181,7 +182,7 @@ proc patch*(
   curl: PCurl,
   url: string,
   headers = emptyHttpHeaders(),
-  body: sink string = "",
+  body: openarray[char] = "".toOpenArray(0, -1),
   timeout: float32 = 60
 ): Response =
   curl.makeRequest("PATCH", url, headers, body, timeout)
@@ -215,7 +216,7 @@ proc post*(
   pool: CurlPool,
   url: string,
   headers = emptyHttpHeaders(),
-  body: sink string = "",
+  body: openarray[char] = "".toOpenArray(0, -1),
   timeout: float32 = 60
 ): Response =
   pool.withHandle curl:
@@ -225,7 +226,7 @@ proc put*(
   pool: CurlPool,
   url: string,
   headers = emptyHttpHeaders(),
-  body: sink string = "",
+  body: openarray[char] = "".toOpenArray(0, -1),
   timeout: float32 = 60
 ): Response =
   pool.withHandle curl:
@@ -235,7 +236,7 @@ proc patch*(
   pool: CurlPool,
   url: string,
   headers = emptyHttpHeaders(),
-  body: sink string = "",
+  body: openarray[char] = "".toOpenArray(0, -1),
   timeout: float32 = 60
 ): Response =
   pool.withHandle curl:
