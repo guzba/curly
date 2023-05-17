@@ -116,17 +116,9 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="makeRequest" href="#makeRequest"><span>makeRequest:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="curly: makeRequest(curl: PCurl; verb: string; url: string;
-            headers = emptyHttpHeaders();
-            body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1);
-            timeout: float32 = 60): Response" href="curly.html#makeRequest%2CPCurl%2Cstring%2Cstring%2CopenArray%5Bbyte%5D%2Cfloat32">curly: makeRequest(curl: PCurl; verb: string; url: string;
-            headers = emptyHttpHeaders();
-            body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1);
-            timeout: float32 = 60): Response</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="curly: makeRequest(curl: PCurl; verb: string; url: string;
-            headers = emptyHttpHeaders(); body: string = &quot;&quot;;
-            timeout: float32 = 60): Response" href="curly.html#makeRequest%2CPCurl%2Cstring%2Cstring%2Cstring%2Cfloat32">curly: makeRequest(curl: PCurl; verb: string; url: string;
-            headers = emptyHttpHeaders(); body: string = &quot;&quot;;
+            headers = emptyHttpHeaders(); body: sink string = &quot;&quot;;
+            timeout: float32 = 60): Response" href="curly.html#makeRequest%2CPCurl%2Cstring%2Cstring%2Csinkstring%2Cfloat32">curly: makeRequest(curl: PCurl; verb: string; url: string;
+            headers = emptyHttpHeaders(); body: sink string = &quot;&quot;;
             timeout: float32 = 60): Response</a></li>
           </ul></dd>
 <dt><a name="newCurlPool" href="#newCurlPool"><span>newCurlPool:</span></a></dt><dd><ul class="simple">
@@ -136,56 +128,32 @@ window.addEventListener('DOMContentLoaded', main);
 <dt><a name="patch" href="#patch"><span>patch:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="curly: patch(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-      body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response" href="curly.html#patch%2CCurlPool%2Cstring%2CopenArray%5Bbyte%5D%2Cfloat32">curly: patch(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-      body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="curly: patch(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-      body: string = &quot;&quot;; timeout: float32 = 60): Response" href="curly.html#patch%2CCurlPool%2Cstring%2Cstring%2Cfloat32">curly: patch(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-      body: string = &quot;&quot;; timeout: float32 = 60): Response</a></li>
+      body: sink string = &quot;&quot;; timeout: float32 = 60): Response" href="curly.html#patch%2CCurlPool%2Cstring%2Csinkstring%2Cfloat32">curly: patch(pool: CurlPool; url: string; headers = emptyHttpHeaders();
+      body: sink string = &quot;&quot;; timeout: float32 = 60): Response</a></li>
           <li><a class="reference external"
           data-doc-search-tag="curly: patch(curl: PCurl; url: string; headers = emptyHttpHeaders();
-      body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response" href="curly.html#patch%2CPCurl%2Cstring%2CopenArray%5Bbyte%5D%2Cfloat32">curly: patch(curl: PCurl; url: string; headers = emptyHttpHeaders();
-      body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="curly: patch(curl: PCurl; url: string; headers = emptyHttpHeaders(); body: string = &quot;&quot;;
-      timeout: float32 = 60): Response" href="curly.html#patch%2CPCurl%2Cstring%2Cstring%2Cfloat32">curly: patch(curl: PCurl; url: string; headers = emptyHttpHeaders(); body: string = &quot;&quot;;
-      timeout: float32 = 60): Response</a></li>
+      body: sink string = &quot;&quot;; timeout: float32 = 60): Response" href="curly.html#patch%2CPCurl%2Cstring%2Csinkstring%2Cfloat32">curly: patch(curl: PCurl; url: string; headers = emptyHttpHeaders();
+      body: sink string = &quot;&quot;; timeout: float32 = 60): Response</a></li>
           </ul></dd>
 <dt><a name="post" href="#post"><span>post:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="curly: post(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-     body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response" href="curly.html#post%2CCurlPool%2Cstring%2CopenArray%5Bbyte%5D%2Cfloat32">curly: post(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-     body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="curly: post(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-     body: string = &quot;&quot;; timeout: float32 = 60): Response" href="curly.html#post%2CCurlPool%2Cstring%2Cstring%2Cfloat32">curly: post(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-     body: string = &quot;&quot;; timeout: float32 = 60): Response</a></li>
+     body: sink string = &quot;&quot;; timeout: float32 = 60): Response" href="curly.html#post%2CCurlPool%2Cstring%2Csinkstring%2Cfloat32">curly: post(pool: CurlPool; url: string; headers = emptyHttpHeaders();
+     body: sink string = &quot;&quot;; timeout: float32 = 60): Response</a></li>
           <li><a class="reference external"
           data-doc-search-tag="curly: post(curl: PCurl; url: string; headers = emptyHttpHeaders();
-     body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response" href="curly.html#post%2CPCurl%2Cstring%2CopenArray%5Bbyte%5D%2Cfloat32">curly: post(curl: PCurl; url: string; headers = emptyHttpHeaders();
-     body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="curly: post(curl: PCurl; url: string; headers = emptyHttpHeaders(); body: string = &quot;&quot;;
-     timeout: float32 = 60): Response" href="curly.html#post%2CPCurl%2Cstring%2Cstring%2Cfloat32">curly: post(curl: PCurl; url: string; headers = emptyHttpHeaders(); body: string = &quot;&quot;;
-     timeout: float32 = 60): Response</a></li>
+     body: sink string = &quot;&quot;; timeout: float32 = 60): Response" href="curly.html#post%2CPCurl%2Cstring%2Csinkstring%2Cfloat32">curly: post(curl: PCurl; url: string; headers = emptyHttpHeaders();
+     body: sink string = &quot;&quot;; timeout: float32 = 60): Response</a></li>
           </ul></dd>
 <dt><a name="put" href="#put"><span>put:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="curly: put(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-    body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response" href="curly.html#put%2CCurlPool%2Cstring%2CopenArray%5Bbyte%5D%2Cfloat32">curly: put(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-    body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="curly: put(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-    body: string = &quot;&quot;; timeout: float32 = 60): Response" href="curly.html#put%2CCurlPool%2Cstring%2Cstring%2Cfloat32">curly: put(pool: CurlPool; url: string; headers = emptyHttpHeaders();
-    body: string = &quot;&quot;; timeout: float32 = 60): Response</a></li>
+    body: sink string = &quot;&quot;; timeout: float32 = 60): Response" href="curly.html#put%2CCurlPool%2Cstring%2Csinkstring%2Cfloat32">curly: put(pool: CurlPool; url: string; headers = emptyHttpHeaders();
+    body: sink string = &quot;&quot;; timeout: float32 = 60): Response</a></li>
           <li><a class="reference external"
           data-doc-search-tag="curly: put(curl: PCurl; url: string; headers = emptyHttpHeaders();
-    body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response" href="curly.html#put%2CPCurl%2Cstring%2CopenArray%5Bbyte%5D%2Cfloat32">curly: put(curl: PCurl; url: string; headers = emptyHttpHeaders();
-    body: openArray[byte] = &quot;&quot;.toOpenArrayByte(0, -1); timeout: float32 = 60): Response</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="curly: put(curl: PCurl; url: string; headers = emptyHttpHeaders(); body: string = &quot;&quot;;
-    timeout: float32 = 60): Response" href="curly.html#put%2CPCurl%2Cstring%2Cstring%2Cfloat32">curly: put(curl: PCurl; url: string; headers = emptyHttpHeaders(); body: string = &quot;&quot;;
-    timeout: float32 = 60): Response</a></li>
+    body: sink string = &quot;&quot;; timeout: float32 = 60): Response" href="curly.html#put%2CPCurl%2Cstring%2Csinkstring%2Cfloat32">curly: put(curl: PCurl; url: string; headers = emptyHttpHeaders();
+    body: sink string = &quot;&quot;; timeout: float32 = 60): Response</a></li>
           </ul></dd>
 <dt><a name="recycle" href="#recycle"><span>recycle:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -204,7 +172,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-17 20:17:51 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-05-17 20:19:03 UTC</small>
       </div>
     </div>
   </div>
