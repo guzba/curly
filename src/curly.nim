@@ -1,6 +1,6 @@
-import waterpark, libcurl, std/sequtils, std/strutils, webby, zippy
+import waterpark, libcurl, std/sequtils, std/strutils, webby/httpheaders, zippy
 
-export webby
+export httpheaders
 
 block:
   let ret = global_init(GLOBAL_DEFAULT)
