@@ -1,4 +1,4 @@
-version     = "0.1.9"
+version     = "0.1.10"
 author      = "Ryan Oldenburg"
 description = "Makes using libcurl efficiently easy"
 license     = "MIT"
