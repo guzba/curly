@@ -148,7 +148,8 @@ proc makeRequest*(
       if result.headers["Content-Encoding"] == "gzip":
         result.body = uncompress(result.body, dfGzip)
     else:
-      raise newException(CatchableError, $easy_strerror(ret))
+      let msg = $easy_strerror(ret) & " " & verb & " " & url
+      raise newException(CatchableError, msg)
   finally:
     curl.easy_reset()
 
