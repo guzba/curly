@@ -36,6 +36,9 @@ proc close*(pool: CurlPool) =
   deallocShared(pool)
 
 proc borrow*(pool: CurlPool): PCurl {.inline, raises: [], gcsafe.} =
+  ## Removes a libcurl handle from the pool. This call blocks until it can take
+  ## a handle. Remember to add the handle back to the pool with recycle
+  ## when you're finished with it.
   acquire(pool.lock)
   while pool.handles.len == 0:
     wait(pool.cond, pool.lock)
@@ -43,6 +46,7 @@ proc borrow*(pool: CurlPool): PCurl {.inline, raises: [], gcsafe.} =
   release(pool.lock)
 
 proc recycle*(pool: CurlPool, handle: PCurl) {.inline, raises: [], gcsafe.} =
+  ## Returns a libcurl handle to the pool.
   withLock pool.lock:
     pool.handles.add(handle)
     pool.r.shuffle(pool.handles)
