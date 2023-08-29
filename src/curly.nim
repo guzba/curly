@@ -1,4 +1,4 @@
-import waterpark, libcurl, std/sequtils, std/strutils, webby/httpheaders, zippy
+import libcurl, std/strutils, std/locks, std/random, webby/httpheaders, zippy
 
 export httpheaders
 
@@ -8,8 +8,13 @@ block:
     raise newException(Defect, $easy_strerror(ret))
 
 type
-  CurlPool* = object
-    pool: Pool[PCurl]
+  CurlPoolObj = object
+    handles: seq[PCurl]
+    lock: Lock
+    cond: Cond
+    r: Rand
+
+  CurlPool* = ptr CurlPoolObj
 
   Response* = object
     code*: int
@@ -24,32 +29,49 @@ type
 proc close*(pool: CurlPool) =
   ## Closes the libcurl handles then deallocates the pool.
   ## All libcurl handles should be returned to the pool before it is closed.
-  let entries = toSeq(pool.pool.items)
-  for entry in entries:
-    entry.easy_cleanup()
-    pool.pool.delete(entry)
-  pool.pool.close()
+  withLock pool.lock:
+    for entry in pool.handles:
+      easy_cleanup(entry)
+  `=destroy`(pool[])
+  deallocShared(pool)
+
+proc borrow*(pool: CurlPool): PCurl {.inline, raises: [], gcsafe.} =
+  ## Removes a libcurl handle from the pool. This call blocks until it can take
+  ## a handle. Remember to add the handle back to the pool with recycle
+  ## when you're finished with it.
+  acquire(pool.lock)
+  while pool.handles.len == 0:
+    wait(pool.cond, pool.lock)
+  result = pool.handles.pop()
+  release(pool.lock)
+
+proc recycle*(pool: CurlPool, handle: PCurl) {.inline, raises: [], gcsafe.} =
+  ## Returns a libcurl handle to the pool.
+  withLock pool.lock:
+    pool.handles.add(handle)
+    pool.r.shuffle(pool.handles)
+  signal(pool.cond)
 
 proc newCurlPool*(size: int): CurlPool =
   ## Creates a new thead-safe pool of libcurl handles.
   if size <= 0:
     raise newException(CatchableError, "Invalid pool size")
-  result.pool = newPool[PCurl]()
+  # result.pool = newPool[PCurl]()
+
+  result = cast[CurlPool](allocShared0(sizeof(CurlPoolObj)))
+  initLock(result.lock)
+  initCond(result.cond)
+  result.r = initRand(2023)
+
   try:
     for _ in 0 ..< size:
-      result.pool.recycle(easy_init())
+      result.recycle(easy_init())
   except:
     try:
       result.close()
     except:
       discard
     raise getCurrentException()
-
-proc borrow*(pool: CurlPool): PCurl {.inline, raises: [], gcsafe.} =
-  pool.pool.borrow()
-
-proc recycle*(pool: CurlPool, handle: PCurl) {.inline, raises: [], gcsafe.} =
-  pool.pool.recycle(handle)
 
 template withHandle*(pool: CurlPool, handle, body) =
   block:
