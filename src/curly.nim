@@ -7,6 +7,10 @@ block:
   if ret != E_OK:
     raise newException(Defect, $easy_strerror(ret))
 
+  let data = version_info(VERSION_NOW)
+  if (data.features and VERSION_ASYNCHDNS) == 0:
+    echo "Curly warning: libcurl does not have CURL_VERSION_ASYNCHDNS bit set"
+
 type
   CurlPoolObj = object
     handles: seq[PCurl]
@@ -151,6 +155,9 @@ proc makeRequest*(
   # Follow up to 10 redirects
   discard curl.easy_setopt(OPT_FOLLOWLOCATION, 1)
   discard curl.easy_setopt(OPT_MAXREDIRS, 10)
+
+  # https://curl.se/libcurl/c/threadsafe.html
+  discard curl.easy_setopt(OPT_NOSIGNAL, 1)
 
   try:
     let ret = curl.easy_perform()
