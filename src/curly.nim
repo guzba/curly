@@ -358,7 +358,7 @@ when defined(curlyPrototype):
       cond: Cond
       count: int
 
-    WaitGroup* = ptr WaitGroupObj
+    WaitGroup = ptr WaitGroupObj
 
     RequestObj = object
       verb: string
@@ -441,8 +441,6 @@ when defined(curlyPrototype):
         # Set CURLOPT_PIPEWAIT
         discard easyHandle.easy_setopt(cast[libcurl.Option](237), 1)
 
-        for (k, v) in request.headers:
-          request.headerStringsForLibcurl.add k & ": " & v
         # Create the Pslist for passing headers to curl manually. This is to
         # avoid needing to call slist_free_all which creates problems
         for i, header in request.headers:
@@ -600,6 +598,9 @@ when defined(curlyPrototype):
       request.bodyLen = body.len
     request.timeout = timeout
     request.waitGroup = newWaitGroup(1)
+
+    for (k, v) in request.headers:
+      request.headerStringsForLibcurl.add k & ": " & v
 
     withLock curl.queueLock:
       curl.queue.addLast(request)
