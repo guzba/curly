@@ -1,6 +1,32 @@
-import libcurl, std/strutils, std/locks, std/posix, std/random, webby/httpheaders, zippy
+when not defined(gcArc) and not defined(gcOrc):
+  {.error: "Using --mm:arc or --mm:orc is required by Curly.".}
+
+when not compileOption("threads"):
+  {.error: "Using --threads:on is required by Curly.".}
+
+import libcurl, std/strutils, std/locks, std/posix, std/random, webby/httpheaders,
+    zippy, std/deques, std/tables
 
 export httpheaders
+
+when defined(windows):
+  const
+    libname = "libcurl.dll"
+elif defined(macosx):
+  const
+    libname = "libcurl(|.4).dylib"
+elif defined(unix):
+  const
+    libname = "libcurl.so(|.4)"
+
+proc multi_poll*(
+  multi_handle: PM,
+  extra_fds: pointer,
+  extra_nfds: uint32,
+  timeout_ms: int32,
+  numfds: var int32
+): Mcode
+  {.cdecl, dynlib: libname, importc: "curl_multi_poll".}
 
 block:
   let ret = global_init(GLOBAL_DEFAULT)
@@ -192,8 +218,10 @@ proc makeRequest*(
       if result.headers["Content-Encoding"] == "gzip":
         result.body = uncompress(result.body, dfGzip)
     else:
-      let msg = $easy_strerror(ret) & " " & verb & " " & url
-      raise newException(CatchableError, msg)
+      raise newException(
+        CatchableError,
+        $easy_strerror(ret) & ' ' & verb & ' ' & url
+      )
   finally:
     curl.easy_reset()
 
@@ -322,3 +350,338 @@ proc head*(
 ): Response =
   pool.withHandle curl:
     result = curl.makeRequest("HEAD", url, headers, "", timeout)
+
+when defined(curlyPrototype):
+  type
+    WaitGroupObj = object
+      lock: Lock
+      cond: Cond
+      count: int
+
+    WaitGroup* = ptr WaitGroupObj
+
+    RequestObj = object
+      verb: string
+      url: string
+      headers: HttpHeaders
+      body: string
+      timeout: int
+      waitGroup: WaitGroup
+      headerStringsForLibcurl: seq[string]
+      slistsForLibcurl: seq[Slist]
+      responseBodyForLibcurl: StringWrap
+      responseHeadersForLibcurl: StringWrap
+      response: Response
+      error: string
+
+    Request = ptr RequestObj
+
+    PrototypeObj* = object
+      queue: Deque[Request]
+      queueLock: Lock
+      queueCond: Cond
+      multiHandle: PM
+      availableEasyHandles: Deque[PCurl]
+      inFlight: Table[PCurl, Request]
+      thread: Thread[Prototype]
+
+    Prototype* = ptr PrototypeObj
+
+  proc newWaitGroup(count: int): WaitGroup =
+    result = cast[WaitGroup](allocShared0(sizeof(WaitGroupObj)))
+    result.count = count
+    initLock(result.lock)
+    initCond(result.cond)
+
+  proc wait(waitGroup: WaitGroup) =
+    acquire(waitGroup.lock)
+    while waitGroup.count > 0:
+      wait(waitGroup.cond, waitGroup.lock)
+    release(waitGroup.lock)
+
+  proc done(waitGroup: WaitGroup) =
+    var signalCond: bool
+    withLock waitGroup.lock:
+      dec waitGroup.count
+      signalCond = (waitGroup.count == 0)
+    if signalCond:
+      signal(waitGroup.cond)
+
+  proc threadProc(curl: Prototype) {.raises: [].} =
+    block: # Block SIGPIPE for this thread
+      var oldSet, empty: Sigset
+      discard sigemptyset(oldSet)
+      discard sigemptyset(empty)
+      discard pthread_sigmask(SIG_BLOCK, empty, oldSet) # Read current
+      var newSet = oldSet
+      discard sigaddset(newSet, SIGPIPE)
+      discard pthread_sigmask(SIG_BLOCK, newSet, oldSet) # Block SIGPIPE
+
+    var dequeued: seq[Request]
+    while true:
+      if curl.availableEasyHandles.len > 0:
+        withLock curl.queueLock:
+          {.gcsafe.}:
+            let
+              easyHandlesAvailable = curl.availableEasyHandles.len
+              entriesAvailable = curl.queue.len
+            for _ in 0 ..< min(easyHandlesAvailable, entriesAvailable):
+              dequeued.add(curl.queue.popFirst())
+
+      for request in dequeued:
+        let easyHandle = curl.availableEasyHandles.popFirst()
+
+        discard easyHandle.easy_setopt(OPT_URL, request.url.cstring)
+        discard easyHandle.easy_setopt(OPT_CUSTOMREQUEST, request.verb.cstring)
+        discard easyHandle.easy_setopt(OPT_TIMEOUT, request.timeout)
+
+        # Set CURLOPT_PIPEWAIT
+        discard easyHandle.easy_setopt(cast[libcurl.Option](237), 1)
+
+        for (k, v) in request.headers:
+          request.headerStringsForLibcurl.add k & ": " & v
+        # Create the Pslist for passing headers to curl manually. This is to
+        # avoid needing to call slist_free_all which creates problems
+        for i, header in request.headers:
+          request.slistsForLibcurl.add(
+            Slist(data: request.headerStringsForLibcurl[i].cstring, next: nil)
+          )
+        # Do this in two passes so the slists index addresses are stable
+        var headerList: Pslist
+        for i, header in request.headers:
+          if i == 0:
+            headerList = request.slistsForLibcurl[0].addr
+          else:
+            var tail = headerList
+            while tail.next != nil:
+              tail = tail.next
+            tail.next = request.slistsForLibcurl[i].addr
+        discard easyHandle.easy_setopt(OPT_HTTPHEADER, headerList)
+
+        if cmpIgnoreCase(request.verb, "HEAD") == 0:
+          discard easyHandle.easy_setopt(OPT_NOBODY, 1)
+        elif cmpIgnoreCase(request.verb, "POST") == 0 or request.body.len > 0:
+          discard easyHandle.easy_setopt(OPT_POSTFIELDSIZE, request.body.len)
+          if request.body.len > 0:
+            discard easyHandle.easy_setopt(OPT_POSTFIELDS, request.body.cstring)
+
+        # Follow up to 10 redirects
+        discard easyHandle.easy_setopt(OPT_FOLLOWLOCATION, 1)
+        discard easyHandle.easy_setopt(OPT_MAXREDIRS, 10)
+
+        # https://curl.se/libcurl/c/threadsafe.html
+        discard easyHandle.easy_setopt(OPT_NOSIGNAL, 1)
+
+        # Setup writers
+        discard easyHandle.easy_setopt(
+          OPT_WRITEDATA,
+          request.responseBodyForLibcurl.addr
+        )
+        discard easyHandle.easy_setopt(OPT_WRITEFUNCTION, curlWriteFn)
+        discard easyHandle.easy_setopt(
+          OPT_HEADERDATA,
+          request.responseHeadersForLibcurl.addr
+        )
+        discard easyHandle.easy_setopt(OPT_HEADERFUNCTION, curlWriteFn)
+
+        let mc = multi_add_handle(curl.multiHandle, easyHandle)
+        if mc == M_OK:
+          curl.inFlight[easyHandle] = request
+        else:
+          # Reset this easy_handle and add it back as available
+          easy_reset(easyHandle)
+          curl.availableEasyHandles.addLast(easyHandle)
+
+          # Set the error so an exception is raised
+          request.error = "Unexpected libcurl multi_add_handle error: " &
+            $mc & ' ' & $multi_strerror(mc)
+
+          request.waitGroup.done()
+
+      dequeued.setLen(0) # Reset for next loop
+
+      var
+        numRunningHandles: int32
+        mc = multi_perform(curl.multiHandle, numRunningHandles)
+      if mc == M_OK:
+        if numRunningHandles > 0:
+          var numFds: int32
+          mc = multi_poll(curl.multiHandle, nil, 0, timeout_ms = 1000, numFds)
+          if mc != M_OK:
+            # Is this fatal? When can this happen?
+            echo "Unexpected libcurl multi_poll error: ",
+              mc, ' ', multi_strerror(mc)
+      else:
+        # Is this fatal? When can this happen?
+        echo "Unexpected libcurl multi_perform error: ",
+          mc, ' ', multi_strerror(mc)
+
+      while true:
+        var msgsInQueue: int32
+        let m = multi_info_read(curl.multiHandle, msgsInQueue)
+        if m == nil:
+          break
+        if m.msg != MSG_DONE:
+          continue
+
+        let mc = multi_remove_handle(curl.multiHandle, m.easy_handle)
+        if mc != M_OK:
+          # This should never happen?
+          echo "Unexpected libcurl multi_remove_handle error: ",
+            mc, ' ', multi_strerror(mc)
+          continue
+
+        let request = curl.inFlight.getOrDefault(m.easy_handle, nil)
+        curl.inFlight.del(m.easy_handle)
+        if request == nil:
+          # This should never happen
+          echo "Unrecognized libcurl easy_handle from multi_info_read"
+          continue
+
+        # This request has completed
+        let code = cast[Code](m.whatever)
+        if code == E_OK:
+          # Avoid SIGSEGV on Mac with -d:release and a memory leak on Linux
+          let tmp = allocShared0(4)
+          discard m.easy_handle.easy_getinfo(INFO_RESPONSE_CODE, tmp)
+          var httpCode: uint32
+          copyMem(httpCode.addr, tmp, 4)
+          deallocShared(tmp)
+          request.response.code = httpCode.int
+          let
+            rawHeaders = move request.responseHeadersForLibcurl.str
+            headerLines = rawHeaders.split("\r\n")
+          for i, headerLine in headerLines:
+            if i == 0:
+              continue # Skip "HTTP/2 200" line
+            let parts = headerLine.split(":", 1)
+            if parts.len == 2:
+              request.response.headers.add((parts[0].strip(), parts[1].strip()))
+            else:
+              request.response.headers.add((parts[0].strip(), ""))
+          request.response.body = move request.responseBodyForLibcurl.str
+          if request.response.headers["Content-Encoding"] == "gzip":
+            try:
+              request.response.body = uncompress(request.response.body, dfGzip)
+            except:
+              # Set the error so an exception is raised
+              request.error = "Error uncompressing gzip'ed response body: " &
+                getCurrentExceptionMsg()
+        else:
+          request.error =
+            $easy_strerror(code) & ' ' & request.verb & ' ' & request.url
+
+        # Reset this easy_handle and add it back as available
+        easy_reset(m.easy_handle)
+        curl.availableEasyHandles.addLast(m.easy_handle)
+
+        request.waitGroup.done()
+
+      if numRunningHandles == 0:
+        # Sleep if there are no running handles and the queue is empty
+        {.gcsafe.}:
+          acquire(curl.queueLock)
+          while curl.queue.len == 0:
+            wait(curl.queueCond, curl.queueLock)
+          release(curl.queueLock)
+
+  proc newPrototype*(maxInFlight = 16): Prototype =
+    result = cast[Prototype](allocShared0(sizeof(PrototypeObj)))
+    initLock(result.queueLock)
+    initCond(result.queueCond)
+    result.multiHandle = multi_init()
+    if multi_setopt(
+      result.multiHandle,
+      cast[MOption](3), # CURLMOPT_PIPELINING
+      2 # CURLPIPE_MULTIPLEX
+    ) != M_OK:
+      raise newException(CatchableError, "Error setting CURLMOPT_PIPELINING")
+    for i in 0 ..< maxInFlight:
+      result.availableEasyHandles.addLast(easy_init())
+    createThread(result.thread, threadProc, result)
+
+  proc makeRequest(
+    curl: Prototype,
+    verb: sink string,
+    url: sink string,
+    headers: sink HttpHeaders,
+    body: sink string,
+    timeout: int
+  ): Response =
+    let request = cast[Request](allocShared0(sizeof(RequestObj)))
+    request.verb = move verb
+    request.url = move url
+    request.headers = move headers
+    request.body = move body
+    request.timeout = timeout
+    request.waitGroup = newWaitGroup(1)
+
+    withLock curl.queueLock:
+      curl.queue.addLast(request)
+    curl.queueCond.signal()
+
+    request.waitGroup.wait()
+
+    try:
+      if request.error == "":
+        result = move request.response
+      else:
+        raise newException(CatchableError, move request.error)
+    finally:
+      deinitLock(request.waitGroup.lock)
+      deinitCond(request.waitGroup.cond)
+      `=destroy`(request.waitGroup[])
+      deallocShared(request.waitGroup)
+      `=destroy`(request[])
+      deallocShared(request)
+
+  proc get*(
+    curl: Prototype,
+    url: sink string,
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    timeout = 60
+  ): Response =
+    curl.makeRequest("GET", url, headers, "", timeout)
+
+  proc post*(
+    curl: Prototype,
+    url: string,
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    body: sink string = "",
+    timeout = 60
+  ): Response =
+    curl.makeRequest("POST", url, headers, body, timeout)
+
+  proc put*(
+    curl: Prototype,
+    url: string,
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    body: sink string = "",
+    timeout = 60
+  ): Response =
+    curl.makeRequest("PUT", url, headers, body, timeout)
+
+  proc patch*(
+    curl: Prototype,
+    url: string,
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    body: sink string = "",
+    timeout = 60
+  ): Response =
+    curl.makeRequest("PATCH", url, headers, body, timeout)
+
+  proc delete*(
+    curl: Prototype,
+    url: string,
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    timeout = 60
+  ): Response =
+    curl.makeRequest("DELETE", url, headers, "", timeout)
+
+  proc head*(
+    curl: Prototype,
+    url: string,
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    timeout = 60
+  ): Response =
+    curl.makeRequest("HEAD", url, headers, "", timeout)
