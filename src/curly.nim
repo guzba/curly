@@ -595,6 +595,10 @@ when defined(curlyPrototype):
     requests: seq[Request],
     timeout = 60
   ): seq[tuple[response: Response, error: string]] {.gcsafe.} =
+    ## Make multiple HTTP requests in parallel. This proc blocks until
+    ## all requests have either received a response or are unable to complete.
+    ## The return value seq is in the same order as the parameter requests seq.
+
     if requests.len == 0:
       return
 
