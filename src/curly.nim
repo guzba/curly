@@ -110,6 +110,19 @@ proc curlWriteFn(
 
 {.pop.}
 
+proc addHeaders(dst: var HttpHeaders, src: string) =
+  let headerLines = src.split("\r\n")
+  for i, headerLine in headerLines:
+    if i == 0:
+      continue # Skip "HTTP/2 200" line
+    if headerLine == "":
+      continue
+    let parts = headerLine.split(":", 1)
+    if parts.len == 2:
+      dst.add((parts[0].strip(), parts[1].strip()))
+    else:
+      dst.add((parts[0].strip(), ""))
+
 proc makeRequest*(
   curl: PCurl,
   verb: string,
@@ -192,10 +205,7 @@ proc makeRequest*(
       copyMem(httpCode.addr, tmp, 4)
       deallocShared(tmp)
       result.code = httpCode.int
-      for headerLine in headerWrap.str.split("\r\n"):
-        let arr = headerLine.split(":", 1)
-        if arr.len == 2:
-          result.headers.add((arr[0].strip(), arr[1].strip()))
+      addHeaders(result.headers, headerWrap.str)
       result.body = move bodyWrap.str
       if result.headers["Content-Encoding"] == "gzip":
         result.body = uncompress(result.body, dfGzip)
@@ -635,19 +645,7 @@ when defined(curlyPrototype):
     for rw in wrapped:
       if rw.error == "":
         var response = move rw.response
-        let
-          rawHeaders = move rw.responseHeadersForLibcurl.str
-          headerLines = rawHeaders.split("\r\n")
-        for i, headerLine in headerLines:
-          if i == 0:
-            continue # Skip "HTTP/2 200" line
-          if headerLine == "":
-            continue
-          let parts = headerLine.split(":", 1)
-          if parts.len == 2:
-            response.headers.add((parts[0].strip(), parts[1].strip()))
-          else:
-            response.headers.add((parts[0].strip(), ""))
+        addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
         response.body = move rw.responseBodyForLibcurl.str
         if response.headers["Content-Encoding"] == "gzip":
           response.body = uncompress(response.body, dfGzip)
@@ -694,19 +692,7 @@ when defined(curlyPrototype):
     try:
       if rw.error == "":
         result = move rw.response
-        let
-          rawHeaders = move rw.responseHeadersForLibcurl.str
-          headerLines = rawHeaders.split("\r\n")
-        for i, headerLine in headerLines:
-          if i == 0:
-            continue # Skip "HTTP/2 200" line
-          if headerLine == "":
-            continue
-          let parts = headerLine.split(":", 1)
-          if parts.len == 2:
-            result.headers.add((parts[0].strip(), parts[1].strip()))
-          else:
-            result.headers.add((parts[0].strip(), ""))
+        addHeaders(result.headers, rw.responseHeadersForLibcurl.str)
         result.body = move rw.responseBodyForLibcurl.str
         if result.headers["Content-Encoding"] == "gzip":
           result.body = uncompress(result.body, dfGzip)
