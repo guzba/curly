@@ -21,7 +21,10 @@ block:
 # block:
 #   let curl = newPrototype()
 
-#   let getResponse = curl.get("https://www.google.com")
+#   var headers: HttpHeaders
+#   headers["Accept-Encoding"] = "gzip"
+
+#   let getResponse = curl.get("https://www.google.com", headers)
 #   doAssert getResponse.code == 200
 #   doAssert getResponse.body.len > 0
 

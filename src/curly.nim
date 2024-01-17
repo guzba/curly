@@ -562,13 +562,6 @@ when defined(curlyPrototype):
             else:
               request.response.headers.add((parts[0].strip(), ""))
           request.response.body = move request.responseBodyForLibcurl.str
-          if request.response.headers["Content-Encoding"] == "gzip":
-            try:
-              request.response.body = uncompress(request.response.body, dfGzip)
-            except:
-              # Set the error so an exception is raised
-              request.error = "Error uncompressing gzip'ed response body: " &
-                getCurrentExceptionMsg()
         else:
           request.error =
             $easy_strerror(code) & ' ' & request.verb & ' ' & request.url
@@ -629,6 +622,8 @@ when defined(curlyPrototype):
     try:
       if request.error == "":
         result = move request.response
+        if result.headers["Content-Encoding"] == "gzip":
+          result.body = uncompress(result.body, dfGzip)
       else:
         raise newException(CatchableError, move request.error)
     finally:
