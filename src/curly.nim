@@ -353,14 +353,20 @@ proc head*(
 
 when defined(curlyPrototype):
   type
+    WaitGroupObj = object
+      lock: Lock
+      cond: Cond
+      count: int
+
+    WaitGroup* = ptr WaitGroupObj
+
     RequestObj = object
       verb: string
       url: string
       headers: HttpHeaders
       body: string
       timeout: int
-      lock: Lock
-      cond: Cond
+      waitGroup: WaitGroup
       headerStringsForLibcurl: seq[string]
       slistsForLibcurl: seq[Slist]
       responseBodyForLibcurl: StringWrap
@@ -380,6 +386,26 @@ when defined(curlyPrototype):
       thread: Thread[Prototype]
 
     Prototype* = ptr PrototypeObj
+
+  proc newWaitGroup(count: int): WaitGroup =
+    result = cast[WaitGroup](allocShared0(sizeof(WaitGroupObj)))
+    result.count = count
+    initLock(result.lock)
+    initCond(result.cond)
+
+  proc wait(waitGroup: WaitGroup) =
+    acquire(waitGroup.lock)
+    while waitGroup.count > 0:
+      wait(waitGroup.cond, waitGroup.lock)
+    release(waitGroup.lock)
+
+  proc done(waitGroup: WaitGroup) =
+    var signalCond: bool
+    withLock waitGroup.lock:
+      dec waitGroup.count
+      signalCond = (waitGroup.count == 0)
+    if signalCond:
+      signal(waitGroup.cond)
 
   proc threadProc(curl: Prototype) {.raises: [].} =
     block: # Block SIGPIPE for this thread
@@ -470,10 +496,7 @@ when defined(curlyPrototype):
           request.error = "Unexpected libcurl multi_add_handle error: " &
             $mc & ' ' & $multi_strerror(mc)
 
-          # Signal the thread waiting on this request
-          acquire(request.lock)
-          release(request.lock)
-          signal(request.cond)
+          request.waitGroup.done()
 
       dequeued.setLen(0) # Reset for next loop
 
@@ -552,10 +575,7 @@ when defined(curlyPrototype):
         easy_reset(m.easy_handle)
         curl.availableEasyHandles.addLast(m.easy_handle)
 
-        # Signal the thread waiting on this request
-        acquire(request.lock)
-        release(request.lock)
-        signal(request.cond)
+        request.waitGroup.done()
 
       if numRunningHandles == 0:
         # Sleep if there are no running handles and the queue is empty
@@ -594,17 +614,13 @@ when defined(curlyPrototype):
     request.headers = move headers
     request.body = move body
     request.timeout = timeout
-    initLock(request.lock)
-    initCond(request.cond)
-
-    acquire(request.lock)
+    request.waitGroup = newWaitGroup(1)
 
     withLock curl.queueLock:
       curl.queue.addLast(request)
     curl.queueCond.signal()
 
-    wait(request.cond, request.lock)
-    release(request.lock)
+    request.waitGroup.wait()
 
     try:
       if request.error == "":
@@ -612,8 +628,10 @@ when defined(curlyPrototype):
       else:
         raise newException(CatchableError, move request.error)
     finally:
-      deinitLock(request.lock)
-      deinitCond(request.cond)
+      deinitLock(request.waitGroup.lock)
+      deinitCond(request.waitGroup.cond)
+      `=destroy`(request.waitGroup[])
+      deallocShared(request.waitGroup)
       `=destroy`(request[])
       deallocShared(request)
 
