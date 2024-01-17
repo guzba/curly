@@ -550,18 +550,6 @@ when defined(curlyPrototype):
           var httpCode: uint32
           copyMem(httpCode.addr, fourBytes, 4)
           request.response.code = httpCode.int
-          let
-            rawHeaders = move request.responseHeadersForLibcurl.str
-            headerLines = rawHeaders.split("\r\n")
-          for i, headerLine in headerLines:
-            if i == 0:
-              continue # Skip "HTTP/2 200" line
-            let parts = headerLine.split(":", 1)
-            if parts.len == 2:
-              request.response.headers.add((parts[0].strip(), parts[1].strip()))
-            else:
-              request.response.headers.add((parts[0].strip(), ""))
-          request.response.body = move request.responseBodyForLibcurl.str
         else:
           request.error =
             $easy_strerror(code) & ' ' & request.verb & ' ' & request.url
@@ -622,6 +610,18 @@ when defined(curlyPrototype):
     try:
       if request.error == "":
         result = move request.response
+        let
+          rawHeaders = move request.responseHeadersForLibcurl.str
+          headerLines = rawHeaders.split("\r\n")
+        for i, headerLine in headerLines:
+          if i == 0:
+            continue # Skip "HTTP/2 200" line
+          let parts = headerLine.split(":", 1)
+          if parts.len == 2:
+            result.headers.add((parts[0].strip(), parts[1].strip()))
+          else:
+            result.headers.add((parts[0].strip(), ""))
+        result.body = move request.responseBodyForLibcurl.str
         if result.headers["Content-Encoding"] == "gzip":
           result.body = uncompress(result.body, dfGzip)
       else:
