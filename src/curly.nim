@@ -418,6 +418,8 @@ when defined(curlyPrototype):
       discard sigaddset(newSet, SIGPIPE)
       discard pthread_sigmask(SIG_BLOCK, newSet, oldSet) # Block SIGPIPE
 
+    let fourBytes = allocShared0(4)
+
     var dequeued: seq[Request]
     while true:
       if curl.availableEasyHandles.len > 0:
@@ -543,11 +545,10 @@ when defined(curlyPrototype):
         let code = cast[Code](m.whatever)
         if code == E_OK:
           # Avoid SIGSEGV on Mac with -d:release and a memory leak on Linux
-          let tmp = allocShared0(4)
-          discard m.easy_handle.easy_getinfo(INFO_RESPONSE_CODE, tmp)
+          zeroMem(fourBytes, 4)
+          discard m.easy_handle.easy_getinfo(INFO_RESPONSE_CODE, fourBytes)
           var httpCode: uint32
-          copyMem(httpCode.addr, tmp, 4)
-          deallocShared(tmp)
+          copyMem(httpCode.addr, fourBytes, 4)
           request.response.code = httpCode.int
           let
             rawHeaders = move request.responseHeadersForLibcurl.str
