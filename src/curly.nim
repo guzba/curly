@@ -398,12 +398,13 @@ when defined(curlyPrototype):
 
     PrototypeObj* = object
       queue: Deque[RequestWrap]
-      queueLock: Lock
-      queueCond: Cond
+      lock: Lock
+      cond: Cond
       multiHandle: PM
       availableEasyHandles: Deque[PCurl]
       inFlight: Table[PCurl, RequestWrap]
       thread: Thread[Prototype]
+      closeCalled: bool
 
     Prototype* = ptr PrototypeObj
 
@@ -442,7 +443,7 @@ when defined(curlyPrototype):
     var dequeued: seq[RequestWrap]
     while true:
       if curl.availableEasyHandles.len > 0:
-        withLock curl.queueLock:
+        withLock curl.lock:
           {.gcsafe.}:
             let
               easyHandlesAvailable = curl.availableEasyHandles.len
@@ -580,15 +581,20 @@ when defined(curlyPrototype):
       if numRunningHandles == 0:
         # Sleep if there are no running handles and the queue is empty
         {.gcsafe.}:
-          acquire(curl.queueLock)
-          while curl.queue.len == 0:
-            wait(curl.queueCond, curl.queueLock)
-          release(curl.queueLock)
+          acquire(curl.lock)
+          while curl.queue.len == 0 and not curl.closeCalled:
+            wait(curl.cond, curl.lock)
+          var closeCalled = curl.closeCalled
+          release(curl.lock)
+          # Close has been called and there are no running handles, break the
+          # loop and let this thread join.
+          if closeCalled:
+            break
 
   proc newPrototype*(maxInFlight = 16): Prototype =
     result = cast[Prototype](allocShared0(sizeof(PrototypeObj)))
-    initLock(result.queueLock)
-    initCond(result.queueCond)
+    initLock(result.lock)
+    initCond(result.cond)
     result.multiHandle = multi_init()
     if multi_setopt(
       result.multiHandle,
@@ -599,6 +605,20 @@ when defined(curlyPrototype):
     for i in 0 ..< maxInFlight:
       result.availableEasyHandles.addLast(easy_init())
     createThread(result.thread, threadProc, result)
+
+  proc close*(prototype: Prototype) =
+    withLock prototype.lock:
+      prototype.closeCalled = true
+    signal(prototype.cond)
+    joinThreads(prototype.thread)
+    deinitLock(prototype.lock)
+    deinitCond(prototype.cond)
+    while prototype.availableEasyHandles.len > 0:
+      let easyHandle = prototype.availableEasyHandles.popFirst()
+      easy_cleanup(easyHandle)
+    discard multi_cleanup(prototype.multiHandle)
+    `=destroy`(prototype[])
+    deallocShared(prototype)
 
   proc makeRequests*(
     curl: Prototype,
@@ -635,10 +655,10 @@ when defined(curlyPrototype):
 
       wrapped.add(rw)
 
-      withLock curl.queueLock:
+      withLock curl.lock:
         curl.queue.addLast(rw)
 
-    curl.queueCond.signal()
+    signal(curl.cond)
 
     waitGroup.wait()
 
@@ -683,9 +703,9 @@ when defined(curlyPrototype):
     for (k, v) in rw.headers:
       rw.headerStringsForLibcurl.add k & ": " & v
 
-    withLock curl.queueLock:
+    withLock curl.lock:
       curl.queue.addLast(rw)
-    curl.queueCond.signal()
+    signal(curl.cond)
 
     rw.waitGroup.wait()
 

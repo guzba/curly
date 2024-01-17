@@ -20,6 +20,8 @@ block:
   doAssertRaises CatchableError:
     echo curlPool.get(asdf)
 
+  curlPool.close()
+
 # block:
 #   let curl = newPrototype()
 
@@ -38,6 +40,8 @@ block:
 
 #   doAssertRaises CatchableError:
 #     discard curl.get(asdf)
+
+#   curl.close()
 
 # block:
 #   let curl = newPrototype()
@@ -73,3 +77,5 @@ block:
 
 #   # for (response, error) in x:
 #   #   discard
+
+#   curl.close()
