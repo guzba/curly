@@ -1,13 +1,33 @@
-import curly
+import curly, std/typetraits
 
-let curlPool = newCurlPool(3)
+const asdf = "https://eafeafaef.localhost.com"
 
-curlPool.withHandle curl:
-  let response = curl.get("https://www.google.com")
-  doAssert response.code == 200
-  doAssert response.body.len > 0
+block:
+  let curlPool = newCurlPool(3)
 
-curlPool.withHandle curl:
-  let response = curl.head("https://www.google.com")
-  doAssert response.code == 200
-  doAssert response.body.len == 0
+  curlPool.withHandle curl:
+    let response = curl.get("https://www.google.com")
+    doAssert response.code == 200
+    doAssert response.body.len > 0
+
+  curlPool.withHandle curl:
+    let response = curl.head("https://www.google.com")
+    doAssert response.code == 200
+    doAssert response.body.len == 0
+
+  doAssertRaises CatchableError:
+    echo curlPool.get(asdf)
+
+# block:
+#   let curl = newPrototype()
+
+#   let getResponse = curl.get("https://www.google.com")
+#   doAssert getResponse.code == 200
+#   doAssert getResponse.body.len > 0
+
+#   let headResponse = curl.head("https://www.google.com")
+#   doAssert headResponse.code == 200
+#   doAssert headResponse.body.len == 0
+
+#   doAssertRaises CatchableError:
+#     discard curl.get(asdf)
