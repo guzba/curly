@@ -364,7 +364,8 @@ when defined(curlyPrototype):
       verb: string
       url: string
       headers: HttpHeaders
-      body: string
+      body: pointer
+      bodyLen: int
       timeout: int
       waitGroup: WaitGroup
       headerStringsForLibcurl: seq[string]
@@ -460,10 +461,10 @@ when defined(curlyPrototype):
 
         if cmpIgnoreCase(request.verb, "HEAD") == 0:
           discard easyHandle.easy_setopt(OPT_NOBODY, 1)
-        elif cmpIgnoreCase(request.verb, "POST") == 0 or request.body.len > 0:
-          discard easyHandle.easy_setopt(OPT_POSTFIELDSIZE, request.body.len)
-          if request.body.len > 0:
-            discard easyHandle.easy_setopt(OPT_POSTFIELDS, request.body.cstring)
+        elif cmpIgnoreCase(request.verb, "POST") == 0 or request.bodyLen > 0:
+          discard easyHandle.easy_setopt(OPT_POSTFIELDSIZE, request.bodyLen)
+          if request.bodyLen > 0:
+            discard easyHandle.easy_setopt(OPT_POSTFIELDS, request.body)
 
         # Follow up to 10 redirects
         discard easyHandle.easy_setopt(OPT_FOLLOWLOCATION, 1)
@@ -605,14 +606,16 @@ when defined(curlyPrototype):
     verb: sink string,
     url: sink string,
     headers: sink HttpHeaders,
-    body: sink string,
+    body: openarray[char],
     timeout: int
   ): Response =
     let request = cast[Request](allocShared0(sizeof(RequestObj)))
     request.verb = move verb
     request.url = move url
     request.headers = move headers
-    request.body = move body
+    if body.len > 0:
+      request.body = body[0].addr
+      request.bodyLen = body.len
     request.timeout = timeout
     request.waitGroup = newWaitGroup(1)
 
@@ -647,7 +650,7 @@ when defined(curlyPrototype):
     curl: Prototype,
     url: string,
     headers: sink HttpHeaders = emptyHttpHeaders(),
-    body: sink string = "",
+    body: openarray[char] = "".toOpenArray(0, -1),
     timeout = 60
   ): Response =
     curl.makeRequest("POST", url, headers, body, timeout)
@@ -656,7 +659,7 @@ when defined(curlyPrototype):
     curl: Prototype,
     url: string,
     headers: sink HttpHeaders = emptyHttpHeaders(),
-    body: sink string = "",
+    body: openarray[char] = "".toOpenArray(0, -1),
     timeout = 60
   ): Response =
     curl.makeRequest("PUT", url, headers, body, timeout)
@@ -665,7 +668,7 @@ when defined(curlyPrototype):
     curl: Prototype,
     url: string,
     headers: sink HttpHeaders = emptyHttpHeaders(),
-    body: sink string = "",
+    body: openarray[char] = "".toOpenArray(0, -1),
     timeout = 60
   ): Response =
     curl.makeRequest("PATCH", url, headers, body, timeout)
