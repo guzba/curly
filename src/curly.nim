@@ -601,12 +601,12 @@ when defined(curlyPrototype):
       result.availableEasyHandles.addLast(easy_init())
     createThread(result.thread, threadProc, result)
 
-  proc makeRequest(
+  proc makeRequest*(
     curl: Prototype,
     verb: sink string,
     url: sink string,
-    headers: sink HttpHeaders,
-    body: openarray[char],
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    body: openarray[char] = "".toOpenArray(0, -1),
     timeout: int
   ): Response =
     let request = cast[Request](allocShared0(sizeof(RequestObj)))
