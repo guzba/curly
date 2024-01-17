@@ -598,6 +598,10 @@ when defined(curlyPrototype):
     ## Make multiple HTTP requests in parallel. This proc blocks until
     ## all requests have either received a response or are unable to complete.
     ## The return value seq is in the same order as the parameter requests seq.
+    ## Each request will have either a response or an error in the return seq.
+    ## If `error != ""` then `response` is empty because something prevented the
+    ## request from completing. This may be a timeout, DNS error, connection
+    ## interruption, etc. The error string provides more information.
 
     if requests.len == 0:
       return
