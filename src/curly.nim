@@ -361,7 +361,7 @@ when defined(curlyPrototype):
 
     WaitGroup = ptr WaitGroupObj
 
-    RequestObj = object
+    RequestWrapObj = object
       verb: string
       url: string
       headers: HttpHeaders
@@ -376,15 +376,15 @@ when defined(curlyPrototype):
       response: Response
       error: string
 
-    Request = ptr RequestObj
+    RequestWrap = ptr RequestWrapObj
 
     PrototypeObj* = object
-      queue: Deque[Request]
+      queue: Deque[RequestWrap]
       queueLock: Lock
       queueCond: Cond
       multiHandle: PM
       availableEasyHandles: Deque[PCurl]
-      inFlight: Table[PCurl, Request]
+      inFlight: Table[PCurl, RequestWrap]
       thread: Thread[Prototype]
 
     Prototype* = ptr PrototypeObj
@@ -421,7 +421,7 @@ when defined(curlyPrototype):
 
     let fourBytes = allocShared0(4)
 
-    var dequeued: seq[Request]
+    var dequeued: seq[RequestWrap]
     while true:
       if curl.availableEasyHandles.len > 0:
         withLock curl.queueLock:
@@ -589,31 +589,31 @@ when defined(curlyPrototype):
     headers: sink HttpHeaders = emptyHttpHeaders(),
     body: openarray[char] = "".toOpenArray(0, -1),
     timeout: int
-  ): Response =
-    let request = cast[Request](allocShared0(sizeof(RequestObj)))
-    request.verb = move verb
-    request.url = move url
-    request.headers = move headers
+  ): Response {.gcsafe.} =
+    let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
+    rw.verb = move verb
+    rw.url = move url
+    rw.headers = move headers
     if body.len > 0:
-      request.body = body[0].addr
-      request.bodyLen = body.len
-    request.timeout = timeout
-    request.waitGroup = newWaitGroup(1)
+      rw.body = body[0].addr
+      rw.bodyLen = body.len
+    rw.timeout = timeout
+    rw.waitGroup = newWaitGroup(1)
 
-    for (k, v) in request.headers:
-      request.headerStringsForLibcurl.add k & ": " & v
+    for (k, v) in rw.headers:
+      rw.headerStringsForLibcurl.add k & ": " & v
 
     withLock curl.queueLock:
-      curl.queue.addLast(request)
+      curl.queue.addLast(rw)
     curl.queueCond.signal()
 
-    request.waitGroup.wait()
+    rw.waitGroup.wait()
 
     try:
-      if request.error == "":
-        result = move request.response
+      if rw.error == "":
+        result = move rw.response
         let
-          rawHeaders = move request.responseHeadersForLibcurl.str
+          rawHeaders = move rw.responseHeadersForLibcurl.str
           headerLines = rawHeaders.split("\r\n")
         for i, headerLine in headerLines:
           if i == 0:
@@ -623,18 +623,18 @@ when defined(curlyPrototype):
             result.headers.add((parts[0].strip(), parts[1].strip()))
           else:
             result.headers.add((parts[0].strip(), ""))
-        result.body = move request.responseBodyForLibcurl.str
+        result.body = move rw.responseBodyForLibcurl.str
         if result.headers["Content-Encoding"] == "gzip":
           result.body = uncompress(result.body, dfGzip)
       else:
-        raise newException(CatchableError, move request.error)
+        raise newException(CatchableError, move rw.error)
     finally:
-      deinitLock(request.waitGroup.lock)
-      deinitCond(request.waitGroup.cond)
-      `=destroy`(request.waitGroup[])
-      deallocShared(request.waitGroup)
-      `=destroy`(request[])
-      deallocShared(request)
+      deinitLock(rw.waitGroup.lock)
+      deinitCond(rw.waitGroup.cond)
+      `=destroy`(rw.waitGroup[])
+      deallocShared(rw.waitGroup)
+      `=destroy`(rw[])
+      deallocShared(rw)
 
   proc get*(
     curl: Prototype,
