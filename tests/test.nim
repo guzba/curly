@@ -34,3 +34,32 @@ block:
 
 #   doAssertRaises CatchableError:
 #     discard curl.get(asdf)
+
+# block:
+#   let curl = newPrototype()
+
+#   var requests: seq[Request]
+#   requests.add(Request(
+#     verb: "GET",
+#     url: "https://www.microsoft.com"
+#   ))
+#   requests.add(Request(
+#     verb: "GET",
+#     url: asdf
+#   ))
+#   requests.add(Request(
+#     verb: "GET",
+#     url: "https://news.ycombinator.com/"
+#   ))
+
+#   let x = curl.makeRequests(requests)
+
+#   doAssert x[0].error == ""
+#   doAssert x[1].error != ""
+#   doAssert x[2].error == ""
+
+#   doAssert x[0].response.code == 200
+#   doAssert x[2].response.code == 200
+
+#   # for (response, error) in x:
+#   #   discard

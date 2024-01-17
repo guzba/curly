@@ -6,28 +6,9 @@ when not compileOption("threads"):
   {.error: "Using --threads:on is required by Curly.".}
 
 import libcurl, std/strutils, std/locks, std/posix, std/random, webby/httpheaders,
-    zippy, std/deques, std/tables
+    zippy
 
 export httpheaders
-
-when defined(windows):
-  const
-    libname = "libcurl.dll"
-elif defined(macosx):
-  const
-    libname = "libcurl(|.4).dylib"
-elif defined(unix):
-  const
-    libname = "libcurl.so(|.4)"
-
-proc multi_poll*(
-  multi_handle: PM,
-  extra_fds: pointer,
-  extra_nfds: uint32,
-  timeout_ms: int32,
-  numfds: var int32
-): Mcode
-  {.cdecl, dynlib: libname, importc: "curl_multi_poll".}
 
 block:
   let ret = global_init(GLOBAL_DEFAULT)
@@ -353,7 +334,34 @@ proc head*(
     result = curl.makeRequest("HEAD", url, headers, "", timeout)
 
 when defined(curlyPrototype):
+  import std/deques, std/tables
+
+  when defined(windows):
+    const
+      libname = "libcurl.dll"
+  elif defined(macosx):
+    const
+      libname = "libcurl(|.4).dylib"
+  elif defined(unix):
+    const
+      libname = "libcurl.so(|.4)"
+
+  proc multi_poll*(
+    multi_handle: PM,
+    extra_fds: pointer,
+    extra_nfds: uint32,
+    timeout_ms: int32,
+    numfds: var int32
+  ): Mcode
+    {.cdecl, dynlib: libname, importc: "curl_multi_poll".}
+
   type
+    Request* = object
+      verb*: string
+      url*: string
+      headers*: HttpHeaders
+      body*: string
+
     WaitGroupObj = object
       lock: Lock
       cond: Cond
@@ -582,13 +590,79 @@ when defined(curlyPrototype):
       result.availableEasyHandles.addLast(easy_init())
     createThread(result.thread, threadProc, result)
 
+  proc makeRequests*(
+    curl: Prototype,
+    requests: seq[Request],
+    timeout = 60
+  ): seq[tuple[response: Response, error: string]] {.gcsafe.} =
+    if requests.len == 0:
+      return
+
+    let waitGroup = newWaitGroup(requests.len)
+
+    var wrapped: seq[RequestWrap]
+    for request in requests:
+      let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
+      rw.verb = request.verb
+      rw.url = request.url
+      rw.headers = request.headers
+      if request.body.len > 0:
+        rw.body = request.body[0].addr
+        rw.bodyLen = request.body.len
+      rw.timeout = timeout
+      rw.waitGroup = waitGroup
+
+      for (k, v) in rw.headers:
+        rw.headerStringsForLibcurl.add k & ": " & v
+
+      wrapped.add(rw)
+
+      withLock curl.queueLock:
+        curl.queue.addLast(rw)
+
+    curl.queueCond.signal()
+
+    waitGroup.wait()
+
+    for rw in wrapped:
+      if rw.error == "":
+        var response = move rw.response
+        let
+          rawHeaders = move rw.responseHeadersForLibcurl.str
+          headerLines = rawHeaders.split("\r\n")
+        for i, headerLine in headerLines:
+          if i == 0:
+            continue # Skip "HTTP/2 200" line
+          if headerLine == "":
+            continue
+          let parts = headerLine.split(":", 1)
+          if parts.len == 2:
+            response.headers.add((parts[0].strip(), parts[1].strip()))
+          else:
+            response.headers.add((parts[0].strip(), ""))
+        response.body = move rw.responseBodyForLibcurl.str
+        if response.headers["Content-Encoding"] == "gzip":
+          response.body = uncompress(response.body, dfGzip)
+        result.add((move response, ""))
+      else:
+        result.add((Response(), move rw.error))
+
+    for rw in wrapped:
+      {.gcsafe.}:
+        deinitLock(rw.waitGroup.lock)
+        deinitCond(rw.waitGroup.cond)
+        `=destroy`(rw.waitGroup[])
+        deallocShared(rw.waitGroup)
+        `=destroy`(rw[])
+        deallocShared(rw)
+
   proc makeRequest*(
     curl: Prototype,
     verb: sink string,
     url: sink string,
     headers: sink HttpHeaders = emptyHttpHeaders(),
     body: openarray[char] = "".toOpenArray(0, -1),
-    timeout: int
+    timeout = 60
   ): Response {.gcsafe.} =
     let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
     rw.verb = move verb
@@ -618,6 +692,8 @@ when defined(curlyPrototype):
         for i, headerLine in headerLines:
           if i == 0:
             continue # Skip "HTTP/2 200" line
+          if headerLine == "":
+            continue
           let parts = headerLine.split(":", 1)
           if parts.len == 2:
             result.headers.add((parts[0].strip(), parts[1].strip()))
@@ -629,12 +705,13 @@ when defined(curlyPrototype):
       else:
         raise newException(CatchableError, move rw.error)
     finally:
-      deinitLock(rw.waitGroup.lock)
-      deinitCond(rw.waitGroup.cond)
-      `=destroy`(rw.waitGroup[])
-      deallocShared(rw.waitGroup)
-      `=destroy`(rw[])
-      deallocShared(rw)
+      {.gcsafe.}:
+        deinitLock(rw.waitGroup.lock)
+        deinitCond(rw.waitGroup.cond)
+        `=destroy`(rw.waitGroup[])
+        deallocShared(rw.waitGroup)
+        `=destroy`(rw[])
+        deallocShared(rw)
 
   proc get*(
     curl: Prototype,
