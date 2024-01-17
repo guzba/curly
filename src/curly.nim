@@ -346,7 +346,7 @@ when defined(curlyPrototype):
     const
       libname = "libcurl.so(|.4)"
 
-  proc multi_poll*(
+  proc multi_poll(
     multi_handle: PM,
     extra_fds: pointer,
     extra_nfds: uint32,
