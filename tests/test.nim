@@ -46,21 +46,12 @@ block:
 # block:
 #   let curl = newPrototype()
 
-#   var requests: seq[Request]
-#   requests.add(Request(
-#     verb: "GET",
-#     url: "https://www.microsoft.com"
-#   ))
-#   requests.add(Request(
-#     verb: "GET",
-#     url: asdf
-#   ))
-#   requests.add(Request(
-#     verb: "GET",
-#     url: "https://news.ycombinator.com/"
-#   ))
+#   var batch: RequestBatch
+#   batch.get("https://www.microsoft.com")
+#   batch.get(asdf)
+#   batch.get("https://news.ycombinator.com/")
 
-#   let x = curl.makeRequests(requests)
+#   let x = curl.makeRequests(batch)
 
 #   doAssert x[0].error == ""
 #   doAssert x[1].error != ""

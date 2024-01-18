@@ -366,11 +366,16 @@ when defined(curlyPrototype):
     {.cdecl, dynlib: libname, importc: "curl_multi_poll".}
 
   type
-    Request* = object
-      verb*: string
-      url*: string
-      headers*: HttpHeaders
-      body*: string
+    RequestBatch* = object
+      requests: seq[BatchedRequest]
+
+    BatchedRequest = object
+      verb: string
+      url: string
+      headers: HttpHeaders
+      body: string
+
+    ResponseBatch* = seq[tuple[response: Response, error: string]]
 
     WaitGroupObj = object
       lock: Lock
@@ -620,68 +625,6 @@ when defined(curlyPrototype):
     `=destroy`(prototype[])
     deallocShared(prototype)
 
-  proc makeRequests*(
-    curl: Prototype,
-    requests: seq[Request],
-    timeout = 60
-  ): seq[tuple[response: Response, error: string]] {.gcsafe.} =
-    ## Make multiple HTTP requests in parallel. This proc blocks until
-    ## all requests have either received a response or are unable to complete.
-    ## The return value seq is in the same order as the parameter requests seq.
-    ## Each request will have either a response or an error in the return seq.
-    ## If `error != ""` then `response` is empty because something prevented the
-    ## request from completing. This may be a timeout, DNS error, connection
-    ## interruption, etc. The error string provides more information.
-
-    if requests.len == 0:
-      return
-
-    let waitGroup = newWaitGroup(requests.len)
-
-    var wrapped: seq[RequestWrap]
-    for request in requests:
-      let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
-      rw.verb = request.verb
-      rw.url = request.url
-      rw.headers = request.headers
-      if request.body.len > 0:
-        rw.body = request.body[0].addr
-        rw.bodyLen = request.body.len
-      rw.timeout = timeout
-      rw.waitGroup = waitGroup
-
-      for (k, v) in rw.headers:
-        rw.headerStringsForLibcurl.add k & ": " & v
-
-      wrapped.add(rw)
-
-      withLock curl.lock:
-        curl.queue.addLast(rw)
-
-    signal(curl.cond)
-
-    waitGroup.wait()
-
-    for rw in wrapped:
-      if rw.error == "":
-        var response = move rw.response
-        addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
-        response.body = move rw.responseBodyForLibcurl.str
-        if response.headers["Content-Encoding"] == "gzip":
-          response.body = uncompress(response.body, dfGzip)
-        result.add((move response, ""))
-      else:
-        result.add((Response(), move rw.error))
-
-    for rw in wrapped:
-      {.gcsafe.}:
-        deinitLock(rw.waitGroup.lock)
-        deinitCond(rw.waitGroup.cond)
-        `=destroy`(rw.waitGroup[])
-        deallocShared(rw.waitGroup)
-        `=destroy`(rw[])
-        deallocShared(rw)
-
   proc makeRequest*(
     curl: Prototype,
     verb: sink string,
@@ -777,3 +720,124 @@ when defined(curlyPrototype):
     timeout = 60
   ): Response =
     curl.makeRequest("HEAD", url, headers, "", timeout)
+
+  proc makeRequests*(
+    curl: Prototype,
+    batch: RequestBatch,
+    timeout = 60
+  ): ResponseBatch {.gcsafe.} =
+    ## Make multiple HTTP requests in parallel. This proc blocks until
+    ## all requests have either received a response or are unable to complete.
+    ## The return value seq is in the same order as the request batch.
+    ## Each request will have either a response or an error in the return seq.
+    ## If `error != ""` then `response` is empty because something prevented the
+    ## request from completing. This may be a timeout, DNS error, connection
+    ## interruption, etc. The error string provides more information.
+
+    if batch.requests.len == 0:
+      return
+
+    let waitGroup = newWaitGroup(batch.requests.len)
+
+    var wrapped: seq[RequestWrap]
+    for request in batch.requests:
+      let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
+      rw.verb = request.verb
+      rw.url = request.url
+      rw.headers = request.headers
+      if request.body.len > 0:
+        rw.body = request.body[0].addr
+        rw.bodyLen = request.body.len
+      rw.timeout = timeout
+      rw.waitGroup = waitGroup
+
+      for (k, v) in rw.headers:
+        rw.headerStringsForLibcurl.add k & ": " & v
+
+      wrapped.add(rw)
+
+      withLock curl.lock:
+        curl.queue.addLast(rw)
+
+    signal(curl.cond)
+
+    waitGroup.wait()
+
+    for rw in wrapped:
+      if rw.error == "":
+        var response = move rw.response
+        addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
+        response.body = move rw.responseBodyForLibcurl.str
+        if response.headers["Content-Encoding"] == "gzip":
+          response.body = uncompress(response.body, dfGzip)
+        result.add((move response, ""))
+      else:
+        result.add((Response(), move rw.error))
+
+    for rw in wrapped:
+      {.gcsafe.}:
+        deinitLock(rw.waitGroup.lock)
+        deinitCond(rw.waitGroup.cond)
+        `=destroy`(rw.waitGroup[])
+        deallocShared(rw.waitGroup)
+        `=destroy`(rw[])
+        deallocShared(rw)
+
+  proc addRequest*(
+    batch: var RequestBatch,
+    verb: sink string,
+    url: sink string,
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    body: sink string = ""
+  ) =
+    batch.requests.add(BatchedRequest(
+      verb: move verb,
+      url: move url,
+      headers: move headers,
+      body: move body
+    ))
+
+  proc get*(
+    batch: var RequestBatch,
+    url: sink string,
+    headers: sink HttpHeaders = emptyHttpHeaders()
+  ) =
+    batch.addRequest("GET", move url, move headers)
+
+  proc post*(
+    batch: var RequestBatch,
+    url: sink string,
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    body: sink string = ""
+  ) =
+    batch.addRequest("POST", move url, move headers, move body)
+
+  proc put*(
+    batch: var RequestBatch,
+    url: sink string,
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    body: sink string = ""
+  ) =
+    batch.addRequest("PUT", move url, move headers, move body)
+
+  proc patch*(
+    batch: var RequestBatch,
+    url: sink string,
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    body: sink string = ""
+  ) =
+    batch.addRequest("PATCH", move url, move headers, move body)
+
+  proc delete*(
+    batch: var RequestBatch,
+    url: sink string,
+    headers: sink HttpHeaders = emptyHttpHeaders()
+  ) =
+    batch.addRequest("DELETE", move url, move headers)
+
+  proc head*(
+    batch: var RequestBatch,
+    url: sink string,
+    headers: sink HttpHeaders = emptyHttpHeaders()
+  ) =
+    batch.addRequest("HEAD", move url, move headers)
