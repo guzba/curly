@@ -229,7 +229,6 @@ proc makeRequest*(
       if sigismember(pending, SIGPIPE) > 0:
         var sig: cint
         discard sigwait(sigPipeMask, sig)
-        echo "TMP dropping SIGPIPE"
       else:
         break
 
