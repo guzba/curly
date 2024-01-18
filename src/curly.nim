@@ -455,7 +455,7 @@ when defined(curlyPrototype):
               entriesAvailable = curl.queue.len
             for _ in 0 ..< min(easyHandlesAvailable, entriesAvailable):
               dequeued.add(curl.queue.popFirst())
-            noMoreHandles = (curl.availableEasyHandles.len == 0)
+            noMoreHandles = (curl.availableEasyHandles.len == 0 and curl.queue.len > 0)
         if noMoreHandles:
           echo "TMP no more handles"
 
