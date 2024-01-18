@@ -447,6 +447,7 @@ when defined(curlyPrototype):
     var dequeued: seq[RequestWrap]
     while true:
       if curl.availableEasyHandles.len > 0:
+        var noMoreHandles: bool
         withLock curl.lock:
           {.gcsafe.}:
             let
@@ -454,6 +455,9 @@ when defined(curlyPrototype):
               entriesAvailable = curl.queue.len
             for _ in 0 ..< min(easyHandlesAvailable, entriesAvailable):
               dequeued.add(curl.queue.popFirst())
+            noMoreHandles = (curl.availableEasyHandles.len == 0)
+        if noMoreHandles:
+          echo "TMP no more handles"
 
       for request in dequeued:
         let easyHandle = curl.availableEasyHandles.popFirst()
