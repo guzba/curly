@@ -368,11 +368,11 @@ when defined(curlyPrototype):
     RequestBatch* = object
       requests: seq[BatchedRequest]
 
-    BatchedRequest = object
-      verb: string
-      url: string
-      headers: HttpHeaders
-      body: string
+    BatchedRequest* = object
+      verb*: string
+      url*: string
+      headers*: HttpHeaders
+      body*: string
 
     ResponseBatch* = seq[tuple[response: Response, error: string]]
 
@@ -781,6 +781,9 @@ when defined(curlyPrototype):
         deallocShared(rw.waitGroup)
         `=destroy`(rw[])
         deallocShared(rw)
+
+  proc `[]`*(batch: RequestBatch, i: int): lent BatchedRequest =
+    batch.requests[i]
 
   proc addRequest*(
     batch: var RequestBatch,

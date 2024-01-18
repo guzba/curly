@@ -66,7 +66,7 @@ block:
 #   doAssert x[0].response.body.len > 0
 #   doAssert x[2].response.body.len > 0
 
-#   # for (response, error) in x:
-#   #   discard
+#   for i, (response, error) in x:
+#     discard
 
 #   curl.close()
