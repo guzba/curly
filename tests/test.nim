@@ -59,7 +59,7 @@ when defined(curlyPrototype):
 
     var batch: RequestBatch
     batch.get("https://www.microsoft.com")
-    batch.get(badurl)
+    batch.get(badurl, tag = "tag_test")
     batch.get("https://news.ycombinator.com/")
 
     echo batch.len
@@ -82,6 +82,8 @@ when defined(curlyPrototype):
     doAssert x[2].response.request.verb == "GET"
     doAssert x[2].response.request.url == "https://news.ycombinator.com/"
     doAssert x[2].response.url == "https://news.ycombinator.com/"
+
+    doAssert x[1].response.request.tag == "tag_test"
 
     for i, (response, error) in x:
       echo batch[i].verb, ' ', batch[i].url, " => ", response.code

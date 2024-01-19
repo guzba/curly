@@ -31,6 +31,7 @@ type
   RequestInfo = object
     verb*: string
     url*: string ## Intitial request URL, before any redirects
+    tag*: string ## Arbtitrary user-provided data when batching requests
 
   Response* = object
     code*: int
@@ -386,6 +387,7 @@ when defined(curlyPrototype):
       url*: string
       headers*: HttpHeaders
       body*: string
+      tag*: string
 
     ResponseBatch* = seq[tuple[response: Response, error: string]]
 
@@ -403,6 +405,7 @@ when defined(curlyPrototype):
       body: pointer
       bodyLen: int
       timeout: int
+      tag: string
       waitGroup: WaitGroup
       headerStringsForLibcurl: seq[string]
       slistsForLibcurl: seq[Slist]
@@ -787,6 +790,7 @@ when defined(curlyPrototype):
         rw.body = request.body[0].addr
         rw.bodyLen = request.body.len
       rw.timeout = timeout
+      rw.tag = request.tag
       rw.waitGroup = waitGroup
 
       for (k, v) in rw.headers:
@@ -806,6 +810,7 @@ when defined(curlyPrototype):
         var response = move rw.response
         response.request.verb = move rw.verb
         response.request.url = move rw.url
+        response.request.tag = move rw.tag
         addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
         response.body = move rw.responseBodyForLibcurl.str
         if response.headers["Content-Encoding"] == "gzip":
@@ -830,56 +835,64 @@ when defined(curlyPrototype):
     verb: sink string,
     url: sink string,
     headers: sink HttpHeaders = emptyHttpHeaders(),
-    body: sink string = ""
+    body: sink string = "",
+    tag: sink string = ""
   ) =
     batch.requests.add(BatchedRequest(
       verb: move verb,
       url: move url,
       headers: move headers,
-      body: move body
+      body: move body,
+      tag: move tag
     ))
 
   proc get*(
     batch: var RequestBatch,
     url: sink string,
-    headers: sink HttpHeaders = emptyHttpHeaders()
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    tag: sink string = ""
   ) =
-    batch.addRequest("GET", move url, move headers)
+    batch.addRequest("GET", move url, move headers, "", tag)
 
   proc post*(
     batch: var RequestBatch,
     url: sink string,
     headers: sink HttpHeaders = emptyHttpHeaders(),
-    body: sink string = ""
+    body: sink string = "",
+    tag: sink string = ""
   ) =
-    batch.addRequest("POST", move url, move headers, move body)
+    batch.addRequest("POST", move url, move headers, move body, tag)
 
   proc put*(
     batch: var RequestBatch,
     url: sink string,
     headers: sink HttpHeaders = emptyHttpHeaders(),
-    body: sink string = ""
+    body: sink string = "",
+    tag: sink string = ""
   ) =
-    batch.addRequest("PUT", move url, move headers, move body)
+    batch.addRequest("PUT", move url, move headers, move body, tag)
 
   proc patch*(
     batch: var RequestBatch,
     url: sink string,
     headers: sink HttpHeaders = emptyHttpHeaders(),
-    body: sink string = ""
+    body: sink string = "",
+    tag: sink string = ""
   ) =
-    batch.addRequest("PATCH", move url, move headers, move body)
+    batch.addRequest("PATCH", move url, move headers, move body, tag)
 
   proc delete*(
     batch: var RequestBatch,
     url: sink string,
-    headers: sink HttpHeaders = emptyHttpHeaders()
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    tag: sink string = ""
   ) =
-    batch.addRequest("DELETE", move url, move headers)
+    batch.addRequest("DELETE", move url, move headers, "", tag)
 
   proc head*(
     batch: var RequestBatch,
     url: sink string,
-    headers: sink HttpHeaders = emptyHttpHeaders()
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    tag: sink string = ""
   ) =
-    batch.addRequest("HEAD", move url, move headers)
+    batch.addRequest("HEAD", move url, move headers, "", tag)
