@@ -432,6 +432,12 @@ when defined(curlyPrototype):
     if signalCond:
       signal(waitGroup.cond)
 
+  proc destroy(waitGroup: WaitGroup) =
+    deinitLock(waitGroup.lock)
+    deinitCond(waitGroup.cond)
+    `=destroy`(waitGroup[])
+    deallocShared(waitGroup)
+
   proc threadProc(curl: Prototype) {.raises: [].} =
     block: # Block SIGPIPE for this thread
       var oldSet, empty: Sigset
@@ -624,6 +630,10 @@ when defined(curlyPrototype):
     `=destroy`(prototype[])
     deallocShared(prototype)
 
+  proc destroy(rw: RequestWrap) {.gcsafe.} =
+    `=destroy`(rw[])
+    deallocShared(rw)
+
   proc makeRequest*(
     curl: Prototype,
     verb: sink string,
@@ -661,13 +671,8 @@ when defined(curlyPrototype):
       else:
         raise newException(CatchableError, move rw.error)
     finally:
-      {.gcsafe.}:
-        deinitLock(rw.waitGroup.lock)
-        deinitCond(rw.waitGroup.cond)
-        `=destroy`(rw.waitGroup[])
-        deallocShared(rw.waitGroup)
-        `=destroy`(rw[])
-        deallocShared(rw)
+      destroy rw.waitGroup
+      destroy rw
 
   proc get*(
     curl: Prototype,
@@ -773,14 +778,10 @@ when defined(curlyPrototype):
       else:
         result.add((Response(), move rw.error))
 
+    destroy waitGroup
+
     for rw in wrapped:
-      {.gcsafe.}:
-        deinitLock(rw.waitGroup.lock)
-        deinitCond(rw.waitGroup.cond)
-        `=destroy`(rw.waitGroup[])
-        deallocShared(rw.waitGroup)
-        `=destroy`(rw[])
-        deallocShared(rw)
+      destroy rw
 
   proc `[]`*(batch: RequestBatch, i: int): lent BatchedRequest =
     batch.requests[i]
