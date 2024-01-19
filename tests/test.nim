@@ -52,6 +52,10 @@ when defined(curlyPrototype):
     doAssertRaises CatchableError:
       discard curl.get(badurl)
 
+    doAssert curl.queueLen == 0
+    doAssert curl.numInFlight == 0
+    doAssert not curl.hasRequests
+
     curl.close()
 
   block:
@@ -89,6 +93,8 @@ when defined(curlyPrototype):
       echo batch[i].verb, ' ', batch[i].url, " => ", response.code
 
     doAssert curl.queueLen == 0
+    doAssert curl.numInFlight == 0
+    doAssert not curl.hasRequests
 
     curl.close()
 
@@ -112,6 +118,10 @@ when defined(curlyPrototype):
 
     joinThreads(threads)
 
+    doAssert curl.queueLen == 0
+    doAssert curl.numInFlight == 0
+    doAssert not curl.hasRequests
+
   block:
     let curl = newPrototype()
 
@@ -129,6 +139,10 @@ when defined(curlyPrototype):
       else:
         echo error
 
+    doAssert curl.queueLen == 0
+    doAssert curl.numInFlight == 0
+    doAssert not curl.hasRequests
+
   block:
     let curl = newPrototype(0)
 
@@ -141,6 +155,8 @@ when defined(curlyPrototype):
     curl.startRequests(batch)
 
     doAssert curl.queueLen == batch.len
+    doAssert curl.numInFlight == 0
+    doAssert curl.hasRequests
 
     curl.clearQueue()
 

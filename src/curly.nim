@@ -422,6 +422,7 @@ when defined(curlyPrototype):
       cond: Cond
       requestCompletedCond: Cond
       multiHandle: PM
+      maxInFlight: int
       availableEasyHandles: Deque[PCurl]
       queue: Deque[RequestWrap]
       inFlight: Table[PCurl, RequestWrap]
@@ -642,6 +643,7 @@ when defined(curlyPrototype):
       2 # CURLPIPE_MULTIPLEX
     ) != M_OK:
       raise newException(CatchableError, "Error setting CURLMOPT_PIPELINING")
+    result.maxInFlight = maxInFlight
     for i in 0 ..< maxInFlight:
       result.availableEasyHandles.addLast(easy_init())
     createThread(result.thread, threadProc, result)
@@ -664,6 +666,15 @@ when defined(curlyPrototype):
   proc destroy(rw: RequestWrap) {.gcsafe.} =
     `=destroy`(rw[])
     deallocShared(rw)
+
+  proc hasRequests*(prototype: Prototype): bool {.gcsafe.} =
+    withLock prototype.lock:
+      let inFlight = prototype.maxInFlight - prototype.availableEasyHandles.len
+      result = inFlight > 0 or prototype.queue.len > 0
+
+  proc numInFlight*(prototype: Prototype): int {.gcsafe.} =
+    withLock prototype.lock:
+      result = prototype.maxInFlight - prototype.availableEasyHandles.len
 
   proc queueLen*(prototype: Prototype): int {.gcsafe.} =
     withLock prototype.lock:
