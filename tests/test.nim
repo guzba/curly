@@ -64,28 +64,28 @@ when defined(curlyPrototype):
 
     echo batch.len
 
-    let x = curl.makeRequests(batch)
+    let rb = curl.makeRequests(batch)
 
-    doAssert x[0].error == ""
-    doAssert x[1].error != ""
-    doAssert x[2].error == ""
+    doAssert rb[0].error == ""
+    doAssert rb[1].error != ""
+    doAssert rb[2].error == ""
 
-    doAssert x[0].response.code == 200
-    doAssert x[2].response.code == 200
+    doAssert rb[0].response.code == 200
+    doAssert rb[2].response.code == 200
 
-    doAssert x[0].response.headers.len > 0
-    doAssert x[2].response.headers.len > 0
+    doAssert rb[0].response.headers.len > 0
+    doAssert rb[2].response.headers.len > 0
 
-    doAssert x[0].response.body.len > 0
-    doAssert x[2].response.body.len > 0
+    doAssert rb[0].response.body.len > 0
+    doAssert rb[2].response.body.len > 0
 
-    doAssert x[2].response.request.verb == "GET"
-    doAssert x[2].response.request.url == "https://news.ycombinator.com/"
-    doAssert x[2].response.url == "https://news.ycombinator.com/"
+    doAssert rb[2].response.request.verb == "GET"
+    doAssert rb[2].response.request.url == "https://news.ycombinator.com/"
+    doAssert rb[2].response.url == "https://news.ycombinator.com/"
 
-    doAssert x[1].response.request.tag == "tag_test"
+    doAssert rb[1].response.request.tag == "tag_test"
 
-    for i, (response, error) in x:
+    for i, (response, error) in rb:
       echo batch[i].verb, ' ', batch[i].url, " => ", response.code
 
     doAssert curl.queueLen == 0
