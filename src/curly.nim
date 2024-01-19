@@ -776,7 +776,7 @@ when defined(curlyPrototype):
     curl: Prototype,
     batch: RequestBatch,
     timeout = 60
-  ): ResponseBatch {.gcsafe.} =
+  ): ResponseBatch {.raises: [], gcsafe.} =
     ## Make multiple HTTP requests in parallel. This proc blocks until
     ## all requests have either received a response or are unable to complete.
     ## The return value seq is in the same order as the request batch.
@@ -824,10 +824,12 @@ when defined(curlyPrototype):
         addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
         response.body = move rw.responseBodyForLibcurl.str
         if response.headers["Content-Encoding"] == "gzip":
-          response.body = uncompress(response.body, dfGzip)
-        result.add((move response, ""))
-      else:
-        result.add((move response, move rw.error))
+          try:
+            response.body = uncompress(response.body, dfGzip)
+          except:
+            rw.error = "Uncompressing gzip'ed response body failed: " &
+              getCurrentExceptionMsg()
+      result.add((move response, move rw.error))
 
     destroy waitGroup
 
@@ -911,7 +913,7 @@ when defined(curlyPrototype):
     curl: Prototype,
     batch: sink RequestBatch,
     timeout = 60
-  ) {.gcsafe.} =
+  ) {.raises: [], gcsafe.} =
     ## Starts one or more HTTP requests. These requests are run in parallel.
     ## This proc does not block waiting for responses.
 
@@ -943,7 +945,7 @@ when defined(curlyPrototype):
 
   proc waitForResponse*(
     curl: Prototype
-  ): tuple[response: Response, error: string] {.gcsafe.} =
+  ): tuple[response: Response, error: string] {.raises: [], gcsafe.} =
     acquire(curl.lock)
     while curl.requestsCompleted.len == 0:
       wait(curl.requestCompletedCond, curl.lock)
@@ -958,9 +960,11 @@ when defined(curlyPrototype):
       addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
       response.body = move rw.responseBodyForLibcurl.str
       if response.headers["Content-Encoding"] == "gzip":
-        response.body = uncompress(response.body, dfGzip)
-      result = (move response, "")
-    else:
-      result = (move response, move rw.error)
+        try:
+          response.body = uncompress(response.body, dfGzip)
+        except:
+          rw.error = "Uncompressing gzip'ed response body failed: " &
+            getCurrentExceptionMsg()
+    result = (move response, move rw.error)
 
     destroy rw
