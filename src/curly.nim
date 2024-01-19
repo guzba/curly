@@ -5,8 +5,10 @@ when not defined(nimdoc):
 when not compileOption("threads"):
   {.error: "Using --threads:on is required by Curly.".}
 
-import libcurl, std/strutils, std/locks, std/posix, std/random, webby/httpheaders,
-    zippy
+import libcurl, std/strutils, std/locks, std/random, webby/httpheaders, zippy
+
+when not defined(windows):
+  import std/posix
 
 export httpheaders
 
@@ -186,20 +188,24 @@ proc makeRequest*(
   # https://curl.se/libcurl/c/threadsafe.html
   discard curl.easy_setopt(OPT_NOSIGNAL, 1)
 
-  let alreadyHasPendingSIGPIPE = block:
-    var pending: Sigset
-    discard sigemptyset(pending)
-    discard sigpending(pending)
-    sigismember(pending, SIGPIPE) != 0
+  when defined(windows):
+    # CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA
+    discard curl.easy_setopt(cast[libcurl.Option](216), 1 shl 4)
+  else:
+    let alreadyHasPendingSIGPIPE = block:
+      var pending: Sigset
+      discard sigemptyset(pending)
+      discard sigpending(pending)
+      sigismember(pending, SIGPIPE) != 0
 
-  var oldSet, empty: Sigset
-  discard sigemptyset(oldSet)
-  discard sigemptyset(empty)
-  discard pthread_sigmask(SIG_BLOCK, empty, oldSet) # Read current
+    var oldSet, empty: Sigset
+    discard sigemptyset(oldSet)
+    discard sigemptyset(empty)
+    discard pthread_sigmask(SIG_BLOCK, empty, oldSet) # Read current
 
-  var newSet = oldSet
-  discard sigaddset(newSet, SIGPIPE)
-  discard pthread_sigmask(SIG_BLOCK, newSet, oldSet) # Block SIGPIPE
+    var newSet = oldSet
+    discard sigaddset(newSet, SIGPIPE)
+    discard pthread_sigmask(SIG_BLOCK, newSet, oldSet) # Block SIGPIPE
 
   try:
     let ret = curl.easy_perform()
@@ -227,22 +233,23 @@ proc makeRequest*(
   finally:
     curl.easy_reset()
 
-  if not alreadyHasPendingSIGPIPE:
-    var sigPipeMask: Sigset
-    discard sigemptyset(sigPipeMask)
-    discard sigaddset(sigPipeMask, SIGPIPE)
+  when not defined(windows):
+    if not alreadyHasPendingSIGPIPE:
+      var sigPipeMask: Sigset
+      discard sigemptyset(sigPipeMask)
+      discard sigaddset(sigPipeMask, SIGPIPE)
 
-    var pending: Sigset
-    while true:
-      discard sigemptyset(pending)
-      discard sigpending(pending)
-      if sigismember(pending, SIGPIPE) > 0:
-        var sig: cint
-        discard sigwait(sigPipeMask, sig)
-      else:
-        break
+      var pending: Sigset
+      while true:
+        discard sigemptyset(pending)
+        discard sigpending(pending)
+        if sigismember(pending, SIGPIPE) > 0:
+          var sig: cint
+          discard sigwait(sigPipeMask, sig)
+        else:
+          break
 
-  discard pthread_sigmask(SIG_SETMASK, oldSet, empty)
+    discard pthread_sigmask(SIG_SETMASK, oldSet, empty)
 
 proc get*(
   curl: PCurl,
@@ -455,7 +462,7 @@ when defined(curlyPrototype):
     deallocShared(waitGroup)
 
   proc threadProc(curl: Prototype) {.raises: [].} =
-    block: # Block SIGPIPE for this thread
+    when not defined(windows): # Block SIGPIPE for this thread
       var oldSet, empty: Sigset
       discard sigemptyset(oldSet)
       discard sigemptyset(empty)
@@ -520,6 +527,10 @@ when defined(curlyPrototype):
 
         # https://curl.se/libcurl/c/threadsafe.html
         discard easyHandle.easy_setopt(OPT_NOSIGNAL, 1)
+
+        when defined(windows):
+          # CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA
+          discard easyHandle.easy_setopt(cast[libcurl.Option](216), 1 shl 4)
 
         # Setup writers
         discard easyHandle.easy_setopt(
