@@ -51,6 +51,8 @@ block:
 #   batch.get(asdf)
 #   batch.get("https://news.ycombinator.com/")
 
+#   echo batch.len
+
 #   let x = curl.makeRequests(batch)
 
 #   doAssert x[0].error == ""
@@ -67,6 +69,6 @@ block:
 #   doAssert x[2].response.body.len > 0
 
 #   for i, (response, error) in x:
-#     discard
+#     echo batch[i].verb, ' ', batch[i].url, " => ", response.code
 
 #   curl.close()

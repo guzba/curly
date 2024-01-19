@@ -783,6 +783,9 @@ when defined(curlyPrototype):
     for rw in wrapped:
       destroy rw
 
+  proc len*(batch: RequestBatch): int =
+    batch.requests.len
+
   proc `[]`*(batch: RequestBatch, i: int): lent BatchedRequest =
     batch.requests[i]
 
