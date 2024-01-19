@@ -54,8 +54,10 @@
       <li><a class="reference" href="#CurlPool" title="CurlPool = ptr CurlPoolObj">CurlPool</a></li>
 <li><a class="reference" href="#Response" title="Response = object
   code*: int
+  url*: string               ## Final URL, after any redirects
   headers*: HttpHeaders
-  body*: string">Response</a></li>
+  body*: string
+  request*: RequestInfo">Response</a></li>
 
     </ul>
   </details>
@@ -187,14 +189,16 @@
 <div id="Response">
   <dt><pre><a href="curly.html#Response"><span class="Identifier">Response</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">code</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
+  <span class="Identifier">url</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>               <span class="Comment">## Final URL, after any redirects</span>
   <span class="Identifier">headers</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">HttpHeaders</span>
   <span class="Identifier">body</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
+  <span class="Identifier">request</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">RequestInfo</span>
 </pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L31" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L31" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L35" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L35" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -211,8 +215,8 @@
   <dd>
     
     Removes a libcurl handle from the pool. This call blocks until it can take a handle. Remember to add the handle back to the pool with recycle when you're finished with it.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L50" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L50" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L56" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L56" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -224,8 +228,8 @@
   <dd>
     
     Closes the libcurl handles then deallocates the pool. All libcurl handles should be returned to the pool before it is closed.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L41" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L41" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L47" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L47" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -239,8 +243,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L272" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L272" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L285" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L285" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -251,8 +255,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L327" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L327" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L340" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L340" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -266,8 +270,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L237" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L237" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L250" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L250" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -278,8 +282,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L288" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L288" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L301" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L301" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -293,8 +297,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L280" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L280" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L293" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L293" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -305,8 +309,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L336" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L336" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L349" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L349" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -322,8 +326,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L126" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L126" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L132" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L132" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -336,8 +340,8 @@
   <dd>
     
     Creates a new thead-safe pool of libcurl handles.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L67" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L67" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L73" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L73" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -352,8 +356,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L263" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L263" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L276" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L276" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -365,8 +369,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L317" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L317" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L330" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L330" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -380,8 +384,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L245" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L245" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L258" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L258" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -392,8 +396,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L297" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L297" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L310" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L310" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -407,8 +411,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L254" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L254" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L267" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L267" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -419,8 +423,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L307" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L307" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L320" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L320" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -433,8 +437,8 @@
   <dd>
     
     Returns a libcurl handle to the pool.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L60" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L60" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L66" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L66" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -452,8 +456,8 @@
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L88" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L88" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L94" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L94" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -469,7 +473,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-19 01:22:57 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-19 02:13:25 UTC</small>
       </div>
     </div>
   </div>
