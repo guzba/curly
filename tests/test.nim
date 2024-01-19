@@ -180,6 +180,5 @@ when defined(curlyPrototype):
       if i < 10:
         inc i
         curl.startRequest("GET", badurl, tag = $i)
-
       else:
         break
