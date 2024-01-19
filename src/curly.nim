@@ -943,6 +943,19 @@ when defined(curlyPrototype):
 
     signal(curl.cond)
 
+  proc startRequest*(
+    curl: Prototype,
+    verb: sink string,
+    url: sink string,
+    headers: sink HttpHeaders = emptyHttpHeaders(),
+    body: sink string = "",
+    timeout = 60,
+    tag: sink string = ""
+  ) {.raises: [], gcsafe.} =
+    var batch: RequestBatch
+    batch.addRequest(verb, url, headers, body, tag)
+    curl.startRequests(batch, timeout)
+
   proc waitForResponse*(
     curl: Prototype
   ): tuple[response: Response, error: string] {.raises: [], gcsafe.} =

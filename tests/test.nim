@@ -153,10 +153,7 @@ when defined(curlyPrototype):
   block:
     let curl = newPrototype()
 
-    block:
-      var batch: RequestBatch
-      batch.get(badurl, tag = $0)
-      curl.startRequests(batch)
+    curl.startRequest("GET", badurl, tag = $0)
 
     var i: int
     while true:
@@ -166,8 +163,7 @@ when defined(curlyPrototype):
       doAssert response.request.tag == $i
       if i < 10:
         inc i
-        var batch: RequestBatch
-        batch.get(badurl, tag = $i)
-        curl.startRequests(batch)
+        curl.startRequest("GET", badurl, tag = $i)
+
       else:
         break
