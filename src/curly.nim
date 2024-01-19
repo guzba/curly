@@ -382,7 +382,7 @@ when defined(curlyPrototype):
     RequestBatch* = object
       requests: seq[BatchedRequest]
 
-    BatchedRequest* = object
+    BatchedRequest = object
       verb*: string
       url*: string
       headers*: HttpHeaders
