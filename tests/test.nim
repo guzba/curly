@@ -11,6 +11,10 @@ block:
     doAssert response.headers.len > 0
     doAssert response.body.len > 0
 
+    doAssert response.request.verb == "GET"
+    doAssert response.request.url == "https://www.google.com"
+    doAssert response.url == "https://www.google.com/"
+
   curlPool.withHandle curl:
     let response = curl.head("https://www.google.com")
     doAssert response.code == 200
@@ -35,6 +39,10 @@ when defined(curlyPrototype):
     doAssert getResponse.code == 200
     doAssert getResponse.headers.len > 0
     doAssert getResponse.body.len > 0
+
+    doAssert getResponse.request.verb == "GET"
+    doAssert getResponse.request.url == "https://www.google.com"
+    doAssert getResponse.url == "https://www.google.com/"
 
     let headResponse = curl.head("https://www.google.com")
     doAssert headResponse.code == 200
@@ -70,6 +78,10 @@ when defined(curlyPrototype):
 
     doAssert x[0].response.body.len > 0
     doAssert x[2].response.body.len > 0
+
+    doAssert x[2].response.request.verb == "GET"
+    doAssert x[2].response.request.url == "https://news.ycombinator.com/"
+    doAssert x[2].response.url == "https://news.ycombinator.com/"
 
     for i, (response, error) in x:
       echo batch[i].verb, ' ', batch[i].url, " => ", response.code

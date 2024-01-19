@@ -28,10 +28,16 @@ type
 
   CurlPool* = ptr CurlPoolObj
 
+  RequestInfo = object
+    verb*: string
+    url*: string ## Intitial request URL, before any redirects
+
   Response* = object
     code*: int
+    url*: string ## Final URL, after any redirects
     headers*: HttpHeaders
     body*: string
+    request*: RequestInfo
 
   StringWrap = object
     ## As strings are value objects they need
@@ -131,6 +137,9 @@ proc makeRequest*(
   body: openarray[char] = "".toOpenArray(0, -1),
   timeout: float32 = 60
 ): Response =
+  result.request.verb = verb
+  result.request.url = url
+
   var strings: seq[string]
   strings.add url
   strings.add verb.toUpperAscii()
@@ -199,12 +208,16 @@ proc makeRequest*(
     let ret = curl.easy_perform()
     if ret == E_OK:
       # This avoids a SIGSEGV on Mac with -d:release and a memory leak on Linux
-      let tmp = allocShared0(4)
-      discard curl.easy_getinfo(INFO_RESPONSE_CODE, tmp)
+      let tmp4 = allocShared0(4)
+      discard curl.easy_getinfo(INFO_RESPONSE_CODE, tmp4)
       var httpCode: uint32
-      copyMem(httpCode.addr, tmp, 4)
-      deallocShared(tmp)
+      copyMem(httpCode.addr, tmp4, 4)
+      deallocShared(tmp4)
       result.code = httpCode.int
+      let tmpcstring = cast[ptr cstring](allocShared0(sizeof(cstring)))
+      discard curl.easy_getinfo(INFO_EFFECTIVE_URL, tmpcstring)
+      result.url = $tmpcstring[]
+      deallocShared(tmpcstring)
       addHeaders(result.headers, headerWrap.str)
       result.body = move bodyWrap.str
       if result.headers["Content-Encoding"] == "gzip":
@@ -448,7 +461,9 @@ when defined(curlyPrototype):
       discard sigaddset(newSet, SIGPIPE)
       discard pthread_sigmask(SIG_BLOCK, newSet, oldSet) # Block SIGPIPE
 
-    let fourBytes = allocShared0(4)
+    let
+      tmp4 = allocShared0(4)
+      tmpcstring = cast[ptr cstring](allocShared0(sizeof(cstring)))
 
     var dequeued: seq[RequestWrap]
     while true:
@@ -573,11 +588,14 @@ when defined(curlyPrototype):
         let code = cast[Code](m.whatever)
         if code == E_OK:
           # Avoid SIGSEGV on Mac with -d:release and a memory leak on Linux
-          zeroMem(fourBytes, 4)
-          discard m.easy_handle.easy_getinfo(INFO_RESPONSE_CODE, fourBytes)
+          zeroMem(tmp4, 4)
+          discard m.easy_handle.easy_getinfo(INFO_RESPONSE_CODE, tmp4)
           var httpCode: uint32
-          copyMem(httpCode.addr, fourBytes, 4)
+          copyMem(httpCode.addr, tmp4, 4)
           request.response.code = httpCode.int
+          zeroMem(tmpcstring, sizeof(cstring))
+          discard m.easy_handle.easy_getinfo(INFO_EFFECTIVE_URL, tmpcstring)
+          request.response.url = $tmpcstring[]
         else:
           request.error =
             $easy_strerror(code) & ' ' & request.verb & ' ' & request.url
@@ -678,6 +696,8 @@ when defined(curlyPrototype):
     try:
       if rw.error == "":
         result = move rw.response
+        result.request.verb = move rw.verb
+        result.request.url = move rw.url
         addHeaders(result.headers, rw.responseHeadersForLibcurl.str)
         result.body = move rw.responseBodyForLibcurl.str
         if result.headers["Content-Encoding"] == "gzip":
@@ -784,6 +804,8 @@ when defined(curlyPrototype):
     for rw in wrapped:
       if rw.error == "":
         var response = move rw.response
+        response.request.verb = move rw.verb
+        response.request.url = move rw.url
         addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
         response.body = move rw.responseBodyForLibcurl.str
         if response.headers["Content-Encoding"] == "gzip":
