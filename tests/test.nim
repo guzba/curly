@@ -161,10 +161,10 @@ when defined(curlyPrototype):
     var i: int
     while true:
       let (response, error) = curl.waitForResponse()
+      doAssert response.request.verb == "GET"
+      doAssert response.request.url == badurl
+      doAssert response.request.tag == $i
       if i < 10:
-        doAssert response.request.verb == "GET"
-        doAssert response.request.url == badurl
-        doAssert response.request.tag == $i
         inc i
         var batch: RequestBatch
         batch.get(badurl, tag = $i)
