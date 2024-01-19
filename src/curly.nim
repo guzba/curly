@@ -402,6 +402,7 @@ when defined(curlyPrototype):
       verb: string
       url: string
       headers: HttpHeaders
+      ignore: string
       body: pointer
       bodyLen: int
       timeout: int
@@ -417,12 +418,14 @@ when defined(curlyPrototype):
     RequestWrap = ptr RequestWrapObj
 
     PrototypeObj* = object
-      queue: Deque[RequestWrap]
       lock: Lock
       cond: Cond
+      requestCompletedCond: Cond
       multiHandle: PM
       availableEasyHandles: Deque[PCurl]
+      queue: Deque[RequestWrap]
       inFlight: Table[PCurl, RequestWrap]
+      requestsCompleted: Deque[RequestWrap]
       thread: Thread[Prototype]
       closeCalled: bool
 
@@ -607,7 +610,12 @@ when defined(curlyPrototype):
         easy_reset(m.easy_handle)
         curl.availableEasyHandles.addLast(m.easy_handle)
 
-        request.waitGroup.done()
+        if request.waitGroup != nil:
+          request.waitGroup.done()
+        else:
+          withLock curl.lock:
+            curl.requestsCompleted.addLast(request)
+          signal(curl.requestCompletedCond)
 
       if numRunningHandles == 0:
         # Sleep if there are no running handles and the queue is empty
@@ -626,6 +634,7 @@ when defined(curlyPrototype):
     result = cast[Prototype](allocShared0(sizeof(PrototypeObj)))
     initLock(result.lock)
     initCond(result.cond)
+    initCond(result.requestCompletedCond)
     result.multiHandle = multi_init()
     if multi_setopt(
       result.multiHandle,
@@ -644,6 +653,7 @@ when defined(curlyPrototype):
     joinThreads(prototype.thread)
     deinitLock(prototype.lock)
     deinitCond(prototype.cond)
+    deinitCond(prototype.requestCompletedCond)
     while prototype.availableEasyHandles.len > 0:
       let easyHandle = prototype.availableEasyHandles.popFirst()
       easy_cleanup(easyHandle)
@@ -663,11 +673,11 @@ when defined(curlyPrototype):
     withLock prototype.lock:
       while prototype.queue.len > 0:
         let rw = prototype.queue.popFirst()
+        rw.error = "Canceled in clearQueue"
         if rw.waitGroup != nil:
-          rw.error = "Canceled in clearQueue"
           rw.waitGroup.done()
         else:
-          destroy rw
+          prototype.requestsCompleted.addLast(rw)
 
   proc makeRequest*(
     curl: Prototype,
@@ -806,18 +816,18 @@ when defined(curlyPrototype):
     waitGroup.wait()
 
     for rw in wrapped:
+      var response = move rw.response
+      response.request.verb = move rw.verb
+      response.request.url = move rw.url
+      response.request.tag = move rw.tag
       if rw.error == "":
-        var response = move rw.response
-        response.request.verb = move rw.verb
-        response.request.url = move rw.url
-        response.request.tag = move rw.tag
         addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
         response.body = move rw.responseBodyForLibcurl.str
         if response.headers["Content-Encoding"] == "gzip":
           response.body = uncompress(response.body, dfGzip)
         result.add((move response, ""))
       else:
-        result.add((Response(), move rw.error))
+        result.add((move response, move rw.error))
 
     destroy waitGroup
 
@@ -896,3 +906,61 @@ when defined(curlyPrototype):
     tag: sink string = ""
   ) =
     batch.addRequest("HEAD", move url, move headers, "", tag)
+
+  proc startRequests*(
+    curl: Prototype,
+    batch: sink RequestBatch,
+    timeout = 60
+  ) {.gcsafe.} =
+    ## Starts one or more HTTP requests. These requests are run in parallel.
+    ## This proc does not block waiting for responses.
+
+    if batch.requests.len == 0:
+      return
+
+    var wrapped: seq[RequestWrap]
+    for request in batch.requests.mitems:
+      let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
+      rw.verb = move request.verb
+      rw.url = move request.url
+      rw.headers = move request.headers
+      rw.ignore = move request.body
+      if rw.ignore.len > 0:
+        rw.body = rw.ignore[0].addr
+        rw.bodyLen = rw.ignore.len
+      rw.timeout = timeout
+      rw.tag = move request.tag
+
+      for (k, v) in rw.headers:
+        rw.headerStringsForLibcurl.add k & ": " & v
+
+      wrapped.add(rw)
+
+      withLock curl.lock:
+        curl.queue.addLast(rw)
+
+    signal(curl.cond)
+
+  proc waitForResponse*(
+    curl: Prototype
+  ): tuple[response: Response, error: string] {.gcsafe.} =
+    acquire(curl.lock)
+    while curl.requestsCompleted.len == 0:
+      wait(curl.requestCompletedCond, curl.lock)
+    let rw = curl.requestsCompleted.popFirst()
+    release(curl.lock)
+
+    var response = move rw.response
+    response.request.verb = move rw.verb
+    response.request.url = move rw.url
+    response.request.tag = move rw.tag
+    if rw.error == "":
+      addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
+      response.body = move rw.responseBodyForLibcurl.str
+      if response.headers["Content-Encoding"] == "gzip":
+        response.body = uncompress(response.body, dfGzip)
+      result = (move response, "")
+    else:
+      result = (move response, move rw.error)
+
+    destroy rw

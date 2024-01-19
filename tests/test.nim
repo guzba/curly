@@ -111,3 +111,63 @@ when defined(curlyPrototype):
     curl.clearQueue()
 
     joinThreads(threads)
+
+  block:
+    let curl = newPrototype()
+
+    var batch: RequestBatch
+    batch.get("https://www.yahoo.com")
+    batch.get(badurl, tag = "tag_test")
+    batch.get("https://nim-lang.org")
+
+    curl.startRequests(batch, timeout = 10)
+
+    for i in 0 ..< batch.len:
+      let (response, error) = curl.waitForResponse()
+      if error == "":
+        echo response.request.url
+      else:
+        echo error
+
+  block:
+    let curl = newPrototype(0)
+
+    var batch: RequestBatch
+    batch.get(badurl)
+    batch.get(badurl)
+    batch.get(badurl)
+    batch.get(badurl)
+
+    curl.startRequests(batch)
+
+    doAssert curl.queueLen == batch.len
+
+    curl.clearQueue()
+
+    doAssert curl.queueLen == 0
+
+    for i in 0 ..< batch.len:
+      let (response, error) = curl.waitForResponse()
+      doAssert error == "Canceled in clearQueue"
+
+  block:
+    let curl = newPrototype()
+
+    block:
+      var batch: RequestBatch
+      batch.get(badurl, tag = $0)
+      curl.startRequests(batch)
+
+    var i: int
+    while true:
+      let (response, error) = curl.waitForResponse()
+      if i < 10:
+        doAssert response.request.verb == "GET"
+        doAssert response.request.url == badurl
+        doAssert response.request.tag == $i
+        inc i
+        var batch: RequestBatch
+        batch.get(badurl, tag = $i)
+        curl.startRequests(batch)
+      else:
+        break
