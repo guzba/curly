@@ -73,10 +73,6 @@ proc recycle*(pool: CurlPool, handle: PCurl) {.inline, raises: [], gcsafe.} =
 
 proc newCurlPool*(size: int): CurlPool =
   ## Creates a new thead-safe pool of libcurl handles.
-  if size <= 0:
-    raise newException(CatchableError, "Invalid pool size")
-  # result.pool = newPool[PCurl]()
-
   result = cast[CurlPool](allocShared0(sizeof(CurlPoolObj)))
   initLock(result.lock)
   initCond(result.cond)
