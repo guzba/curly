@@ -1,6 +1,6 @@
-import curly, std/typetraits
+import curly
 
-const asdf = "https://eafeafaef.localhost.com"
+const badurl = "https://eafeafaef.localhost.com"
 
 block:
   let curlPool = newCurlPool(3)
@@ -18,57 +18,82 @@ block:
     doAssert response.body.len == 0
 
   doAssertRaises CatchableError:
-    echo curlPool.get(asdf)
+    echo curlPool.get(badurl)
 
   curlPool.close()
 
-# block:
-#   let curl = newPrototype()
+when defined(curlyPrototype):
+  import std/os
 
-#   var headers: HttpHeaders
-#   headers["Accept-Encoding"] = "gzip"
+  block:
+    let curl = newPrototype()
 
-#   let getResponse = curl.get("https://www.google.com", headers)
-#   doAssert getResponse.code == 200
-#   doAssert getResponse.headers.len > 0
-#   doAssert getResponse.body.len > 0
+    var headers: HttpHeaders
+    headers["Accept-Encoding"] = "gzip"
 
-#   let headResponse = curl.head("https://www.google.com")
-#   doAssert headResponse.code == 200
-#   doAssert getResponse.headers.len > 0
-#   doAssert headResponse.body.len == 0
+    let getResponse = curl.get("https://www.google.com", headers)
+    doAssert getResponse.code == 200
+    doAssert getResponse.headers.len > 0
+    doAssert getResponse.body.len > 0
 
-#   doAssertRaises CatchableError:
-#     discard curl.get(asdf)
+    let headResponse = curl.head("https://www.google.com")
+    doAssert headResponse.code == 200
+    doAssert getResponse.headers.len > 0
+    doAssert headResponse.body.len == 0
 
-#   curl.close()
+    doAssertRaises CatchableError:
+      discard curl.get(badurl)
 
-# block:
-#   let curl = newPrototype()
+    curl.close()
 
-#   var batch: RequestBatch
-#   batch.get("https://www.microsoft.com")
-#   batch.get(asdf)
-#   batch.get("https://news.ycombinator.com/")
+  block:
+    let curl = newPrototype()
 
-#   echo batch.len
+    var batch: RequestBatch
+    batch.get("https://www.microsoft.com")
+    batch.get(badurl)
+    batch.get("https://news.ycombinator.com/")
 
-#   let x = curl.makeRequests(batch)
+    echo batch.len
 
-#   doAssert x[0].error == ""
-#   doAssert x[1].error != ""
-#   doAssert x[2].error == ""
+    let x = curl.makeRequests(batch)
 
-#   doAssert x[0].response.code == 200
-#   doAssert x[2].response.code == 200
+    doAssert x[0].error == ""
+    doAssert x[1].error != ""
+    doAssert x[2].error == ""
 
-#   doAssert x[0].response.headers.len > 0
-#   doAssert x[2].response.headers.len > 0
+    doAssert x[0].response.code == 200
+    doAssert x[2].response.code == 200
 
-#   doAssert x[0].response.body.len > 0
-#   doAssert x[2].response.body.len > 0
+    doAssert x[0].response.headers.len > 0
+    doAssert x[2].response.headers.len > 0
 
-#   for i, (response, error) in x:
-#     echo batch[i].verb, ' ', batch[i].url, " => ", response.code
+    doAssert x[0].response.body.len > 0
+    doAssert x[2].response.body.len > 0
 
-#   curl.close()
+    for i, (response, error) in x:
+      echo batch[i].verb, ' ', batch[i].url, " => ", response.code
+
+    doAssert curl.queueLen == 0
+
+    curl.close()
+
+  block:
+    let curl = newPrototype(0)
+
+    proc threadProc(curl: Prototype) =
+      try:
+        discard curl.get(badurl)
+      except:
+        doAssert getCurrentExceptionMsg() == "Canceled in clearQueue"
+
+    var threads = newSeq[Thread[Prototype]](10)
+    for thread in threads.mitems:
+      createThread(thread, threadProc, curl)
+
+    while curl.queueLen != threads.len:
+      sleep(1)
+
+    curl.clearQueue()
+
+    joinThreads(threads)

@@ -634,6 +634,20 @@ when defined(curlyPrototype):
     `=destroy`(rw[])
     deallocShared(rw)
 
+  proc queueLen*(prototype: Prototype): int {.gcsafe.} =
+    withLock prototype.lock:
+      result = prototype.queue.len
+
+  proc clearQueue*(prototype: Prototype) {.gcsafe.} =
+    withLock prototype.lock:
+      while prototype.queue.len > 0:
+        let rw = prototype.queue.popFirst()
+        if rw.waitGroup != nil:
+          rw.error = "Canceled in clearQueue"
+          rw.waitGroup.done()
+        else:
+          destroy rw
+
   proc makeRequest*(
     curl: Prototype,
     verb: sink string,
