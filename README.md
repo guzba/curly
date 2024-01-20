@@ -111,7 +111,7 @@ It is a great starting point to simply have `let curl* = newCurly()` at the top 
 
 ## Production tested
 
-I am using Curly in a production web server to make 20k+ HTTPS requests per minute on a tiny VM for a while now without any trouble.
+I am using Curly in a production [Mummy](https://github.com/guzba/mummy) web server to make 20k+ HTTPS requests per minute on a tiny VM for a while now without any trouble.
 
 Both the blocking and non-blocking Curly APIs are used and confirmed working in a very multi-threaded production environment.
 
