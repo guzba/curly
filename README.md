@@ -23,8 +23,6 @@ By choosing what blocks and doesn't block, you can manage your program's control
 
 NOTE! While these examples include `let curl = newCurl()`, it is strongly suggested that you reuse a single or small number of long-lived Curly instances instead of creating new instances frequently.
 
-A great starting point is simply having `let curl* = newCurly()` at the top of your program and use that one instance for everything (even from multiple threads).
-
 ### A simple request
 ```nim
 let curl = newCurly()
@@ -113,3 +111,11 @@ Both the blocking and non-blocking Curly APIs are used and confirmed working in 
 Curly should work out-of-the-box on Linux and Mac.
 
 On Windows you'll need to grab the latest libcurl DLL from https://curl.se/windows/, rename it to libcurl.dll, and put it in the same directory as your executable.
+
+### A key difference from Nim's std/httpclient
+
+When using Nim's std/httplcient, it is expected that you use a new HttpClient or AsyncHttpClient for each request. This is both not needed and a bad idea with Curly.
+
+This is because Curly reuses connections instead of setting them up and tearing them down for each request. A Curly instance should be long-lived, probably for the entire process lifespan.
+
+It is a great starting point to simply have `let curl* = newCurly()` at the top of your program and use it everywhere for any number of requests from any number of threads.
