@@ -348,6 +348,8 @@ proc threadProc(curl: Curly) {.raises: [].} =
           break
 
 proc newCurly*(maxInFlight = 16): Curly =
+  ## Creates a new Curly instance that will run up to `maxInFlight` HTTP
+  ## requests in parallel.
   result = cast[Curly](allocShared0(sizeof(CurlyObj)))
   initLock(result.lock)
   initCond(result.cond)
