@@ -100,6 +100,14 @@ Since `startRequests` can add any number of HTTP requests to a queue, and since 
 
 You can ask a Curly instance how long its queue is (`queueLen`) and if you think that is too long, you can call `clearQueue`. Clearing the queue will unblock all threads waiting for responses and each queued request will have an error stating it was canceled.
 
+## A key difference from Nim's std/httpclient
+
+When using Nim's std/httplcient, it is expected that you use a new HttpClient or AsyncHttpClient for each request. This is both not needed and a bad idea with Curly.
+
+This is because Curly reuses connections instead of setting them up and tearing them down for each request. A Curly instance should be long-lived, probably for the entire process lifespan.
+
+It is a great starting point to simply have `let curl* = newCurly()` at the top of your program and use it everywhere for any number of requests from any number of threads.
+
 ## Production tested
 
 I have been using Curly in a production web server to make 20k+ HTTPS requests per minute on a tiny VM for a while now without any trouble.
@@ -111,11 +119,3 @@ Both the blocking and non-blocking Curly APIs are used and confirmed working in 
 Curly should work out-of-the-box on Linux and Mac.
 
 On Windows you'll need to grab the latest libcurl DLL from https://curl.se/windows/, rename it to libcurl.dll, and put it in the same directory as your executable.
-
-### A key difference from Nim's std/httpclient
-
-When using Nim's std/httplcient, it is expected that you use a new HttpClient or AsyncHttpClient for each request. This is both not needed and a bad idea with Curly.
-
-This is because Curly reuses connections instead of setting them up and tearing them down for each request. A Curly instance should be long-lived, probably for the entire process lifespan.
-
-It is a great starting point to simply have `let curl* = newCurly()` at the top of your program and use it everywhere for any number of requests from any number of threads.
