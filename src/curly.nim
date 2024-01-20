@@ -51,7 +51,7 @@ type
     body*: string ## The response body (uncompressed if gzip'ed)
     request*: RequestInfo ## Info about the request this response is for
 
-  RequestInfo = object
+  RequestInfo* = object
     verb*: string ## HTTP method / verb of the request
     url*: string ## Intitial request URL, before any redirects
     tag*: string ## Arbtitrary user-provided data when batching requests
@@ -64,7 +64,7 @@ type
   RequestBatch* = object
     requests: seq[BatchedRequest]
 
-  BatchedRequest = object
+  BatchedRequest* = object
     verb*: string
     url*: string
     headers*: HttpHeaders
