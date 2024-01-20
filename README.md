@@ -8,7 +8,7 @@
 
 Curly is an efficient thread-ready parallel HTTP client built on top of libcurl.
 
-With Curly you can run one or multiple HTTP requests in parallel while either only blocking the calling thread or not blocking at all without requiring `{.async.}`.
+With Curly you can run one or multiple HTTP requests in parallel while either only blocking the calling thread or not blocking at all.
 
 Some highlights are:
 

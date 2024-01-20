@@ -4,10 +4,10 @@ import mummy, mummy/routers, curly
 ## https://www.google.com and returns the body length every time a request is
 ## received.
 ##
-## Using a pool of handles here means we can take advantage of Keep-Alive,
+## Using Curly means we can take advantage of Keep-Alive,
 ## reusing the connection instead of always opening a new one.
 
-let curl = newCurlPool(3)
+let curl = newCurly()
 
 proc handler(request: Request) =
   let response = curl.get("https://www.google.com")
