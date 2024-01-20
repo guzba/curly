@@ -51,10 +51,20 @@
   <details open>
     <summary><a class="reference reference-toplevel" href="#7" id="57">Types</a></summary>
     <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#CurlPool" title="CurlPool = ptr CurlPoolObj">CurlPool</a></li>
+      <li><a class="reference" href="#BatchedRequest" title="BatchedRequest = object
+  verb*: string
+  url*: string
+  headers*: HttpHeaders
+  body*: string
+  tag*: string">BatchedRequest</a></li>
+<li><a class="reference" href="#CurlPool" title="CurlPool = ptr CurlPoolObj">CurlPool</a></li>
 <li><a class="reference" href="#Curly" title="Curly = ptr CurlyObj">Curly</a></li>
 <li><a class="reference" href="#CurlyObj" title="CurlyObj = object">CurlyObj</a></li>
 <li><a class="reference" href="#RequestBatch" title="RequestBatch = object">RequestBatch</a></li>
+<li><a class="reference" href="#RequestInfo" title="RequestInfo = object
+  verb*: string              ## HTTP method / verb of the request
+  url*: string               ## Intitial request URL, before any redirects
+  tag*: string               ## Arbtitrary user-provided data when batching requests">RequestInfo</a></li>
 <li><a class="reference" href="#Response" title="Response = object
   code*: int                 ## HTTP status code of the response
   url*: string               ## Final URL, after any redirects
@@ -288,7 +298,23 @@
     <div class="section" id="7">
   <h1><a class="toc-backref" href="#7">Types</a></h1>
   <dl class="item">
-    <div id="CurlPool">
+    <div id="BatchedRequest">
+  <dt><pre><a href="curly.html#BatchedRequest"><span class="Identifier">BatchedRequest</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">verb</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
+  <span class="Identifier">url</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
+  <span class="Identifier">headers</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">HttpHeaders</span>
+  <span class="Identifier">body</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
+  <span class="Identifier">tag</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
+</pre></dt>
+  <dd>
+    
+    
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L67" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L67" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
+<div id="CurlPool">
   <dt><pre><a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a> <span class="Other">=</span> <span class="Keyword">ptr</span> <span class="Identifier">CurlPoolObj</span></pre></dt>
   <dd>
     
@@ -330,13 +356,27 @@
 
   </dd>
 </div>
+<div id="RequestInfo">
+  <dt><pre><a href="curly.html#RequestInfo"><span class="Identifier">RequestInfo</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">verb</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>              <span class="Comment">## HTTP method / verb of the request</span>
+  <span class="Identifier">url</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>               <span class="Comment">## Intitial request URL, before any redirects</span>
+  <span class="Identifier">tag</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>               <span class="Comment">## Arbtitrary user-provided data when batching requests</span>
+  </pre></dt>
+  <dd>
+    
+    
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L54" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L54" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
 <div id="Response">
   <dt><pre><a href="curly.html#Response"><span class="Identifier">Response</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">code</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>                 <span class="Comment">## HTTP status code of the response</span>
   <span class="Identifier">url</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>               <span class="Comment">## Final URL, after any redirects</span>
   <span class="Identifier">headers</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">HttpHeaders</span>
   <span class="Identifier">body</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>              <span class="Comment">## The response body (uncompressed if gzip'ed)</span>
-  <span class="Identifier">request</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">RequestInfo</span>      <span class="Comment">## Info about the request this response is for</span>
+  <span class="Identifier">request</span><span class="Operator">*</span><span class="Other">:</span> <a href="curly.html#RequestInfo"><span class="Identifier">RequestInfo</span></a>      <span class="Comment">## Info about the request this response is for</span>
   </pre></dt>
   <dd>
     
@@ -364,7 +404,7 @@
   <dl class="item">
     <div id="[]-procs-all">
   <div id="[],RequestBatch,int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#%5B%5D%2CRequestBatch%2Cint"><span class="Identifier">`[]`</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">lent</span> <span class="Identifier">BatchedRequest</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#%5B%5D%2CRequestBatch%2Cint"><span class="Identifier">`[]`</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">lent</span> <a href="curly.html#BatchedRequest"><span class="Identifier">BatchedRequest</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
@@ -980,7 +1020,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-20 17:43:17 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-20 17:46:19 UTC</small>
       </div>
     </div>
   </div>

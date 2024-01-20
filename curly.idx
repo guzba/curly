@@ -1,6 +1,8 @@
 nimTitle	curly	curly.html	module src/curly		0
 nim	Response	curly.html#Response	object Response		47
+nim	RequestInfo	curly.html#RequestInfo	object RequestInfo		54
 nim	RequestBatch	curly.html#RequestBatch	object RequestBatch		64
+nim	BatchedRequest	curly.html#BatchedRequest	object BatchedRequest		67
 nim	ResponseBatch	curly.html#ResponseBatch	type ResponseBatch		74
 nim	CurlyObj	curly.html#CurlyObj	object CurlyObj		102
 nim	Curly	curly.html#Curly	type Curly		115
