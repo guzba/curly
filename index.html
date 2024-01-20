@@ -53,11 +53,11 @@
     <ul class="simple simple-toc-section">
       <li><a class="reference" href="#CurlPool" title="CurlPool = ptr CurlPoolObj">CurlPool</a></li>
 <li><a class="reference" href="#Response" title="Response = object
-  code*: int
+  code*: int                 ## HTTP status code of the response
   url*: string               ## Final URL, after any redirects
   headers*: HttpHeaders
-  body*: string
-  request*: RequestInfo">Response</a></li>
+  body*: string              ## The response body (uncompressed if gzip'ed)
+  request*: RequestInfo      ## Info about the request this response is for">Response</a></li>
 
     </ul>
   </details>
@@ -188,12 +188,12 @@
 </div>
 <div id="Response">
   <dt><pre><a href="curly.html#Response"><span class="Identifier">Response</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">code</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
+  <span class="Identifier">code</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>                 <span class="Comment">## HTTP status code of the response</span>
   <span class="Identifier">url</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>               <span class="Comment">## Final URL, after any redirects</span>
   <span class="Identifier">headers</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">HttpHeaders</span>
-  <span class="Identifier">body</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-  <span class="Identifier">request</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">RequestInfo</span>
-</pre></dt>
+  <span class="Identifier">body</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>              <span class="Comment">## The response body (uncompressed if gzip'ed)</span>
+  <span class="Identifier">request</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">RequestInfo</span>      <span class="Comment">## Info about the request this response is for</span>
+  </pre></dt>
   <dd>
     
     
@@ -473,7 +473,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-20 00:52:59 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-20 00:56:36 UTC</small>
       </div>
     </div>
   </div>
