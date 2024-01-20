@@ -1,4 +1,4 @@
-import curly
+import curly, std/options
 
 const badurl = "https://eafeafaef.localhost.com"
 
@@ -181,4 +181,15 @@ when defined(curlyPrototype):
         inc i
         curl.startRequest("GET", badurl, tag = $i)
       else:
+        break
+
+  block:
+    let curl = newPrototype(1)
+
+    curl.startRequest("GET", badurl)
+
+    while true:
+      let answer = curl.pollForResponse()
+      if answer.isSome:
+        doAssert answer.get.error != ""
         break

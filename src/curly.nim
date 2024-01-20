@@ -5,7 +5,9 @@ when not defined(nimdoc):
 when not compileOption("threads"):
   {.error: "Using --threads:on is required by Curly.".}
 
-import libcurl, std/strutils, std/locks, std/random, webby/httpheaders, zippy
+import std/strutils, std/locks, std/random, webby/httpheaders, zippy
+
+import libcurl except Option
 
 when not defined(windows):
   import std/posix
@@ -360,7 +362,7 @@ proc head*(
     result = curl.makeRequest("HEAD", url, headers, "", timeout)
 
 when defined(curlyPrototype):
-  import std/deques, std/tables
+  import std/deques, std/tables, std/options
 
   when defined(windows):
     const
@@ -950,7 +952,7 @@ when defined(curlyPrototype):
     ## Starts one or more HTTP requests. These requests are run in parallel.
     ## This proc does not block waiting for responses.
     ## NOTE: When each request completes, a response is stored until it is
-    ## removed by a call to `waitForResponse`.
+    ## removed by a call to `waitForResponse` or `pollForResponse`.
     ## If the responses are never removed, they will accumulate in memory.
 
     if batch.requests.len == 0:
@@ -1013,3 +1015,20 @@ when defined(curlyPrototype):
     result = unwrapResponse(rw)
 
     destroy rw
+
+  type RequestResult = object
+    response*: Response
+    error*: string
+
+  proc pollForResponse*(
+    curl: Prototype
+  ): Option[RequestResult] {.raises: [], gcsafe.} =
+    var rw: RequestWrap
+    acquire(curl.lock)
+    if curl.requestsCompleted.len > 0:
+      rw = curl.requestsCompleted.popFirst()
+    release(curl.lock)
+
+    if rw != nil:
+      var (response, error) = unwrapResponse(rw)
+      result = some(RequestResult(response: move response, error: move error))
