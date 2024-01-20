@@ -22,17 +22,43 @@
     <div class="container">
       <h1 class="title">Index</h1>
       Modules: <a href="curly.html">curly</a>.<br/><p /><h2>API symbols</h2>
-<dl><dt><a name="borrow" href="#borrow"><span>borrow:</span></a></dt><dd><ul class="simple">
+<dl><dt><a name="%60%5B%5D%60" href="#%60%5B%5D%60"><span>`[]`:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc `[]`(batch: RequestBatch; i: int): lent BatchedRequest" href="curly.html#%5B%5D%2CRequestBatch%2Cint">curly: proc `[]`(batch: RequestBatch; i: int): lent BatchedRequest</a></li>
+          </ul></dd>
+<dt><a name="addRequest" href="#addRequest"><span>addRequest:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc addRequest(batch: var RequestBatch; verb: sink string; url: sink string;
+           headers: sink HttpHeaders = emptyHttpHeaders();
+           body: sink string = &quot;&quot;; tag: sink string = &quot;&quot;)" href="curly.html#addRequest%2CRequestBatch%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring">curly: proc addRequest(batch: var RequestBatch; verb: sink string; url: sink string;
+           headers: sink HttpHeaders = emptyHttpHeaders();
+           body: sink string = &quot;&quot;; tag: sink string = &quot;&quot;)</a></li>
+          </ul></dd>
+<dt><a name="borrow" href="#borrow"><span>borrow:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="curly: proc borrow(pool: CurlPool): PCurl" href="curly.html#borrow%2CCurlPool">curly: proc borrow(pool: CurlPool): PCurl</a></li>
+          </ul></dd>
+<dt><a name="clearQueue" href="#clearQueue"><span>clearQueue:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc clearQueue(curl: Curly)" href="curly.html#clearQueue%2CCurly">curly: proc clearQueue(curl: Curly)</a></li>
           </ul></dd>
 <dt><a name="close" href="#close"><span>close:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="curly: proc close(pool: CurlPool)" href="curly.html#close%2CCurlPool">curly: proc close(pool: CurlPool)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="curly: proc close(curl: Curly)" href="curly.html#close%2CCurly">curly: proc close(curl: Curly)</a></li>
           </ul></dd>
 <dt><a name="CurlPool" href="#CurlPool"><span>CurlPool:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="curly: type CurlPool" href="curly.html#CurlPool">curly: type CurlPool</a></li>
+          </ul></dd>
+<dt><a name="Curly" href="#Curly"><span>Curly:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: type Curly" href="curly.html#Curly">curly: type Curly</a></li>
+          </ul></dd>
+<dt><a name="CurlyObj" href="#CurlyObj"><span>CurlyObj:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: object CurlyObj" href="curly.html#CurlyObj">curly: object CurlyObj</a></li>
           </ul></dd>
 <dt><a name="delete" href="#delete"><span>delete:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -40,9 +66,17 @@
        timeout: float32 = 60.0): Response" href="curly.html#delete%2CCurlPool%2Cstring%2Cfloat32">curly: proc delete(pool: CurlPool; url: string; headers = emptyHttpHeaders();
        timeout: float32 = 60.0): Response</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="curly: proc delete(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();
+       timeout = 60): Response" href="curly.html#delete%2CCurly%2Cstring%2CsinkHttpHeaders%2Cint">curly: proc delete(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();
+       timeout = 60): Response</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="curly: proc delete(curl: PCurl; url: string; headers = emptyHttpHeaders();
        timeout: float32 = 60.0): Response" href="curly.html#delete%2CPCurl%2Cstring%2Cfloat32">curly: proc delete(curl: PCurl; url: string; headers = emptyHttpHeaders();
        timeout: float32 = 60.0): Response</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="curly: proc delete(batch: var RequestBatch; url: sink string;
+       headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = &quot;&quot;)" href="curly.html#delete%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring">curly: proc delete(batch: var RequestBatch; url: sink string;
+       headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = &quot;&quot;)</a></li>
           </ul></dd>
 <dt><a name="get" href="#get"><span>get:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -50,9 +84,21 @@
     timeout: float32 = 60.0): Response" href="curly.html#get%2CCurlPool%2Cstring%2Cfloat32">curly: proc get(pool: CurlPool; url: string; headers = emptyHttpHeaders();
     timeout: float32 = 60.0): Response</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="curly: proc get(curl: Curly; url: sink string;
+    headers: sink HttpHeaders = emptyHttpHeaders(); timeout = 60): Response" href="curly.html#get%2CCurly%2Csinkstring%2CsinkHttpHeaders%2Cint">curly: proc get(curl: Curly; url: sink string;
+    headers: sink HttpHeaders = emptyHttpHeaders(); timeout = 60): Response</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="curly: proc get(curl: PCurl; url: string; headers = emptyHttpHeaders();
     timeout: float32 = 60.0): Response" href="curly.html#get%2CPCurl%2Cstring%2Cfloat32">curly: proc get(curl: PCurl; url: string; headers = emptyHttpHeaders();
     timeout: float32 = 60.0): Response</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="curly: proc get(batch: var RequestBatch; url: sink string;
+    headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = &quot;&quot;)" href="curly.html#get%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring">curly: proc get(batch: var RequestBatch; url: sink string;
+    headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = &quot;&quot;)</a></li>
+          </ul></dd>
+<dt><a name="hasRequests" href="#hasRequests"><span>hasRequests:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc hasRequests(curl: Curly): bool" href="curly.html#hasRequests%2CCurly">curly: proc hasRequests(curl: Curly): bool</a></li>
           </ul></dd>
 <dt><a name="head" href="#head"><span>head:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -60,12 +106,30 @@
      timeout: float32 = 60.0): Response" href="curly.html#head%2CCurlPool%2Cstring%2Cfloat32">curly: proc head(pool: CurlPool; url: string; headers = emptyHttpHeaders();
      timeout: float32 = 60.0): Response</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="curly: proc head(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();
+     timeout = 60): Response" href="curly.html#head%2CCurly%2Cstring%2CsinkHttpHeaders%2Cint">curly: proc head(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();
+     timeout = 60): Response</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="curly: proc head(curl: PCurl; url: string; headers = emptyHttpHeaders();
      timeout: float32 = 60.0): Response" href="curly.html#head%2CPCurl%2Cstring%2Cfloat32">curly: proc head(curl: PCurl; url: string; headers = emptyHttpHeaders();
      timeout: float32 = 60.0): Response</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="curly: proc head(batch: var RequestBatch; url: sink string;
+     headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = &quot;&quot;)" href="curly.html#head%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring">curly: proc head(batch: var RequestBatch; url: sink string;
+     headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = &quot;&quot;)</a></li>
+          </ul></dd>
+<dt><a name="len" href="#len"><span>len:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc len(batch: RequestBatch): int" href="curly.html#len%2CRequestBatch">curly: proc len(batch: RequestBatch): int</a></li>
           </ul></dd>
 <dt><a name="makeRequest" href="#makeRequest"><span>makeRequest:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="curly: proc makeRequest(curl: Curly; verb: sink string; url: sink string;
+            headers: sink HttpHeaders = emptyHttpHeaders();
+            body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout = 60): Response" href="curly.html#makeRequest%2CCurly%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint">curly: proc makeRequest(curl: Curly; verb: sink string; url: sink string;
+            headers: sink HttpHeaders = emptyHttpHeaders();
+            body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout = 60): Response</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="curly: proc makeRequest(curl: PCurl; verb: string; url: string;
             headers = emptyHttpHeaders();
             body: openArray[char] = &quot;&quot;.toOpenArray(0, -1);
@@ -74,9 +138,21 @@
             body: openArray[char] = &quot;&quot;.toOpenArray(0, -1);
             timeout: float32 = 60.0): Response</a></li>
           </ul></dd>
+<dt><a name="makeRequests" href="#makeRequests"><span>makeRequests:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc makeRequests(curl: Curly; batch: RequestBatch; timeout = 60): ResponseBatch" href="curly.html#makeRequests%2CCurly%2CRequestBatch%2Cint">curly: proc makeRequests(curl: Curly; batch: RequestBatch; timeout = 60): ResponseBatch</a></li>
+          </ul></dd>
 <dt><a name="newCurlPool" href="#newCurlPool"><span>newCurlPool:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="curly: proc newCurlPool(size: int): CurlPool" href="curly.html#newCurlPool%2Cint">curly: proc newCurlPool(size: int): CurlPool</a></li>
+          </ul></dd>
+<dt><a name="newCurly" href="#newCurly"><span>newCurly:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc newCurly(maxInFlight = 16): Curly" href="curly.html#newCurly%2Cint">curly: proc newCurly(maxInFlight = 16): Curly</a></li>
+          </ul></dd>
+<dt><a name="numInFlight" href="#numInFlight"><span>numInFlight:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc numInFlight(curl: Curly): int" href="curly.html#numInFlight%2CCurly">curly: proc numInFlight(curl: Curly): int</a></li>
           </ul></dd>
 <dt><a name="patch" href="#patch"><span>patch:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -84,9 +160,23 @@
       body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response" href="curly.html#patch%2CCurlPool%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32">curly: proc patch(pool: CurlPool; url: string; headers = emptyHttpHeaders();
       body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="curly: proc patch(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();
+      body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout = 60): Response" href="curly.html#patch%2CCurly%2Cstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint">curly: proc patch(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();
+      body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout = 60): Response</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="curly: proc patch(curl: PCurl; url: string; headers = emptyHttpHeaders();
       body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response" href="curly.html#patch%2CPCurl%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32">curly: proc patch(curl: PCurl; url: string; headers = emptyHttpHeaders();
       body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="curly: proc patch(batch: var RequestBatch; url: sink string;
+      headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = &quot;&quot;;
+      tag: sink string = &quot;&quot;)" href="curly.html#patch%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring">curly: proc patch(batch: var RequestBatch; url: sink string;
+      headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = &quot;&quot;;
+      tag: sink string = &quot;&quot;)</a></li>
+          </ul></dd>
+<dt><a name="pollForResponse" href="#pollForResponse"><span>pollForResponse:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc pollForResponse(curl: Curly): Option[RequestResult]" href="curly.html#pollForResponse%2CCurly">curly: proc pollForResponse(curl: Curly): Option[RequestResult]</a></li>
           </ul></dd>
 <dt><a name="post" href="#post"><span>post:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -94,9 +184,19 @@
      body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response" href="curly.html#post%2CCurlPool%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32">curly: proc post(pool: CurlPool; url: string; headers = emptyHttpHeaders();
      body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="curly: proc post(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();
+     body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout = 60): Response" href="curly.html#post%2CCurly%2Cstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint">curly: proc post(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();
+     body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout = 60): Response</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="curly: proc post(curl: PCurl; url: string; headers = emptyHttpHeaders();
      body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response" href="curly.html#post%2CPCurl%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32">curly: proc post(curl: PCurl; url: string; headers = emptyHttpHeaders();
      body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="curly: proc post(batch: var RequestBatch; url: sink string;
+     headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = &quot;&quot;;
+     tag: sink string = &quot;&quot;)" href="curly.html#post%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring">curly: proc post(batch: var RequestBatch; url: sink string;
+     headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = &quot;&quot;;
+     tag: sink string = &quot;&quot;)</a></li>
           </ul></dd>
 <dt><a name="put" href="#put"><span>put:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -104,17 +204,55 @@
     body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response" href="curly.html#put%2CCurlPool%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32">curly: proc put(pool: CurlPool; url: string; headers = emptyHttpHeaders();
     body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="curly: proc put(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();
+    body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout = 60): Response" href="curly.html#put%2CCurly%2Cstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint">curly: proc put(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();
+    body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout = 60): Response</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="curly: proc put(curl: PCurl; url: string; headers = emptyHttpHeaders();
     body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response" href="curly.html#put%2CPCurl%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32">curly: proc put(curl: PCurl; url: string; headers = emptyHttpHeaders();
     body: openArray[char] = &quot;&quot;.toOpenArray(0, -1); timeout: float32 = 60.0): Response</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="curly: proc put(batch: var RequestBatch; url: sink string;
+    headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = &quot;&quot;;
+    tag: sink string = &quot;&quot;)" href="curly.html#put%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring">curly: proc put(batch: var RequestBatch; url: sink string;
+    headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = &quot;&quot;;
+    tag: sink string = &quot;&quot;)</a></li>
+          </ul></dd>
+<dt><a name="queueLen" href="#queueLen"><span>queueLen:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc queueLen(curl: Curly): int" href="curly.html#queueLen%2CCurly">curly: proc queueLen(curl: Curly): int</a></li>
           </ul></dd>
 <dt><a name="recycle" href="#recycle"><span>recycle:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="curly: proc recycle(pool: CurlPool; handle: PCurl)" href="curly.html#recycle%2CCurlPool%2CPCurl">curly: proc recycle(pool: CurlPool; handle: PCurl)</a></li>
           </ul></dd>
+<dt><a name="RequestBatch" href="#RequestBatch"><span>RequestBatch:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: object RequestBatch" href="curly.html#RequestBatch">curly: object RequestBatch</a></li>
+          </ul></dd>
 <dt><a name="Response" href="#Response"><span>Response:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="curly: object Response" href="curly.html#Response">curly: object Response</a></li>
+          </ul></dd>
+<dt><a name="ResponseBatch" href="#ResponseBatch"><span>ResponseBatch:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: type ResponseBatch" href="curly.html#ResponseBatch">curly: type ResponseBatch</a></li>
+          </ul></dd>
+<dt><a name="startRequest" href="#startRequest"><span>startRequest:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc startRequest(curl: Curly; verb: sink string; url: sink string;
+             headers: sink HttpHeaders = emptyHttpHeaders();
+             body: sink string = &quot;&quot;; timeout = 60; tag: sink string = &quot;&quot;)" href="curly.html#startRequest%2CCurly%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Cint%2Csinkstring">curly: proc startRequest(curl: Curly; verb: sink string; url: sink string;
+             headers: sink HttpHeaders = emptyHttpHeaders();
+             body: sink string = &quot;&quot;; timeout = 60; tag: sink string = &quot;&quot;)</a></li>
+          </ul></dd>
+<dt><a name="startRequests" href="#startRequests"><span>startRequests:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc startRequests(curl: Curly; batch: sink RequestBatch; timeout = 60)" href="curly.html#startRequests%2CCurly%2CsinkRequestBatch%2Cint">curly: proc startRequests(curl: Curly; batch: sink RequestBatch; timeout = 60)</a></li>
+          </ul></dd>
+<dt><a name="waitForResponse" href="#waitForResponse"><span>waitForResponse:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="curly: proc waitForResponse(curl: Curly): tuple[response: Response, error: string]" href="curly.html#waitForResponse%2CCurly">curly: proc waitForResponse(curl: Curly): tuple[response: Response, error: string]</a></li>
           </ul></dd>
 <dt><a name="withHandle" href="#withHandle"><span>withHandle:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -124,7 +262,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-20 00:56:36 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-01-20 01:25:15 UTC</small>
       </div>
     </div>
   </div>
