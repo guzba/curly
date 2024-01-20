@@ -431,7 +431,7 @@ proc makeRequest*(
   rw.url = move url
   rw.headers = move headers
   if body.len > 0:
-    rw.body = body[0].addr
+    rw.body = body[0].unsafeAddr
     rw.bodyLen = body.len
   rw.timeout = timeout
   rw.waitGroup = newWaitGroup(1)
@@ -554,7 +554,7 @@ proc makeRequests*(
     rw.url = request.url
     rw.headers = request.headers
     if request.body.len > 0:
-      rw.body = request.body[0].addr
+      rw.body = request.body[0].unsafeAddr
       rw.bodyLen = request.body.len
     rw.timeout = timeout
     rw.tag = request.tag
