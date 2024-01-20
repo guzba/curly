@@ -5,56 +5,56 @@ nim	ResponseBatch	curly.html#ResponseBatch	type ResponseBatch		74
 nim	CurlyObj	curly.html#CurlyObj	object CurlyObj		102
 nim	Curly	curly.html#Curly	type Curly		115
 nim	newCurly	curly.html#newCurly,int	proc newCurly(maxInFlight = 16): Curly		350
-nim	close	curly.html#close,Curly	proc close(curl: Curly)		367
-nim	hasRequests	curly.html#hasRequests,Curly	proc hasRequests(curl: Curly): bool		388
-nim	numInFlight	curly.html#numInFlight,Curly	proc numInFlight(curl: Curly): int		394
-nim	queueLen	curly.html#queueLen,Curly	proc queueLen(curl: Curly): int		399
-nim	clearQueue	curly.html#clearQueue,Curly	proc clearQueue(curl: Curly)		404
-nim	makeRequest	curly.html#makeRequest,Curly,sinkstring,sinkstring,sinkHttpHeaders,openArray[char],int	proc makeRequest(curl: Curly; verb: sink string; url: sink string;\n            headers: sink HttpHeaders = emptyHttpHeaders();\n            body: openArray[char] = "".toOpenArray(0, -1); timeout = 60): Response		416
-nim	get	curly.html#get,Curly,sinkstring,sinkHttpHeaders,int	proc get(curl: Curly; url: sink string;\n    headers: sink HttpHeaders = emptyHttpHeaders(); timeout = 60): Response		461
-nim	post	curly.html#post,Curly,string,sinkHttpHeaders,openArray[char],int	proc post(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();\n     body: openArray[char] = "".toOpenArray(0, -1); timeout = 60): Response		469
-nim	put	curly.html#put,Curly,string,sinkHttpHeaders,openArray[char],int	proc put(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();\n    body: openArray[char] = "".toOpenArray(0, -1); timeout = 60): Response		478
-nim	patch	curly.html#patch,Curly,string,sinkHttpHeaders,openArray[char],int	proc patch(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();\n      body: openArray[char] = "".toOpenArray(0, -1); timeout = 60): Response		487
-nim	delete	curly.html#delete,Curly,string,sinkHttpHeaders,int	proc delete(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();\n       timeout = 60): Response		496
-nim	head	curly.html#head,Curly,string,sinkHttpHeaders,int	proc head(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();\n     timeout = 60): Response		504
-nim	makeRequests	curly.html#makeRequests,Curly,RequestBatch,int	proc makeRequests(curl: Curly; batch: RequestBatch; timeout = 60): ResponseBatch		530
-nim	len	curly.html#len,RequestBatch	proc len(batch: RequestBatch): int		581
-nim	`[]`	curly.html#[],RequestBatch,int	proc `[]`(batch: RequestBatch; i: int): lent BatchedRequest		584
-nim	addRequest	curly.html#addRequest,RequestBatch,sinkstring,sinkstring,sinkHttpHeaders,sinkstring,sinkstring	proc addRequest(batch: var RequestBatch; verb: sink string; url: sink string;\n           headers: sink HttpHeaders = emptyHttpHeaders();\n           body: sink string = ""; tag: sink string = "")		587
-nim	get	curly.html#get,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring	proc get(batch: var RequestBatch; url: sink string;\n    headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = "")		603
-nim	post	curly.html#post,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring,sinkstring	proc post(batch: var RequestBatch; url: sink string;\n     headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = "";\n     tag: sink string = "")		611
-nim	put	curly.html#put,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring,sinkstring	proc put(batch: var RequestBatch; url: sink string;\n    headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = "";\n    tag: sink string = "")		620
-nim	patch	curly.html#patch,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring,sinkstring	proc patch(batch: var RequestBatch; url: sink string;\n      headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = "";\n      tag: sink string = "")		629
-nim	delete	curly.html#delete,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring	proc delete(batch: var RequestBatch; url: sink string;\n       headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = "")		638
-nim	head	curly.html#head,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring	proc head(batch: var RequestBatch; url: sink string;\n     headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = "")		646
-nim	startRequests	curly.html#startRequests,Curly,sinkRequestBatch,int	proc startRequests(curl: Curly; batch: sink RequestBatch; timeout = 60)		654
-nim	startRequest	curly.html#startRequest,Curly,sinkstring,sinkstring,sinkHttpHeaders,sinkstring,int,sinkstring	proc startRequest(curl: Curly; verb: sink string; url: sink string;\n             headers: sink HttpHeaders = emptyHttpHeaders();\n             body: sink string = ""; timeout = 60; tag: sink string = "")		691
-nim	waitForResponse	curly.html#waitForResponse,Curly	proc waitForResponse(curl: Curly): tuple[response: Response, error: string]		709
-nim	pollForResponse	curly.html#pollForResponse,Curly	proc pollForResponse(curl: Curly): Option[RequestResult]		730
-nim	CurlPool	curly.html#CurlPool	type CurlPool		756
-nim	close	curly.html#close,CurlPool	proc close(pool: CurlPool)		758
-nim	borrow	curly.html#borrow,CurlPool	proc borrow(pool: CurlPool): PCurl		767
-nim	recycle	curly.html#recycle,CurlPool,PCurl	proc recycle(pool: CurlPool; handle: PCurl)		777
-nim	newCurlPool	curly.html#newCurlPool,int	proc newCurlPool(size: int): CurlPool		784
-nim	withHandle	curly.html#withHandle.t,CurlPool,,	template withHandle(pool: CurlPool; handle, body)		801
-nim	makeRequest	curly.html#makeRequest,PCurl,string,string,openArray[char],float32	proc makeRequest(curl: PCurl; verb: string; url: string;\n            headers = emptyHttpHeaders();\n            body: openArray[char] = "".toOpenArray(0, -1);\n            timeout: float32 = 60.0): Response		809
-nim	get	curly.html#get,PCurl,string,float32	proc get(curl: PCurl; url: string; headers = emptyHttpHeaders();\n    timeout: float32 = 60.0): Response		932
-nim	post	curly.html#post,PCurl,string,openArray[char],float32	proc post(curl: PCurl; url: string; headers = emptyHttpHeaders();\n     body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		940
-nim	put	curly.html#put,PCurl,string,openArray[char],float32	proc put(curl: PCurl; url: string; headers = emptyHttpHeaders();\n    body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		949
-nim	patch	curly.html#patch,PCurl,string,openArray[char],float32	proc patch(curl: PCurl; url: string; headers = emptyHttpHeaders();\n      body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		958
-nim	delete	curly.html#delete,PCurl,string,float32	proc delete(curl: PCurl; url: string; headers = emptyHttpHeaders();\n       timeout: float32 = 60.0): Response		967
-nim	head	curly.html#head,PCurl,string,float32	proc head(curl: PCurl; url: string; headers = emptyHttpHeaders();\n     timeout: float32 = 60.0): Response		975
-nim	get	curly.html#get,CurlPool,string,float32	proc get(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n    timeout: float32 = 60.0): Response		983
-nim	post	curly.html#post,CurlPool,string,openArray[char],float32	proc post(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n     body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		992
-nim	put	curly.html#put,CurlPool,string,openArray[char],float32	proc put(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n    body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		1002
-nim	patch	curly.html#patch,CurlPool,string,openArray[char],float32	proc patch(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n      body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		1012
-nim	delete	curly.html#delete,CurlPool,string,float32	proc delete(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n       timeout: float32 = 60.0): Response		1022
-nim	head	curly.html#head,CurlPool,string,float32	proc head(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n     timeout: float32 = 60.0): Response		1031
-nimgrp	put	curly.html#put-procs-all	proc		478
-nimgrp	close	curly.html#close-procs-all	proc		367
-nimgrp	head	curly.html#head-procs-all	proc		504
-nimgrp	post	curly.html#post-procs-all	proc		469
-nimgrp	get	curly.html#get-procs-all	proc		461
-nimgrp	makerequest	curly.html#makeRequest-procs-all	proc		416
-nimgrp	patch	curly.html#patch-procs-all	proc		487
-nimgrp	delete	curly.html#delete-procs-all	proc		496
+nim	close	curly.html#close,Curly	proc close(curl: Curly)		369
+nim	hasRequests	curly.html#hasRequests,Curly	proc hasRequests(curl: Curly): bool		390
+nim	numInFlight	curly.html#numInFlight,Curly	proc numInFlight(curl: Curly): int		396
+nim	queueLen	curly.html#queueLen,Curly	proc queueLen(curl: Curly): int		401
+nim	clearQueue	curly.html#clearQueue,Curly	proc clearQueue(curl: Curly)		406
+nim	makeRequest	curly.html#makeRequest,Curly,sinkstring,sinkstring,sinkHttpHeaders,openArray[char],int	proc makeRequest(curl: Curly; verb: sink string; url: sink string;\n            headers: sink HttpHeaders = emptyHttpHeaders();\n            body: openArray[char] = "".toOpenArray(0, -1); timeout = 60): Response		418
+nim	get	curly.html#get,Curly,sinkstring,sinkHttpHeaders,int	proc get(curl: Curly; url: sink string;\n    headers: sink HttpHeaders = emptyHttpHeaders(); timeout = 60): Response		463
+nim	post	curly.html#post,Curly,string,sinkHttpHeaders,openArray[char],int	proc post(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();\n     body: openArray[char] = "".toOpenArray(0, -1); timeout = 60): Response		471
+nim	put	curly.html#put,Curly,string,sinkHttpHeaders,openArray[char],int	proc put(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();\n    body: openArray[char] = "".toOpenArray(0, -1); timeout = 60): Response		480
+nim	patch	curly.html#patch,Curly,string,sinkHttpHeaders,openArray[char],int	proc patch(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();\n      body: openArray[char] = "".toOpenArray(0, -1); timeout = 60): Response		489
+nim	delete	curly.html#delete,Curly,string,sinkHttpHeaders,int	proc delete(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();\n       timeout = 60): Response		498
+nim	head	curly.html#head,Curly,string,sinkHttpHeaders,int	proc head(curl: Curly; url: string; headers: sink HttpHeaders = emptyHttpHeaders();\n     timeout = 60): Response		506
+nim	makeRequests	curly.html#makeRequests,Curly,RequestBatch,int	proc makeRequests(curl: Curly; batch: RequestBatch; timeout = 60): ResponseBatch		532
+nim	len	curly.html#len,RequestBatch	proc len(batch: RequestBatch): int		583
+nim	`[]`	curly.html#[],RequestBatch,int	proc `[]`(batch: RequestBatch; i: int): lent BatchedRequest		586
+nim	addRequest	curly.html#addRequest,RequestBatch,sinkstring,sinkstring,sinkHttpHeaders,sinkstring,sinkstring	proc addRequest(batch: var RequestBatch; verb: sink string; url: sink string;\n           headers: sink HttpHeaders = emptyHttpHeaders();\n           body: sink string = ""; tag: sink string = "")		589
+nim	get	curly.html#get,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring	proc get(batch: var RequestBatch; url: sink string;\n    headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = "")		605
+nim	post	curly.html#post,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring,sinkstring	proc post(batch: var RequestBatch; url: sink string;\n     headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = "";\n     tag: sink string = "")		613
+nim	put	curly.html#put,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring,sinkstring	proc put(batch: var RequestBatch; url: sink string;\n    headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = "";\n    tag: sink string = "")		622
+nim	patch	curly.html#patch,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring,sinkstring	proc patch(batch: var RequestBatch; url: sink string;\n      headers: sink HttpHeaders = emptyHttpHeaders(); body: sink string = "";\n      tag: sink string = "")		631
+nim	delete	curly.html#delete,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring	proc delete(batch: var RequestBatch; url: sink string;\n       headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = "")		640
+nim	head	curly.html#head,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring	proc head(batch: var RequestBatch; url: sink string;\n     headers: sink HttpHeaders = emptyHttpHeaders(); tag: sink string = "")		648
+nim	startRequests	curly.html#startRequests,Curly,sinkRequestBatch,int	proc startRequests(curl: Curly; batch: sink RequestBatch; timeout = 60)		656
+nim	startRequest	curly.html#startRequest,Curly,sinkstring,sinkstring,sinkHttpHeaders,sinkstring,int,sinkstring	proc startRequest(curl: Curly; verb: sink string; url: sink string;\n             headers: sink HttpHeaders = emptyHttpHeaders();\n             body: sink string = ""; timeout = 60; tag: sink string = "")		693
+nim	waitForResponse	curly.html#waitForResponse,Curly	proc waitForResponse(curl: Curly): tuple[response: Response, error: string]		711
+nim	pollForResponse	curly.html#pollForResponse,Curly	proc pollForResponse(curl: Curly): Option[RequestResult]		732
+nim	CurlPool	curly.html#CurlPool	type CurlPool		758
+nim	close	curly.html#close,CurlPool	proc close(pool: CurlPool)		760
+nim	borrow	curly.html#borrow,CurlPool	proc borrow(pool: CurlPool): PCurl		769
+nim	recycle	curly.html#recycle,CurlPool,PCurl	proc recycle(pool: CurlPool; handle: PCurl)		779
+nim	newCurlPool	curly.html#newCurlPool,int	proc newCurlPool(size: int): CurlPool		786
+nim	withHandle	curly.html#withHandle.t,CurlPool,,	template withHandle(pool: CurlPool; handle, body)		803
+nim	makeRequest	curly.html#makeRequest,PCurl,string,string,openArray[char],float32	proc makeRequest(curl: PCurl; verb: string; url: string;\n            headers = emptyHttpHeaders();\n            body: openArray[char] = "".toOpenArray(0, -1);\n            timeout: float32 = 60.0): Response		811
+nim	get	curly.html#get,PCurl,string,float32	proc get(curl: PCurl; url: string; headers = emptyHttpHeaders();\n    timeout: float32 = 60.0): Response		934
+nim	post	curly.html#post,PCurl,string,openArray[char],float32	proc post(curl: PCurl; url: string; headers = emptyHttpHeaders();\n     body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		942
+nim	put	curly.html#put,PCurl,string,openArray[char],float32	proc put(curl: PCurl; url: string; headers = emptyHttpHeaders();\n    body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		951
+nim	patch	curly.html#patch,PCurl,string,openArray[char],float32	proc patch(curl: PCurl; url: string; headers = emptyHttpHeaders();\n      body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		960
+nim	delete	curly.html#delete,PCurl,string,float32	proc delete(curl: PCurl; url: string; headers = emptyHttpHeaders();\n       timeout: float32 = 60.0): Response		969
+nim	head	curly.html#head,PCurl,string,float32	proc head(curl: PCurl; url: string; headers = emptyHttpHeaders();\n     timeout: float32 = 60.0): Response		977
+nim	get	curly.html#get,CurlPool,string,float32	proc get(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n    timeout: float32 = 60.0): Response		985
+nim	post	curly.html#post,CurlPool,string,openArray[char],float32	proc post(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n     body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		994
+nim	put	curly.html#put,CurlPool,string,openArray[char],float32	proc put(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n    body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		1004
+nim	patch	curly.html#patch,CurlPool,string,openArray[char],float32	proc patch(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n      body: openArray[char] = "".toOpenArray(0, -1); timeout: float32 = 60.0): Response		1014
+nim	delete	curly.html#delete,CurlPool,string,float32	proc delete(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n       timeout: float32 = 60.0): Response		1024
+nim	head	curly.html#head,CurlPool,string,float32	proc head(pool: CurlPool; url: string; headers = emptyHttpHeaders();\n     timeout: float32 = 60.0): Response		1033
+nimgrp	put	curly.html#put-procs-all	proc		480
+nimgrp	close	curly.html#close-procs-all	proc		369
+nimgrp	head	curly.html#head-procs-all	proc		506
+nimgrp	post	curly.html#post-procs-all	proc		471
+nimgrp	get	curly.html#get-procs-all	proc		463
+nimgrp	makerequest	curly.html#makeRequest-procs-all	proc		418
+nimgrp	patch	curly.html#patch-procs-all	proc		489
+nimgrp	delete	curly.html#delete-procs-all	proc		498
