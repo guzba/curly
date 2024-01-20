@@ -33,16 +33,16 @@ type
   CurlPool* = ptr CurlPoolObj
 
   RequestInfo = object
-    verb*: string
+    verb*: string ## HTTP method / verb of the request
     url*: string ## Intitial request URL, before any redirects
     tag*: string ## Arbtitrary user-provided data when batching requests
 
   Response* = object
-    code*: int
+    code*: int ## HTTP status code of the response
     url*: string ## Final URL, after any redirects
     headers*: HttpHeaders
-    body*: string
-    request*: RequestInfo
+    body*: string ## The response body (uncompressed if gzip'ed)
+    request*: RequestInfo ## Info about the request this response is for
 
   StringWrap = object
     ## As strings are value objects they need
