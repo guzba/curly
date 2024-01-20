@@ -656,6 +656,8 @@ when defined(curlyPrototype):
     createThread(result.thread, threadProc, result)
 
   proc close*(prototype: Prototype) =
+    ## Blocks until all in-flight and queued requests complete, then
+    ## closes all libcurl handles and deallocates the Prototype.
     withLock prototype.lock:
       prototype.closeCalled = true
     signal(prototype.cond)
@@ -675,19 +677,24 @@ when defined(curlyPrototype):
     deallocShared(rw)
 
   proc hasRequests*(prototype: Prototype): bool {.gcsafe.} =
+    ## Returns true if the Prototype has requets in-flight or queued.
     withLock prototype.lock:
       let inFlight = prototype.maxInFlight - prototype.availableEasyHandles.len
       result = inFlight > 0 or prototype.queue.len > 0
 
   proc numInFlight*(prototype: Prototype): int {.gcsafe.} =
+    ## Returns the number of requests currently in-flight.
     withLock prototype.lock:
       result = prototype.maxInFlight - prototype.availableEasyHandles.len
 
   proc queueLen*(prototype: Prototype): int {.gcsafe.} =
+    ## Returns the number of queued requests.
     withLock prototype.lock:
       result = prototype.queue.len
 
   proc clearQueue*(prototype: Prototype) {.gcsafe.} =
+    ## Clears the request queue, unblocking any threads waiting on responses.
+    ## All queued requests are completed with an error.
     withLock prototype.lock:
       while prototype.queue.len > 0:
         let rw = prototype.queue.popFirst()
@@ -705,6 +712,9 @@ when defined(curlyPrototype):
     body: openarray[char] = "".toOpenArray(0, -1),
     timeout = 60
   ): Response {.gcsafe.} =
+    ## Makes the HTTP request and blocks until the response is received. If
+    ## a response cannot be received (due to timeout, DNS failure, broken
+    ## connection, etc), an exception is raised.
     let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
     rw.verb = move verb
     rw.url = move url
@@ -790,6 +800,24 @@ when defined(curlyPrototype):
   ): Response =
     curl.makeRequest("HEAD", url, headers, "", timeout)
 
+  proc unwrapResponse(
+    rw: RequestWrap
+  ): tuple[response: Response, error: string] =
+    var response = move rw.response
+    response.request.verb = move rw.verb
+    response.request.url = move rw.url
+    response.request.tag = move rw.tag
+    if rw.error == "":
+      addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
+      response.body = move rw.responseBodyForLibcurl.str
+      if response.headers["Content-Encoding"] == "gzip":
+        try:
+          response.body = uncompress(response.body, dfGzip)
+        except:
+          rw.error = "Uncompressing gzip'ed response body failed: " &
+            getCurrentExceptionMsg()
+    (move response, move rw.error)
+
   proc makeRequests*(
     curl: Prototype,
     batch: RequestBatch,
@@ -799,9 +827,9 @@ when defined(curlyPrototype):
     ## all requests have either received a response or are unable to complete.
     ## The return value seq is in the same order as the request batch.
     ## Each request will have either a response or an error in the return seq.
-    ## If `error != ""` then `response` is empty because something prevented the
-    ## request from completing. This may be a timeout, DNS error, connection
-    ## interruption, etc. The error string provides more information.
+    ## If `error != ""` then something prevented the request from completing.
+    ## This may be a timeout, DNS error, connection interruption, etc.
+    ## The error string provides more information.
 
     if batch.requests.len == 0:
       return
@@ -834,20 +862,7 @@ when defined(curlyPrototype):
     waitGroup.wait()
 
     for rw in wrapped:
-      var response = move rw.response
-      response.request.verb = move rw.verb
-      response.request.url = move rw.url
-      response.request.tag = move rw.tag
-      if rw.error == "":
-        addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
-        response.body = move rw.responseBodyForLibcurl.str
-        if response.headers["Content-Encoding"] == "gzip":
-          try:
-            response.body = uncompress(response.body, dfGzip)
-          except:
-            rw.error = "Uncompressing gzip'ed response body failed: " &
-              getCurrentExceptionMsg()
-      result.add((move response, move rw.error))
+      result.add(unwrapResponse(rw))
 
     destroy waitGroup
 
@@ -934,6 +949,9 @@ when defined(curlyPrototype):
   ) {.raises: [], gcsafe.} =
     ## Starts one or more HTTP requests. These requests are run in parallel.
     ## This proc does not block waiting for responses.
+    ## NOTE: When each request completes, a response is stored until it is
+    ## removed by a call to `waitForResponse`.
+    ## If the responses are never removed, they will accumulate in memory.
 
     if batch.requests.len == 0:
       return
@@ -970,6 +988,11 @@ when defined(curlyPrototype):
     timeout = 60,
     tag: sink string = ""
   ) {.raises: [], gcsafe.} =
+    ## Starts an HTTP request. These requests are run in parallel.
+    ## This proc does not block waiting for a response.
+    ## NOTE: When the request completes, a response is stored until it is
+    ## removed by a call to `waitForResponse`.
+    ## If the responses are never removed, they will accumulate in memory.
     var batch: RequestBatch
     batch.addRequest(verb, url, headers, body, tag)
     curl.startRequests(batch, timeout)
@@ -977,25 +1000,16 @@ when defined(curlyPrototype):
   proc waitForResponse*(
     curl: Prototype
   ): tuple[response: Response, error: string] {.raises: [], gcsafe.} =
+    ## Blocks waiting for a response to an HTTP request started by either
+    ## `startRequest` or `startRequests`.
+    ## Responses returned by this proc are in the order they are received, NOT
+    ## in the order they were started.
     acquire(curl.lock)
     while curl.requestsCompleted.len == 0:
       wait(curl.requestCompletedCond, curl.lock)
     let rw = curl.requestsCompleted.popFirst()
     release(curl.lock)
 
-    var response = move rw.response
-    response.request.verb = move rw.verb
-    response.request.url = move rw.url
-    response.request.tag = move rw.tag
-    if rw.error == "":
-      addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
-      response.body = move rw.responseBodyForLibcurl.str
-      if response.headers["Content-Encoding"] == "gzip":
-        try:
-          response.body = uncompress(response.body, dfGzip)
-        except:
-          rw.error = "Uncompressing gzip'ed response body failed: " &
-            getCurrentExceptionMsg()
-    result = (move response, move rw.error)
+    result = unwrapResponse(rw)
 
     destroy rw
