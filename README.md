@@ -8,32 +8,32 @@
 
 Curly is an efficient thread-ready parallel HTTP client built on top of libcurl.
 
-With Curly you can run one or multiple HTTP requests in parallel while either only blocking the calling thread or not blocking at all.
+With Curly you can run one or multiple HTTP requests in parallel and you control how and when you want to block.
 
 Some highlights are:
 
-* Automatic TCP connection re-use (especially valuable for HTTPS connections).
+* Automatic TCP connection re-use (a big performance benefit for HTTPS connections).
 * Uses HTTP/2 multiplexing when possible (multiple requests in-flight on one TCP connection).
 * Any number of threads can start any number of requests and choose their blocking / nonblocking behavior.
-* Gzip'ed response bodies are transparently uncompressed.
+* Gzip'ed response bodies are transparently uncompressed using [Zippy](https://github.com/guzba/zippy).
+* Control how many requests are allowed in-flight at the same time.
 
 By choosing what blocks and doesn't block, you can manage your program's control flow however makes sense for you.
 
-## Examples
+### Getting started
+```nim
+import curly
 
-NOTE! While these examples include `let curl = newCurl()`, it is strongly suggested that you reuse a single or small number of long-lived Curly instances instead of creating new instances frequently.
+let curl = newCurly() # Best to start with a single long-lived instance
+```
 
 ### A simple request
 ```nim
-let curl = newCurly()
-
 let response = curl.post("https://...", headers, body) # blocks until complete
 ```
 
 ### Multiple requests in parallel
 ```nim
-let curl = newCurly()
-
 var batch: RequestBatch
 batch.post("https://...", headers, body)
 batch.get("https://...")
@@ -42,13 +42,13 @@ for (response, error) in curl.makeRequests(batch): # blocks until all are comple
   if error == "":
     echo response.code
   else:
+    # Something prevented a response from being received, maybe a connection
+    # interruption, DNS failure, timeout etc. Error here contains more info.
     echo error
 ```
 
 ### A single non-blocking request
 ```nim
-let curl = newCurly()
-
 curl.startRequest("GET", "https://...") # doesn't block
 
 # do whatever
@@ -56,8 +56,6 @@ curl.startRequest("GET", "https://...") # doesn't block
 
 ### Multiple non-blocking requests
 ```nim
-let curl = newCurly()
-
 var batch: RequestBatch
 batch.get(url1)
 batch.get(url2)
@@ -83,6 +81,7 @@ else:
 let answer = curl.pollForResponse() # checks if a request has completed
 if answer.isSome:
   if answer.get.error == "":
+    echo answer.get.response.request.url
     echo answer.get.response.code
   else:
     echo answer.get.error
@@ -92,7 +91,9 @@ Check out the [examples/](https://github.com/guzba/curly/tree/master/examples) f
 
 ## Configuration
 
-When you create a Curly instance, you can optionally specify `maxInFlight` which will let you control the maximum HTTP requests that will be actively running at any time. This means you can queue 100,000 requests and know that only say 100 of them will be in-flight at a time.
+When you create a Curly instance, you can optionally specify `maxInFlight`. This value lets you control the maximum HTTP requests that will be actively running at any time. The default `maxInFlight` value is 16.
+
+Controlling `maxInFlight` is useful because it means you can queue up 100,000 requests and know that only say 100 of them will be in-flight at a time.
 
 ## Queue management
 
@@ -110,7 +111,7 @@ It is a great starting point to simply have `let curl* = newCurly()` at the top 
 
 ## Production tested
 
-I have been using Curly in a production web server to make 20k+ HTTPS requests per minute on a tiny VM for a while now without any trouble.
+I am using Curly in a production web server to make 20k+ HTTPS requests per minute on a tiny VM for a while now without any trouble.
 
 Both the blocking and non-blocking Curly APIs are used and confirmed working in a very multi-threaded production environment.
 
