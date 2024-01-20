@@ -1,4 +1,4 @@
-version     = "0.1.13"
+version     = "1.0.0"
 author      = "Ryan Oldenburg"
 description = "An easy to use and efficient thread-ready HTTP client"
 license     = "MIT"
