@@ -7,7 +7,7 @@ import mummy, mummy/routers, curly
 # to a different backend via an HTTP RPC call.
 # In this case, there may be no need to block completing the incoming request
 # waiting for the analytics RPC call response. Instead we can have a
-# dedicated thread that handles the responses as the come in and logs if
+# dedicated thread that handles the responses as they come in and logs if
 # a request has failed or something like that.
 
 
