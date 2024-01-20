@@ -19,6 +19,12 @@ Some highlights are:
 
 By choosing what blocks and doesn't block, you can manage your program's control flow however makes sense for you.
 
+## Examples
+
+NOTE! While these examples include `let curl = newCurl()`, it is strongly suggested that you reuse a single or small number of long-lived Curly instances instead of creating new instances frequently.
+
+A great starting point is simply having `let curl* = newCurly()` at the top of your program and use that one instance for everything (even from multiple threads).
+
 ### A simple request
 ```nim
 let curl = newCurly()
@@ -94,7 +100,7 @@ When you create a Curly instance, you can optionally specify `maxInFlight` which
 
 Since `startRequests` can add any number of HTTP requests to a queue, and since HTTP requests can block for a long time, it is really easy to find yourself with an ever-growing queue and run out of memory. This is no good.
 
-You can ask a Curly instance how long its queue is (`queueLen`) and if you think that is too long, you can call `clearQueue`. Clearing the queue will unblock all threads waiting for responses and each queued request will have an error.
+You can ask a Curly instance how long its queue is (`queueLen`) and if you think that is too long, you can call `clearQueue`. Clearing the queue will unblock all threads waiting for responses and each queued request will have an error stating it was canceled.
 
 ## Production tested
 

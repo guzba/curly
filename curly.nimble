@@ -1,6 +1,6 @@
 version     = "0.1.13"
 author      = "Ryan Oldenburg"
-description = "Makes using libcurl efficiently easy"
+description = "An easy to use and efficient thread-ready HTTP client"
 license     = "MIT"
 
 srcDir = "src"
