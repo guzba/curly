@@ -1004,8 +1004,8 @@ when defined(curlyPrototype):
   ): tuple[response: Response, error: string] {.raises: [], gcsafe.} =
     ## Blocks waiting for a response to an HTTP request started by either
     ## `startRequest` or `startRequests`.
-    ## Responses returned by this proc are in the order they are received, NOT
-    ## in the order they were started.
+    ## Responses returned by this proc are in the order the responses are
+    ## received, NOT in the order the requests were started.
     acquire(curl.lock)
     while curl.requestsCompleted.len == 0:
       wait(curl.requestCompletedCond, curl.lock)
@@ -1023,6 +1023,10 @@ when defined(curlyPrototype):
   proc pollForResponse*(
     curl: Prototype
   ): Option[RequestResult] {.raises: [], gcsafe.} =
+    ## Returns a response to an HTTP request started by either
+    ## `startRequest` or `startRequests` if one is available.
+    ## Responses returned by this proc are in the order the responses are
+    ## received, NOT in the order the requests were started.
     var rw: RequestWrap
     acquire(curl.lock)
     if curl.requestsCompleted.len > 0:
