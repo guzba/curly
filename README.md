@@ -102,7 +102,7 @@ You can ask a Curly instance how long its queue is (`queueLen`) and if you think
 
 ## A key difference from Nim's std/httpclient
 
-When using Nim's std/httplcient, it is expected that you use a new HttpClient or AsyncHttpClient for each request. This is both not needed and a bad idea with Curly.
+When using Nim's std/httpclient, it is expected that you use a new HttpClient or AsyncHttpClient for each request. This is both not needed and a bad idea with Curly.
 
 This is because Curly reuses connections instead of setting them up and tearing them down for each request. A Curly instance should be long-lived, probably for the entire process lifespan.
 
