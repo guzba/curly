@@ -339,7 +339,7 @@ proc threadProc(curl: Curly) {.raises: [].} =
       # Sleep if there are no running handles and the queue is empty
       {.gcsafe.}:
         acquire(curl.lock)
-        if epochTime() - curl.multiHandleCreated > 1 * 60:
+        if epochTime() - curl.multiHandleCreated > 60 * 60:
           echo "TMP multi cleanup ", multi_cleanup(curl.multiHandle) == M_OK
           curl.multiHandle = multi_init()
           discard multi_setopt(
