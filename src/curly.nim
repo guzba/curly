@@ -6,7 +6,7 @@ when not compileOption("threads"):
   {.error: "Using --threads:on is required by Curly.".}
 
 import std/strutils, std/locks, std/random, webby/httpheaders, zippy,
-    std/deques, std/tables, std/options
+    std/deques, std/tables, std/options, std/times
 
 import libcurl except Option
 
@@ -104,6 +104,7 @@ type
     cond: Cond
     requestCompletedCond: Cond
     multiHandle: PM
+    multiHandleCreated: float
     maxInFlight: int
     availableEasyHandles: Deque[PCurl]
     queue: Deque[RequestWrap]
@@ -338,6 +339,15 @@ proc threadProc(curl: Curly) {.raises: [].} =
       # Sleep if there are no running handles and the queue is empty
       {.gcsafe.}:
         acquire(curl.lock)
+        if epochTime() - curl.multiHandleCreated > 1 * 60:
+          echo "TMP multi cleanup ", multi_cleanup(curl.multiHandle) == M_OK
+          curl.multiHandle = multi_init()
+          discard multi_setopt(
+            curl.multiHandle,
+            cast[MOption](3), # CURLMOPT_PIPELINING
+            2 # CURLPIPE_MULTIPLEX
+          )
+          curl.multiHandleCreated = epochTime()
         while curl.queue.len == 0 and not curl.closeCalled:
           wait(curl.cond, curl.lock)
         var closeCalled = curl.closeCalled
@@ -355,12 +365,12 @@ proc newCurly*(maxInFlight = 16): Curly =
   initCond(result.cond)
   initCond(result.requestCompletedCond)
   result.multiHandle = multi_init()
-  if multi_setopt(
+  discard multi_setopt(
     result.multiHandle,
     cast[MOption](3), # CURLMOPT_PIPELINING
     2 # CURLPIPE_MULTIPLEX
-  ) != M_OK:
-    raise newException(CatchableError, "Error setting CURLMOPT_PIPELINING")
+  )
+  result.multiHandleCreated = epochTime()
   result.maxInFlight = maxInFlight
   for i in 0 ..< maxInFlight:
     result.availableEasyHandles.addLast(easy_init())
