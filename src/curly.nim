@@ -285,7 +285,7 @@ proc threadProc(curl: Curly) {.raises: [].} =
     if mc == M_OK:
       if numRunningHandles > 0:
         var numFds: int32
-        mc = multi_poll(curl.multiHandle, nil, 0, timeout_ms = 10, numFds)
+        mc = multi_poll(curl.multiHandle, nil, 0, timeout_ms = 2, numFds)
         if mc != M_OK:
           # Is this fatal? When can this happen?
           echo "Unexpected libcurl multi_poll error: ",
