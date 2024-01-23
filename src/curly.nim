@@ -6,7 +6,7 @@ when not compileOption("threads"):
   {.error: "Using --threads:on is required by Curly.".}
 
 import std/strutils, std/locks, std/random, webby/httpheaders, zippy,
-    std/deques, std/tables, std/options, std/times
+    std/deques, std/tables, std/options
 
 import libcurl except Option
 
