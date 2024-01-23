@@ -92,6 +92,7 @@ type
     waitGroup: WaitGroup
     headerStringsForLibcurl: seq[string]
     slistsForLibcurl: seq[Slist]
+    pslistForLibcurl: Pslist
     responseBodyForLibcurl: StringWrap
     responseHeadersForLibcurl: StringWrap
     response: Response
@@ -131,6 +132,26 @@ proc curlWriteFn(
   result = size * count
 
 {.pop.}
+
+proc prepHeadersForLibcurl(rw: RequestWrap) =
+  for (k, v) in rw.headers:
+    rw.headerStringsForLibcurl.add k & ": " & v
+
+  # Create the Pslist for passing headers to curl manually. This is to
+  # avoid needing to call slist_free_all which creates problems
+  for i, header in rw.headers:
+    rw.slistsForLibcurl.add(
+      Slist(data: rw.headerStringsForLibcurl[i].cstring, next: nil)
+    )
+  # Do this in two passes so the slists index addresses are stable
+  for i, header in rw.headers:
+    if i == 0:
+      rw.pslistForLibcurl = rw.slistsForLibcurl[0].addr
+    else:
+      var tail = rw.pslistForLibcurl
+      while tail.next != nil:
+        tail = tail.next
+      tail.next = rw.slistsForLibcurl[i].addr
 
 proc addHeaders(dst: var HttpHeaders, src: string) =
   let headerLines = src.split("\r\n")
@@ -206,23 +227,7 @@ proc threadProc(curl: Curly) {.raises: [].} =
       # Set CURLOPT_PIPEWAIT
       discard easyHandle.easy_setopt(cast[libcurl.Option](237), 1)
 
-      # Create the Pslist for passing headers to curl manually. This is to
-      # avoid needing to call slist_free_all which creates problems
-      for i, header in request.headers:
-        request.slistsForLibcurl.add(
-          Slist(data: request.headerStringsForLibcurl[i].cstring, next: nil)
-        )
-      # Do this in two passes so the slists index addresses are stable
-      var headerList: Pslist
-      for i, header in request.headers:
-        if i == 0:
-          headerList = request.slistsForLibcurl[0].addr
-        else:
-          var tail = headerList
-          while tail.next != nil:
-            tail = tail.next
-          tail.next = request.slistsForLibcurl[i].addr
-      discard easyHandle.easy_setopt(OPT_HTTPHEADER, headerList)
+      discard easyHandle.easy_setopt(OPT_HTTPHEADER, request.pslistForLibcurl)
 
       if cmpIgnoreCase(request.verb, "HEAD") == 0:
         discard easyHandle.easy_setopt(OPT_NOBODY, 1)
@@ -266,7 +271,12 @@ proc threadProc(curl: Curly) {.raises: [].} =
         request.error = "Unexpected libcurl multi_add_handle error: " &
           $mc & ' ' & $multi_strerror(mc)
 
-        request.waitGroup.done()
+        if request.waitGroup != nil:
+          request.waitGroup.done()
+        else:
+          withLock curl.lock:
+            curl.requestsCompleted.addLast(request)
+          signal(curl.requestCompletedCond)
 
     dequeued.setLen(0) # Reset for next loop
 
@@ -276,7 +286,7 @@ proc threadProc(curl: Curly) {.raises: [].} =
     if mc == M_OK:
       if numRunningHandles > 0:
         var numFds: int32
-        mc = multi_poll(curl.multiHandle, nil, 0, timeout_ms = 1000, numFds)
+        mc = multi_poll(curl.multiHandle, nil, 0, timeout_ms = 10, numFds)
         if mc != M_OK:
           # Is this fatal? When can this happen?
           echo "Unexpected libcurl multi_poll error: ",
@@ -338,7 +348,6 @@ proc threadProc(curl: Curly) {.raises: [].} =
     if numRunningHandles == 0:
       # Sleep if there are no running handles and the queue is empty
       {.gcsafe.}:
-        acquire(curl.lock)
         if epochTime() - curl.multiHandleCreated > 60 * 60:
           echo "TMP multi cleanup ", multi_cleanup(curl.multiHandle) == M_OK
           curl.multiHandle = multi_init()
@@ -348,6 +357,7 @@ proc threadProc(curl: Curly) {.raises: [].} =
             2 # CURLPIPE_MULTIPLEX
           )
           curl.multiHandleCreated = epochTime()
+        acquire(curl.lock)
         while curl.queue.len == 0 and not curl.closeCalled:
           wait(curl.cond, curl.lock)
         var closeCalled = curl.closeCalled
@@ -446,8 +456,7 @@ proc makeRequest*(
   rw.timeout = timeout
   rw.waitGroup = newWaitGroup(1)
 
-  for (k, v) in rw.headers:
-    rw.headerStringsForLibcurl.add k & ": " & v
+  rw.prepHeadersForLibcurl()
 
   withLock curl.lock:
     curl.queue.addLast(rw)
@@ -570,8 +579,7 @@ proc makeRequests*(
     rw.tag = request.tag
     rw.waitGroup = waitGroup
 
-    for (k, v) in rw.headers:
-      rw.headerStringsForLibcurl.add k & ": " & v
+    rw.prepHeadersForLibcurl()
 
     wrapped.add(rw)
 
@@ -690,8 +698,7 @@ proc startRequests*(
     rw.timeout = timeout
     rw.tag = move request.tag
 
-    for (k, v) in rw.headers:
-      rw.headerStringsForLibcurl.add k & ": " & v
+    rw.prepHeadersForLibcurl()
 
     wrapped.add(rw)
 
