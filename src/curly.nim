@@ -105,7 +105,6 @@ type
     cond: Cond
     requestCompletedCond: Cond
     multiHandle: PM
-    multiHandleCreated: float
     maxInFlight: int
     availableEasyHandles: Deque[PCurl]
     queue: Deque[RequestWrap]
@@ -348,15 +347,6 @@ proc threadProc(curl: Curly) {.raises: [].} =
     if numRunningHandles == 0:
       # Sleep if there are no running handles and the queue is empty
       {.gcsafe.}:
-        if epochTime() - curl.multiHandleCreated > 60 * 60:
-          echo "TMP multi cleanup ", multi_cleanup(curl.multiHandle) == M_OK
-          curl.multiHandle = multi_init()
-          discard multi_setopt(
-            curl.multiHandle,
-            cast[MOption](3), # CURLMOPT_PIPELINING
-            2 # CURLPIPE_MULTIPLEX
-          )
-          curl.multiHandleCreated = epochTime()
         acquire(curl.lock)
         while curl.queue.len == 0 and not curl.closeCalled:
           wait(curl.cond, curl.lock)
@@ -380,7 +370,6 @@ proc newCurly*(maxInFlight = 16): Curly =
     cast[MOption](3), # CURLMOPT_PIPELINING
     2 # CURLPIPE_MULTIPLEX
   )
-  result.multiHandleCreated = epochTime()
   result.maxInFlight = maxInFlight
   for i in 0 ..< maxInFlight:
     result.availableEasyHandles.addLast(easy_init())
