@@ -100,6 +100,8 @@ type
 
   RequestWrap = ptr RequestWrapObj
 
+  CallbackFn = proc(buffer: string): void
+
   CurlyObj* = object
     lock: Lock
     cond: Cond
@@ -128,6 +130,18 @@ proc curlWriteFn(
     i = outbuf.str.len
   outbuf.str.setLen(outbuf.str.len + count)
   copyMem(outbuf.str[i].addr, buffer, count)
+  result = size * count
+
+proc curlCallbackFn(
+  buffer: cstring,
+  size: int,
+  count: int,
+  callbackFn: pointer
+): int {.cdecl.} =
+  let cb = cast[ptr CallbackFn](callbackFn)
+  echo "foo"
+  cb[]($buffer)
+  echo "bar"
   result = size * count
 
 {.pop.}
@@ -820,7 +834,8 @@ proc makeRequest*(
   url: string,
   headers = emptyHttpHeaders(),
   body: openarray[char] = "".toOpenArray(0, -1),
-  timeout: float32 = 60
+  timeout: float32 = 60,
+  callback: CallbackFn = nil
 ): Response =
   result.request.verb = verb
   result.request.url = url
@@ -862,8 +877,13 @@ proc makeRequest*(
 
   # Setup writers
   var headerWrap, bodyWrap: StringWrap
-  discard curl.easy_setopt(OPT_WRITEDATA, bodyWrap.addr)
-  discard curl.easy_setopt(OPT_WRITEFUNCTION, curlWriteFn)
+  echo "callback " & $(callback != nil)
+  if (callback != nil):
+    discard curl.easy_setopt(OPT_WRITEDATA, callback.addr)
+    discard curl.easy_setopt(OPT_WRITEFUNCTION, curlCallbackFn)
+  else:
+    discard curl.easy_setopt(OPT_WRITEDATA, bodyWrap.addr)
+    discard curl.easy_setopt(OPT_WRITEFUNCTION, curlWriteFn)
   discard curl.easy_setopt(OPT_HEADERDATA, headerWrap.addr)
   discard curl.easy_setopt(OPT_HEADERFUNCTION, curlWriteFn)
 
