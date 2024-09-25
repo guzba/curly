@@ -139,9 +139,10 @@ proc curlCallbackFn(
   callbackFn: pointer
 ): int {.cdecl.} =
   let cb = cast[ptr CallbackFn](callbackFn)
-  echo "foo"
-  cb[]($buffer)
-  echo "bar"
+  var outbuf = ""
+  outbuf.setLen(size * count)
+  copyMem(outbuf[0].addr, buffer, size * count)
+  cb[](outbuf)
   result = size * count
 
 {.pop.}
@@ -877,7 +878,6 @@ proc makeRequest*(
 
   # Setup writers
   var headerWrap, bodyWrap: StringWrap
-  echo "callback " & $(callback != nil)
   if (callback != nil):
     discard curl.easy_setopt(OPT_WRITEDATA, callback.addr)
     discard curl.easy_setopt(OPT_WRITEFUNCTION, curlCallbackFn)
