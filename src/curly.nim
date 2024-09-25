@@ -879,7 +879,7 @@ proc makeRequest*(
   # Setup writers
   var headerWrap, bodyWrap: StringWrap
   if (callback != nil):
-    discard curl.easy_setopt(OPT_WRITEDATA, callback.addr)
+    discard curl.easy_setopt(OPT_WRITEDATA, callback.unsafeAddr)
     discard curl.easy_setopt(OPT_WRITEFUNCTION, curlCallbackFn)
   else:
     discard curl.easy_setopt(OPT_WRITEDATA, bodyWrap.addr)
