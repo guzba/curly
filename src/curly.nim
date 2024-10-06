@@ -110,6 +110,32 @@ type
 
   Curly* = ptr CurlyObj
 
+proc newWaitGroup(count: int): WaitGroup =
+  result = cast[WaitGroup](allocShared0(sizeof(WaitGroupObj)))
+  result.count = count
+  initLock(result.lock)
+  initCond(result.cond)
+
+proc wait(waitGroup: WaitGroup) =
+  acquire(waitGroup.lock)
+  while waitGroup.count > 0:
+    wait(waitGroup.cond, waitGroup.lock)
+  release(waitGroup.lock)
+
+proc done(waitGroup: WaitGroup) =
+  var signalCond: bool
+  withLock waitGroup.lock:
+    dec waitGroup.count
+    signalCond = (waitGroup.count == 0)
+  if signalCond:
+    signal(waitGroup.cond)
+
+proc destroy(waitGroup: WaitGroup) =
+  deinitLock(waitGroup.lock)
+  deinitCond(waitGroup.cond)
+  `=destroy`(waitGroup[])
+  deallocShared(waitGroup)
+
 {.push stackTrace: off.}
 
 proc curlHeaderWriteFn(
@@ -172,32 +198,6 @@ proc addHeaders(dst: var HttpHeaders, src: string) =
       dst.add((parts[0].strip(), parts[1].strip()))
     else:
       dst.add((parts[0].strip(), ""))
-
-proc newWaitGroup(count: int): WaitGroup =
-  result = cast[WaitGroup](allocShared0(sizeof(WaitGroupObj)))
-  result.count = count
-  initLock(result.lock)
-  initCond(result.cond)
-
-proc wait(waitGroup: WaitGroup) =
-  acquire(waitGroup.lock)
-  while waitGroup.count > 0:
-    wait(waitGroup.cond, waitGroup.lock)
-  release(waitGroup.lock)
-
-proc done(waitGroup: WaitGroup) =
-  var signalCond: bool
-  withLock waitGroup.lock:
-    dec waitGroup.count
-    signalCond = (waitGroup.count == 0)
-  if signalCond:
-    signal(waitGroup.cond)
-
-proc destroy(waitGroup: WaitGroup) =
-  deinitLock(waitGroup.lock)
-  deinitCond(waitGroup.cond)
-  `=destroy`(waitGroup[])
-  deallocShared(waitGroup)
 
 proc threadProc(curl: Curly) {.raises: [].} =
   when not defined(windows): # Block SIGPIPE for this thread
