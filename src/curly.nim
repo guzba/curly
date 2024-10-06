@@ -56,11 +56,6 @@ type
     url*: string ## Intitial request URL, before any redirects
     tag*: string ## Arbtitrary user-provided data when batching requests
 
-  StringWrap = object
-    ## As strings are value objects they need
-    ## some sort of wrapper to be passed to C.
-    str: string
-
   RequestBatch* = object
     requests: seq[BatchedRequest]
 
@@ -93,8 +88,8 @@ type
     headerStringsForLibcurl: seq[string]
     slistsForLibcurl: seq[Slist]
     pslistForLibcurl: Pslist
-    responseBodyForLibcurl: StringWrap
-    responseHeadersForLibcurl: StringWrap
+    responseHeadersForLibcurl: string
+    responseBodyForLibcurl: string
     response: Response
     error: string
 
@@ -117,17 +112,30 @@ type
 
 {.push stackTrace: off.}
 
-proc curlWriteFn(
+proc curlHeaderWriteFn(
   buffer: cstring,
   size: int,
   count: int,
   outstream: pointer
 ): int {.cdecl.} =
   let
-    outbuf = cast[ptr StringWrap](outstream)
-    i = outbuf.str.len
-  outbuf.str.setLen(outbuf.str.len + count)
-  copyMem(outbuf.str[i].addr, buffer, count)
+    request = cast[RequestWrap](outstream)
+    i = request.responseHeadersForLibcurl.len
+  request.responseHeadersForLibcurl.setLen(i + count)
+  copyMem(request.responseHeadersForLibcurl[i].addr, buffer, count)
+  result = size * count
+
+proc curlBodyWriteFn(
+  buffer: cstring,
+  size: int,
+  count: int,
+  outstream: pointer
+): int {.cdecl.} =
+  let
+    request = cast[RequestWrap](outstream)
+    i = request.responseBodyForLibcurl.len
+  request.responseBodyForLibcurl.setLen(i + count)
+  copyMem(request.responseBodyForLibcurl[i].addr, buffer, count)
   result = size * count
 
 {.pop.}
@@ -247,16 +255,10 @@ proc threadProc(curl: Curly) {.raises: [].} =
         discard easyHandle.easy_setopt(cast[libcurl.Option](216), 1 shl 4)
 
       # Setup writers
-      discard easyHandle.easy_setopt(
-        OPT_WRITEDATA,
-        request.responseBodyForLibcurl.addr
-      )
-      discard easyHandle.easy_setopt(OPT_WRITEFUNCTION, curlWriteFn)
-      discard easyHandle.easy_setopt(
-        OPT_HEADERDATA,
-        request.responseHeadersForLibcurl.addr
-      )
-      discard easyHandle.easy_setopt(OPT_HEADERFUNCTION, curlWriteFn)
+      discard easyHandle.easy_setopt(OPT_HEADERDATA, request)
+      discard easyHandle.easy_setopt(OPT_HEADERFUNCTION, curlHeaderWriteFn)
+      discard easyHandle.easy_setopt(OPT_WRITEDATA, request)
+      discard easyHandle.easy_setopt(OPT_WRITEFUNCTION, curlBodyWriteFn)
 
       let mc = multi_add_handle(curl.multiHandle, easyHandle)
       if mc == M_OK:
@@ -458,8 +460,8 @@ proc makeRequest*(
       result = move rw.response
       result.request.verb = move rw.verb
       result.request.url = move rw.url
-      addHeaders(result.headers, rw.responseHeadersForLibcurl.str)
-      result.body = move rw.responseBodyForLibcurl.str
+      addHeaders(result.headers, rw.responseHeadersForLibcurl)
+      result.body = move rw.responseBodyForLibcurl
       if result.headers["Content-Encoding"] == "gzip":
         result.body = uncompress(result.body, dfGzip)
     else:
@@ -527,8 +529,8 @@ proc unwrapResponse(
   response.request.url = move rw.url
   response.request.tag = move rw.tag
   if rw.error == "":
-    addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
-    response.body = move rw.responseBodyForLibcurl.str
+    addHeaders(response.headers, rw.responseHeadersForLibcurl)
+    response.body = move rw.responseBodyForLibcurl
     if response.headers["Content-Encoding"] == "gzip":
       try:
         response.body = uncompress(response.body, dfGzip)
@@ -763,6 +765,9 @@ type
 
   CurlPool* = ptr CurlPoolObj
 
+  StringWrap = object
+    str: string
+
 proc close*(pool: CurlPool) =
   ## Closes the libcurl handles then deallocates the pool.
   ## All libcurl handles should be returned to the pool before it is closed.
@@ -813,6 +818,23 @@ template withHandle*(pool: CurlPool, handle, body) =
       body
     finally:
       pool.recycle(handle)
+
+{.push stackTrace: off.}
+
+proc curlWriteFn(
+  buffer: cstring,
+  size: int,
+  count: int,
+  outstream: pointer
+): int {.cdecl.} =
+  let
+    outbuf = cast[ptr StringWrap](outstream)
+    i = outbuf.str.len
+  outbuf.str.setLen(outbuf.str.len + count)
+  copyMem(outbuf.str[i].addr, buffer, count)
+  result = size * count
+
+{.pop.}
 
 proc makeRequest*(
   curl: PCurl,
