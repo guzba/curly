@@ -90,6 +90,7 @@ type
     pslistForLibcurl: Pslist
     responseHeadersForLibcurl: string
     responseBodyForLibcurl: string
+    easyHandle: PCurl
     response: Response
     error: string
 
@@ -226,6 +227,8 @@ proc threadProc(curl: Curly) {.raises: [].} =
 
     for request in dequeued:
       let easyHandle = curl.availableEasyHandles.popFirst()
+
+      request.easyHandle = easyHandle
 
       discard easyHandle.easy_setopt(OPT_URL, request.url.cstring)
       discard easyHandle.easy_setopt(OPT_CUSTOMREQUEST, request.verb.cstring)
