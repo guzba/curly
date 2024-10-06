@@ -271,10 +271,11 @@ proc threadProc(curl: Curly) {.raises: [].} =
     for request in dequeued:
       if request.easyHandle != nil:
         # This request was added to the queue to be canceled / freed
-        discard multi_remove_handle(curl.multiHandle, request.easyHandle)
-        curl.inFlight.del(request.easyHandle)
-        easy_reset(request.easyHandle)
-        curl.availableEasyHandles.addLast(request.easyHandle)
+        if request.easyHandle in curl.inFlight:
+          discard multi_remove_handle(curl.multiHandle, request.easyHandle)
+          curl.inFlight.del(request.easyHandle)
+          easy_reset(request.easyHandle)
+          curl.availableEasyHandles.addLast(request.easyHandle)
         deinitLock(request.streamState.get.lock)
         deinitCond(request.streamState.get.cond)
         destroy request.waitGroup
