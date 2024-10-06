@@ -279,7 +279,6 @@ proc threadProc(curl: Curly) {.raises: [].} =
         deinitCond(request.streamState.get.cond)
         destroy request.waitGroup
         destroy request
-        echo "FREED"
       else:
         let easyHandle = curl.availableEasyHandles.popFirst()
 
