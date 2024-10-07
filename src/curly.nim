@@ -6,7 +6,7 @@ when not compileOption("threads"):
   {.error: "Using --threads:on is required by Curly.".}
 
 import std/strutils, std/locks, std/random, webby/httpheaders, zippy,
-    std/deques, std/tables, std/options
+    std/deques, std/tables, std/options, std/times
 
 import libcurl except Option
 
@@ -56,11 +56,6 @@ type
     url*: string ## Intitial request URL, before any redirects
     tag*: string ## Arbtitrary user-provided data when batching requests
 
-  StringWrap = object
-    ## As strings are value objects they need
-    ## some sort of wrapper to be passed to C.
-    str: string
-
   RequestBatch* = object
     requests: seq[BatchedRequest]
 
@@ -80,7 +75,15 @@ type
 
   WaitGroup = ptr WaitGroupObj
 
+  ResponseStreamState = object
+    lock: Lock
+    cond: Cond
+    signaledAfterHeaders: bool
+    lastUpdate: int
+    done: bool
+
   RequestWrapObj = object
+    curl: Curly
     verb: string
     url: string
     headers: HttpHeaders
@@ -93,12 +96,21 @@ type
     headerStringsForLibcurl: seq[string]
     slistsForLibcurl: seq[Slist]
     pslistForLibcurl: Pslist
-    responseBodyForLibcurl: StringWrap
-    responseHeadersForLibcurl: StringWrap
+    responseHeadersForLibcurl: string
+    responseBodyForLibcurl: string
+    easyHandle: PCurl
     response: Response
+    streamState: Option[ResponseStreamState]
     error: string
 
   RequestWrap = ptr RequestWrapObj
+
+  ResponseStream = object
+    code*: int ## HTTP status code of the response
+    url*: string ## Final URL, after any redirects
+    headers*: HttpHeaders
+    request*: RequestInfo ## Info about the request this response is for
+    internal: RequestWrap
 
   CurlyObj* = object
     lock: Lock
@@ -115,19 +127,83 @@ type
 
   Curly* = ptr CurlyObj
 
+proc newWaitGroup(count: int): WaitGroup =
+  result = cast[WaitGroup](allocShared0(sizeof(WaitGroupObj)))
+  result.count = count
+  initLock(result.lock)
+  initCond(result.cond)
+
+proc wait(waitGroup: WaitGroup) =
+  acquire(waitGroup.lock)
+  while waitGroup.count > 0:
+    wait(waitGroup.cond, waitGroup.lock)
+  release(waitGroup.lock)
+
+proc done(waitGroup: WaitGroup) =
+  var signalCond: bool
+  withLock waitGroup.lock:
+    dec waitGroup.count
+    signalCond = (waitGroup.count == 0)
+  if signalCond:
+    signal(waitGroup.cond)
+
+proc destroy(waitGroup: WaitGroup) =
+  deinitLock(waitGroup.lock)
+  deinitCond(waitGroup.cond)
+  `=destroy`(waitGroup[])
+  deallocShared(waitGroup)
+
+proc destroy(rw: RequestWrap) {.gcsafe.} =
+  `=destroy`(rw[])
+  deallocShared(rw)
+
 {.push stackTrace: off.}
 
-proc curlWriteFn(
+proc curlHeaderWriteFn(
   buffer: cstring,
   size: int,
   count: int,
   outstream: pointer
 ): int {.cdecl.} =
   let
-    outbuf = cast[ptr StringWrap](outstream)
-    i = outbuf.str.len
-  outbuf.str.setLen(outbuf.str.len + count)
-  copyMem(outbuf.str[i].addr, buffer, count)
+    request = cast[RequestWrap](outstream)
+    i = request.responseHeadersForLibcurl.len
+  request.responseHeadersForLibcurl.setLen(i + count)
+  copyMem(request.responseHeadersForLibcurl[i].addr, buffer, count)
+  result = size * count
+
+proc curlBodyWriteFn(
+  buffer: cstring,
+  size: int,
+  count: int,
+  outstream: pointer
+): int {.cdecl.} =
+  let request = cast[RequestWrap](outstream)
+  if request.streamState.isSome:
+    if not request.streamstate.get.signaledAfterHeaders:
+      discard request.easyHandle.easy_setopt(OPT_TIMEOUT, 0) # Remove timeout
+      let tmp4 = allocShared0(4)
+      discard request.easyHandle.easy_getinfo(INFO_RESPONSE_CODE, tmp4)
+      var httpCode: uint32
+      copyMem(httpCode.addr, tmp4, 4)
+      deallocShared(tmp4)
+      request.response.code = httpCode.int
+      let tmpcstring = cast[ptr cstring](allocShared0(sizeof(cstring)))
+      discard request.easyHandle.easy_getinfo(INFO_EFFECTIVE_URL, tmpcstring)
+      request.response.url = $tmpcstring[]
+      deallocShared(tmpcstring)
+      request.waitGroup.done()
+      request.streamstate.get.signaledAfterHeaders = true
+    withLock request.streamState.get.lock:
+      let i = request.responseBodyForLibcurl.len
+      request.responseBodyForLibcurl.setLen(i + count)
+      copyMem(request.responseBodyForLibcurl[i].addr, buffer, count)
+      request.streamState.get.lastUpdate = epochTime().int
+    signal(request.streamState.get.cond)
+  else:
+    let i = request.responseBodyForLibcurl.len
+    request.responseBodyForLibcurl.setLen(i + count)
+    copyMem(request.responseBodyForLibcurl[i].addr, buffer, count)
   result = size * count
 
 {.pop.}
@@ -165,32 +241,6 @@ proc addHeaders(dst: var HttpHeaders, src: string) =
     else:
       dst.add((parts[0].strip(), ""))
 
-proc newWaitGroup(count: int): WaitGroup =
-  result = cast[WaitGroup](allocShared0(sizeof(WaitGroupObj)))
-  result.count = count
-  initLock(result.lock)
-  initCond(result.cond)
-
-proc wait(waitGroup: WaitGroup) =
-  acquire(waitGroup.lock)
-  while waitGroup.count > 0:
-    wait(waitGroup.cond, waitGroup.lock)
-  release(waitGroup.lock)
-
-proc done(waitGroup: WaitGroup) =
-  var signalCond: bool
-  withLock waitGroup.lock:
-    dec waitGroup.count
-    signalCond = (waitGroup.count == 0)
-  if signalCond:
-    signal(waitGroup.cond)
-
-proc destroy(waitGroup: WaitGroup) =
-  deinitLock(waitGroup.lock)
-  deinitCond(waitGroup.cond)
-  `=destroy`(waitGroup[])
-  deallocShared(waitGroup)
-
 proc threadProc(curl: Curly) {.raises: [].} =
   when not defined(windows): # Block SIGPIPE for this thread
     var oldSet, empty: Sigset
@@ -205,7 +255,9 @@ proc threadProc(curl: Curly) {.raises: [].} =
     tmp4 = allocShared0(4)
     tmpcstring = cast[ptr cstring](allocShared0(sizeof(cstring)))
 
-  var dequeued: seq[RequestWrap]
+  var
+    dequeued: seq[RequestWrap]
+    timeouts: seq[RequestWrap]
   while true:
     if curl.availableEasyHandles.len > 0:
       withLock curl.lock:
@@ -217,65 +269,73 @@ proc threadProc(curl: Curly) {.raises: [].} =
             dequeued.add(curl.queue.popFirst())
 
     for request in dequeued:
-      let easyHandle = curl.availableEasyHandles.popFirst()
-
-      discard easyHandle.easy_setopt(OPT_URL, request.url.cstring)
-      discard easyHandle.easy_setopt(OPT_CUSTOMREQUEST, request.verb.cstring)
-      discard easyHandle.easy_setopt(OPT_TIMEOUT, request.timeout)
-
-      # Set CURLOPT_PIPEWAIT
-      discard easyHandle.easy_setopt(cast[libcurl.Option](237), 1)
-
-      discard easyHandle.easy_setopt(OPT_HTTPHEADER, request.pslistForLibcurl)
-
-      if cmpIgnoreCase(request.verb, "HEAD") == 0:
-        discard easyHandle.easy_setopt(OPT_NOBODY, 1)
-      elif cmpIgnoreCase(request.verb, "POST") == 0 or request.bodyLen > 0:
-        discard easyHandle.easy_setopt(OPT_POSTFIELDSIZE, request.bodyLen)
-        if request.bodyLen > 0:
-          discard easyHandle.easy_setopt(OPT_POSTFIELDS, request.body)
-
-      # Follow up to 10 redirects
-      discard easyHandle.easy_setopt(OPT_FOLLOWLOCATION, 1)
-      discard easyHandle.easy_setopt(OPT_MAXREDIRS, 10)
-
-      # https://curl.se/libcurl/c/threadsafe.html
-      discard easyHandle.easy_setopt(OPT_NOSIGNAL, 1)
-
-      when defined(windows):
-        # CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA
-        discard easyHandle.easy_setopt(cast[libcurl.Option](216), 1 shl 4)
-
-      # Setup writers
-      discard easyHandle.easy_setopt(
-        OPT_WRITEDATA,
-        request.responseBodyForLibcurl.addr
-      )
-      discard easyHandle.easy_setopt(OPT_WRITEFUNCTION, curlWriteFn)
-      discard easyHandle.easy_setopt(
-        OPT_HEADERDATA,
-        request.responseHeadersForLibcurl.addr
-      )
-      discard easyHandle.easy_setopt(OPT_HEADERFUNCTION, curlWriteFn)
-
-      let mc = multi_add_handle(curl.multiHandle, easyHandle)
-      if mc == M_OK:
-        curl.inFlight[easyHandle] = request
+      if request.easyHandle != nil:
+        # This request was added to the queue to be canceled / freed
+        if request.easyHandle in curl.inFlight:
+          discard multi_remove_handle(curl.multiHandle, request.easyHandle)
+          curl.inFlight.del(request.easyHandle)
+          easy_reset(request.easyHandle)
+          curl.availableEasyHandles.addLast(request.easyHandle)
+        deinitLock(request.streamState.get.lock)
+        deinitCond(request.streamState.get.cond)
+        destroy request.waitGroup
+        destroy request
       else:
-        # Reset this easy_handle and add it back as available
-        easy_reset(easyHandle)
-        curl.availableEasyHandles.addLast(easyHandle)
+        let easyHandle = curl.availableEasyHandles.popFirst()
 
-        # Set the error so an exception is raised
-        request.error = "Unexpected libcurl multi_add_handle error: " &
-          $mc & ' ' & $multi_strerror(mc)
+        request.easyHandle = easyHandle
 
-        if request.waitGroup != nil:
-          request.waitGroup.done()
+        discard easyHandle.easy_setopt(OPT_URL, request.url.cstring)
+        discard easyHandle.easy_setopt(OPT_CUSTOMREQUEST, request.verb.cstring)
+        discard easyHandle.easy_setopt(OPT_TIMEOUT, request.timeout)
+
+        # Set CURLOPT_PIPEWAIT
+        discard easyHandle.easy_setopt(cast[libcurl.Option](237), 1)
+
+        discard easyHandle.easy_setopt(OPT_HTTPHEADER, request.pslistForLibcurl)
+
+        if cmpIgnoreCase(request.verb, "HEAD") == 0:
+          discard easyHandle.easy_setopt(OPT_NOBODY, 1)
+        elif cmpIgnoreCase(request.verb, "POST") == 0 or request.bodyLen > 0:
+          discard easyHandle.easy_setopt(OPT_POSTFIELDSIZE, request.bodyLen)
+          if request.bodyLen > 0:
+            discard easyHandle.easy_setopt(OPT_POSTFIELDS, request.body)
+
+        # Follow up to 10 redirects
+        discard easyHandle.easy_setopt(OPT_FOLLOWLOCATION, 1)
+        discard easyHandle.easy_setopt(OPT_MAXREDIRS, 10)
+
+        # https://curl.se/libcurl/c/threadsafe.html
+        discard easyHandle.easy_setopt(OPT_NOSIGNAL, 1)
+
+        when defined(windows):
+          # CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA
+          discard easyHandle.easy_setopt(cast[libcurl.Option](216), 1 shl 4)
+
+        # Setup writers
+        discard easyHandle.easy_setopt(OPT_HEADERDATA, request)
+        discard easyHandle.easy_setopt(OPT_HEADERFUNCTION, curlHeaderWriteFn)
+        discard easyHandle.easy_setopt(OPT_WRITEDATA, request)
+        discard easyHandle.easy_setopt(OPT_WRITEFUNCTION, curlBodyWriteFn)
+
+        let mc = multi_add_handle(curl.multiHandle, easyHandle)
+        if mc == M_OK:
+          curl.inFlight[easyHandle] = request
         else:
-          withLock curl.lock:
-            curl.requestsCompleted.addLast(request)
-          signal(curl.requestCompletedCond)
+          # Reset this easy_handle and add it back as available
+          easy_reset(easyHandle)
+          curl.availableEasyHandles.addLast(easyHandle)
+
+          # Set the error so an exception is raised
+          request.error = "Unexpected libcurl multi_add_handle error: " &
+            $mc & ' ' & $multi_strerror(mc)
+
+          if request.waitGroup != nil:
+            request.waitGroup.done()
+          else:
+            withLock curl.lock:
+              curl.requestsCompleted.addLast(request)
+            signal(curl.requestCompletedCond)
 
     dequeued.setLen(0) # Reset for next loop
 
@@ -337,12 +397,34 @@ proc threadProc(curl: Curly) {.raises: [].} =
       easy_reset(m.easy_handle)
       curl.availableEasyHandles.addLast(m.easy_handle)
 
+      if request.streamState.isSome:
+        withLock request.streamState.get.lock:
+          request.streamState.get.done = true
+        signal(request.streamState.get.cond)
+
       if request.waitGroup != nil:
         request.waitGroup.done()
       else:
         withLock curl.lock:
           curl.requestsCompleted.addLast(request)
         signal(curl.requestCompletedCond)
+
+    let now = epochTime().int
+    for _, request in curl.inFlight:
+      if request.streamState.isSome and request.streamState.get.lastUpdate > 0:
+        let secondsSinceLastUpdate = now - request.streamState.get.lastUpdate
+        if secondsSinceLastUpdate >= request.timeout and request.timeout > 0:
+          timeouts.add(request)
+
+    if timeouts.len > 0:
+      for request in timeouts:
+        discard multi_remove_handle(curl.multiHandle, request.easyHandle)
+        curl.inFlight.del(request.easyHandle)
+        request.error = "Timeout was reached " & request.verb & ' ' & request.url
+        easy_reset(request.easyHandle)
+        curl.availableEasyHandles.addLast(request.easyHandle)
+        signal(request.streamState.get.cond)
+      timeouts.setLen(0)
 
     if numRunningHandles == 0:
       # Sleep if there are no running handles and the queue is empty
@@ -392,10 +474,6 @@ proc close*(curl: Curly) =
   `=destroy`(curl[])
   deallocShared(curl)
 
-proc destroy(rw: RequestWrap) {.gcsafe.} =
-  `=destroy`(rw[])
-  deallocShared(rw)
-
 proc hasRequests*(curl: Curly): bool {.gcsafe.} =
   ## Returns true if there are requests in-flight or queued.
   withLock curl.lock:
@@ -424,6 +502,98 @@ proc clearQueue*(curl: Curly) {.gcsafe.} =
       else:
         curl.requestsCompleted.addLast(rw)
 
+proc request*(
+  curl: Curly,
+  verb: sink string,
+  url: sink string,
+  headers: sink HttpHeaders = emptyHttpHeaders(),
+  body: openarray[char] = "".toOpenArray(0, -1),
+  timeout = 60
+): ResponseStream {.gcsafe.} =
+  ## Starts a new HTTP request with a streamed response body. When this proc
+  ## returns, the status code and headers are available. The response body
+  ## should then be received by calls to `read` until the stream is finished.
+  ## The timeout parameter is the maximum amount of time to spend waiting for
+  ## this call to return. The timeout counter is then reset for each `read` call
+  ## and is the maximum amount of time waiting for a `read` call to return.
+  ## Remember to call `close` on the return value of this proc when you are
+  ## done with it.
+  let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
+  rw.curl = curl
+  rw.verb = move verb
+  rw.url = move url
+  rw.headers = move headers
+  if body.len > 0:
+    rw.body = body[0].unsafeAddr
+    rw.bodyLen = body.len
+  rw.timeout = timeout
+  rw.waitGroup = newWaitGroup(1)
+
+  rw.prepHeadersForLibcurl()
+
+  rw.streamState = some(ResponseStreamState())
+  initLock(rw.streamState.get.lock)
+  initCond(rw.streamState.get.cond)
+
+  withLock curl.lock:
+    curl.queue.addLast(rw)
+  signal(curl.cond)
+
+  rw.waitGroup.wait()
+
+  if rw.error == "":
+    result.code = rw.response.code
+    result.url = rw.response.url
+    result.request.verb = rw.verb
+    result.request.url = rw.url
+    addHeaders(result.headers, rw.responseHeadersForLibcurl)
+    result.internal = rw
+  else:
+    deinitLock(rw.streamState.get.lock)
+    deinitCond(rw.streamState.get.cond)
+    destroy rw.waitGroup
+    destroy rw
+    raise newException(CatchableError, move rw.error)
+
+proc read*(stream: ResponseStream, buffer: var string): int {.gcsafe.} =
+  ## Adds new bytes received to `buffer`. Returns how many bytes were added.
+  ## Blocks until bytes are received, an error occurs or the stream is finished.
+  var tmp, error: string
+  acquire(stream.internal.streamState.get.lock)
+  while not stream.internal.streamState.get.done and
+    stream.internal.responseBodyForLibcurl == "" and
+    stream.internal.error == "":
+    wait(stream.internal.streamState.get.cond, stream.internal.streamState.get.lock)
+  tmp = move stream.internal.responseBodyForLibcurl
+  error = stream.internal.error
+  release(stream.internal.streamState.get.lock)
+
+  if error == "":
+    result = tmp.len
+    if tmp != "":
+      if buffer.len > 0:
+        let i = buffer.len
+        buffer.setLen(buffer.len + tmp.len)
+        copyMem(
+          buffer[i].addr,
+          tmp.cstring,
+          tmp.len
+        )
+      else:
+        buffer = move tmp
+  else:
+    raise newException(CatchableError, move error)
+
+proc close*(stream: ResponseStream) {.gcsafe.} =
+  ## Frees the resources held by the stream. This must be called when done with
+  ## the stream. It is safe to call `close` at any time (either when fully read
+  ## or before the stream has finished to terminate it).
+  ## After `close` has been called on a stream it is not safe to call `read` or
+  ## `close` again.
+  withLock stream.internal.curl.lock:
+    stream.internal.curl.queue.addLast(stream.internal)
+  signal(stream.internal.curl.cond)
+
 proc makeRequest*(
   curl: Curly,
   verb: sink string,
@@ -436,6 +606,7 @@ proc makeRequest*(
   ## a response cannot be received (due to timeout, DNS failure, broken
   ## connection, etc), an exception is raised.
   let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
+  rw.curl = curl
   rw.verb = move verb
   rw.url = move url
   rw.headers = move headers
@@ -458,8 +629,8 @@ proc makeRequest*(
       result = move rw.response
       result.request.verb = move rw.verb
       result.request.url = move rw.url
-      addHeaders(result.headers, rw.responseHeadersForLibcurl.str)
-      result.body = move rw.responseBodyForLibcurl.str
+      addHeaders(result.headers, rw.responseHeadersForLibcurl)
+      result.body = move rw.responseBodyForLibcurl
       if result.headers["Content-Encoding"] == "gzip":
         result.body = uncompress(result.body, dfGzip)
     else:
@@ -527,8 +698,8 @@ proc unwrapResponse(
   response.request.url = move rw.url
   response.request.tag = move rw.tag
   if rw.error == "":
-    addHeaders(response.headers, rw.responseHeadersForLibcurl.str)
-    response.body = move rw.responseBodyForLibcurl.str
+    addHeaders(response.headers, rw.responseHeadersForLibcurl)
+    response.body = move rw.responseBodyForLibcurl
     if response.headers["Content-Encoding"] == "gzip":
       try:
         response.body = uncompress(response.body, dfGzip)
@@ -558,6 +729,7 @@ proc makeRequests*(
   var wrapped: seq[RequestWrap]
   for request in batch.requests:
     let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
+    rw.curl = curl
     rw.verb = request.verb
     rw.url = request.url
     rw.headers = request.headers
@@ -677,6 +849,7 @@ proc startRequests*(
   var wrapped: seq[RequestWrap]
   for request in batch.requests.mitems:
     let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
+    rw.curl = curl
     rw.verb = move request.verb
     rw.url = move request.url
     rw.headers = move request.headers
@@ -763,6 +936,9 @@ type
 
   CurlPool* = ptr CurlPoolObj
 
+  StringWrap = object
+    str: string
+
 proc close*(pool: CurlPool) =
   ## Closes the libcurl handles then deallocates the pool.
   ## All libcurl handles should be returned to the pool before it is closed.
@@ -813,6 +989,23 @@ template withHandle*(pool: CurlPool, handle, body) =
       body
     finally:
       pool.recycle(handle)
+
+{.push stackTrace: off.}
+
+proc curlWriteFn(
+  buffer: cstring,
+  size: int,
+  count: int,
+  outstream: pointer
+): int {.cdecl.} =
+  let
+    outbuf = cast[ptr StringWrap](outstream)
+    i = outbuf.str.len
+  outbuf.str.setLen(outbuf.str.len + count)
+  copyMem(outbuf.str[i].addr, buffer, count)
+  result = size * count
+
+{.pop.}
 
 proc makeRequest*(
   curl: PCurl,
