@@ -4,6 +4,7 @@ nim	RequestInfo	curly.html#RequestInfo	object RequestInfo		54
 nim	RequestBatch	curly.html#RequestBatch	object RequestBatch		59
 nim	BatchedRequest	curly.html#BatchedRequest	object BatchedRequest		62
 nim	ResponseBatch	curly.html#ResponseBatch	type ResponseBatch		69
+nim	ResponseStream	curly.html#ResponseStream	object ResponseStream		108
 nim	CurlyObj	curly.html#CurlyObj	object CurlyObj		115
 nim	Curly	curly.html#Curly	type Curly		128
 nim	newCurly	curly.html#newCurly,int	proc newCurly(maxInFlight = 16): Curly		442

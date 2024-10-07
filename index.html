@@ -76,6 +76,11 @@
   body*: string              ## The response body (uncompressed if gzip'ed)
   request*: RequestInfo      ## Info about the request this response is for">Response</a></li>
 <li><a class="reference" href="#ResponseBatch" title="ResponseBatch = seq[tuple[response: Response, error: string]]">ResponseBatch</a></li>
+<li><a class="reference" href="#ResponseStream" title="ResponseStream = object
+  code*: int                 ## HTTP status code of the response
+  url*: string               ## Final URL, after any redirects
+  headers*: HttpHeaders
+  request*: RequestInfo      ## Info about the request this response is for">ResponseStream</a></li>
 
     </ul>
   </details>
@@ -408,6 +413,20 @@
 
   </dd>
 </div>
+<div id="ResponseStream">
+  <dt><pre><a href="curly.html#ResponseStream"><span class="Identifier">ResponseStream</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">code</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>                 <span class="Comment">## HTTP status code of the response</span>
+  <span class="Identifier">url</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>               <span class="Comment">## Final URL, after any redirects</span>
+  <span class="Identifier">headers</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">HttpHeaders</span>
+  <span class="Identifier">request</span><span class="Operator">*</span><span class="Other">:</span> <a href="curly.html#RequestInfo"><span class="Identifier">RequestInfo</span></a>      <span class="Comment">## Info about the request this response is for</span></pre></dt>
+  <dd>
+    
+    
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L108" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L108" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
 
   </dl>
 </div>
@@ -493,7 +512,7 @@
   </dd>
 </div>
 <div id="close,ResponseStream">
-  <dt><pre><span class="Keyword">proc</span> <a href="#close%2CResponseStream"><span class="Identifier">close</span></a><span class="Other">(</span><span class="Identifier">stream</span><span class="Other">:</span> <span class="Identifier">ResponseStream</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#close%2CResponseStream"><span class="Identifier">close</span></a><span class="Other">(</span><span class="Identifier">stream</span><span class="Other">:</span> <a href="curly.html#ResponseStream"><span class="Identifier">ResponseStream</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Frees the resources held by the stream. This must be called when done with the stream. It is safe to call <tt class="docutils literal"><span class="pre"><span class="Identifier">close</span></span></tt> at any time (either when fully read or before the stream has finished to terminate it). After <tt class="docutils literal"><span class="pre"><span class="Identifier">close</span></span></tt> has been called on a stream it is not safe to call <tt class="docutils literal"><span class="pre"><span class="Identifier">read</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">close</span></span></tt> again.
@@ -957,7 +976,7 @@
 </div>
 <div id="read-procs-all">
   <div id="read,ResponseStream,string">
-  <dt><pre><span class="Keyword">proc</span> <a href="#read%2CResponseStream%2Cstring"><span class="Identifier">read</span></a><span class="Other">(</span><span class="Identifier">stream</span><span class="Other">:</span> <span class="Identifier">ResponseStream</span><span class="Other">;</span> <span class="Identifier">buffer</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#read%2CResponseStream%2Cstring"><span class="Identifier">read</span></a><span class="Other">(</span><span class="Identifier">stream</span><span class="Other">:</span> <a href="curly.html#ResponseStream"><span class="Identifier">ResponseStream</span></a><span class="Other">;</span> <span class="Identifier">buffer</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span>
     <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
@@ -987,7 +1006,7 @@
   <div id="request,Curly,sinkstring,sinkstring,sinkHttpHeaders,openArray[char],int">
   <dt><pre><span class="Keyword">proc</span> <a href="#request%2CCurly%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint"><span class="Identifier">request</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">verb</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
              <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-             <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">ResponseStream</span> {.
+             <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#ResponseStream"><span class="Identifier">ResponseStream</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
@@ -1072,7 +1091,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-10-07 00:46:52 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2024-10-07 06:07:38 UTC</small>
       </div>
     </div>
   </div>
