@@ -105,7 +105,7 @@ type
 
   RequestWrap = ptr RequestWrapObj
 
-  ResponseStream = object
+  ResponseStream* = object
     code*: int ## HTTP status code of the response
     url*: string ## Final URL, after any redirects
     headers*: HttpHeaders
