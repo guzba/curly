@@ -510,6 +510,14 @@ proc request*(
   body: openarray[char] = "".toOpenArray(0, -1),
   timeout = 60
 ): ResponseStream {.gcsafe.} =
+  ## Starts a new HTTP request with a streamed response body. When this proc
+  ## returns, the status code and headers are available. The response body
+  ## should then be received by calls to `read` until the stream is finished.
+  ## The timeout parameter is the maximum amount of time to spend waiting for
+  ## this call to return. The timeout counter is then reset for each `read` call
+  ## and is the maximum amount of time waiting for a `read` call to return.
+  ## Remember to call `close` on the return value of this proc when you are
+  ## done with it.
   let rw = cast[RequestWrap](allocShared0(sizeof(RequestWrapObj)))
   rw.curl = curl
   rw.verb = move verb
@@ -548,6 +556,8 @@ proc request*(
     raise newException(CatchableError, move rw.error)
 
 proc read*(stream: ResponseStream, buffer: var string): int {.gcsafe.} =
+  ## Adds new bytes received to `buffer`. Returns how many bytes were added.
+  ## Blocks until bytes are received, an error occurs or the stream is finished.
   var tmp, error: string
   acquire(stream.internal.streamState.get.lock)
   while not stream.internal.streamState.get.done and
@@ -575,6 +585,11 @@ proc read*(stream: ResponseStream, buffer: var string): int {.gcsafe.} =
     raise newException(CatchableError, move error)
 
 proc close*(stream: ResponseStream) {.gcsafe.} =
+  ## Frees the resources held by the stream. This must be called when done with
+  ## the stream. It is safe to call `close` at any time (either when fully read
+  ## or before the stream has finished to terminate it).
+  ## After `close` has been called on a stream it is not safe to call `read` or
+  ## `close` again.
   withLock stream.internal.curl.lock:
     stream.internal.curl.queue.addLast(stream.internal)
   signal(stream.internal.curl.cond)
