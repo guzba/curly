@@ -140,12 +140,14 @@ proc wait(waitGroup: WaitGroup) =
   release(waitGroup.lock)
 
 proc done(waitGroup: WaitGroup) =
-  var signalCond: bool
+  ## Signals under the lock: once count hits zero the waiter may return
+  ## and destroy the wait group the moment the lock is released, so a
+  ## signal sent after releasing it would touch freed memory (SIGBUS on
+  ## macOS, silent misuse elsewhere).
   withLock waitGroup.lock:
     dec waitGroup.count
-    signalCond = (waitGroup.count == 0)
-  if signalCond:
-    signal(waitGroup.cond)
+    if waitGroup.count == 0:
+      signal(waitGroup.cond)
 
 proc destroy(waitGroup: WaitGroup) =
   deinitLock(waitGroup.lock)
