@@ -35,7 +35,7 @@ block:
   let curl = newCurly()
 
   var batch: RequestBatch
-  batch.get("https://www.microsoft.com")
+  batch.get("https://www.google.com")
   batch.get(badurl, tag = "tag_test")
   batch.get("https://news.ycombinator.com/")
 
@@ -99,7 +99,7 @@ block:
   let curl = newCurly()
 
   var batch: RequestBatch
-  batch.get("https://www.yahoo.com")
+  batch.get("https://www.google.com")
   batch.get(badurl, tag = "tag_test")
   batch.get("https://nim-lang.org")
 
