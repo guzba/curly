@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>src/curly</title>
+<title>curly</title>
 
 <!-- Google fonts -->
 <link href='https://fonts.googleapis.com/css?family=Lato:400,600,900' rel='stylesheet' type='text/css'/>
@@ -16,15 +16,18 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQQEwksSS9ZWwAAAk1JREFUWMPtll2ITVEUx39nn/O7Y5qR8f05wtCUUr6ZIS++8pEnkZInPImneaCQ5METNdOkeFBKUhMPRIkHKfEuUZSUlGlKPN2TrgfncpvmnntnmlEyq1Z7t89/rf9a6+y99oZxGZf/XeIq61EdtgKXgdXA0xrYAvBjOIF1AI9zvjcC74BSpndrJPkBWDScTF8Aa4E3wDlgHbASaANmVqlcCnwHvgDvgVfAJ+AikAAvgfVZwLnSVZHZaOuKoQi3ZOMi4NkYkpe1p4J7A8BpYAD49hfIy/oqG0+hLomiKP2L5L+1ubn5115S+3OAn4EnwBlgMzCjyt6ZAnQCJ4A7wOs88iRJHvw50HoujuPBoCKwHWiosy8MdfZnAdcHk8dxXFJ3VQbQlCTJvRBCGdRbD4M6uc5glpY3eAihpN5S5w12diSEcCCEcKUO4ljdr15T76ur1FDDLIQQ3qv71EdDOe3Kxj3leRXyk+pxdWnFWod6Wt2bY3de3aSuUHcPBVimHs7mK9WrmeOF6lR1o9qnzskh2ar2qm1qizpfXaPeVGdlmGN5pb09qMxz1Xb1kLqgzn1RyH7JUXW52lr5e/Kqi9qpto7V1atuUzfnARrV7jEib1T76gG2qxdGmXyiekkt1GswPTtek0aBfJp6YySGBfWg2tPQ0FAYgf1stUfdmdcjarbYJEniKIq6gY/Aw+zWHAC+p2labGpqiorFYgGYCEzN7oQdQClN07O1/EfDyGgC0ALMBdYAi4FyK+4H3gLPsxfR1zRNi+NP7nH5J+QntnXe5B5mpfQAAAAASUVORK5CYII=">
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.0">
+<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.12">
 
 <!-- JS -->
-<script type="text/javascript" src="dochack.js?v=2.2.0"></script>
+<script type="text/javascript" src="dochack.js?v=2.2.12"></script>
 </head>
 <body>
   <div class="document" id="documentId">
+    <input type="checkbox" id="nav-toggle" hidden>
+    <label for="nav-toggle" id="nav-burger">&#9776;</label>
+    <label for="nav-toggle" id="nav-overlay"></label>
     <div class="container">
-      <h1 class="title">src/curly</h1>
+      <h1 class="title">curly</h1>
       <div class="row">
   <div class="three columns">
     <div class="theme-select-wrapper">
@@ -321,7 +324,7 @@
   <h1><a class="toc-backref" href="#7">Types</a></h1>
   <dl class="item">
     <div id="BatchedRequest">
-  <dt><pre><a href="curly.html#BatchedRequest"><span class="Identifier">BatchedRequest</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <dt><pre><a href="#BatchedRequest"><span class="Identifier">BatchedRequest</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">verb</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
   <span class="Identifier">url</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
   <span class="Identifier">headers</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">HttpHeaders</span>
@@ -336,17 +339,17 @@
   </dd>
 </div>
 <div id="CurlPool">
-  <dt><pre><a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a> <span class="Other">=</span> <span class="Keyword">ptr</span> <span class="Identifier">CurlPoolObj</span></pre></dt>
+  <dt><pre><a href="#CurlPool"><span class="Identifier">CurlPool</span></a> <span class="Other">=</span> <span class="Keyword">ptr</span> <span class="Identifier">CurlPoolObj</span></pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L937" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L937" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L939" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L939" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="Curly">
-  <dt><pre><a href="curly.html#Curly"><span class="Identifier">Curly</span></a> <span class="Other">=</span> <span class="Keyword">ptr</span> <a href="curly.html#CurlyObj"><span class="Identifier">CurlyObj</span></a></pre></dt>
+  <dt><pre><a href="#Curly"><span class="Identifier">Curly</span></a> <span class="Other">=</span> <span class="Keyword">ptr</span> <a href="#CurlyObj"><span class="Identifier">CurlyObj</span></a></pre></dt>
   <dd>
     
     
@@ -356,7 +359,7 @@
   </dd>
 </div>
 <div id="CurlyObj">
-  <dt><pre><a href="curly.html#CurlyObj"><span class="Identifier">CurlyObj</span></a> <span class="Other">=</span> <span class="Keyword">object</span></pre></dt>
+  <dt><pre><a href="#CurlyObj"><span class="Identifier">CurlyObj</span></a> <span class="Other">=</span> <span class="Keyword">object</span></pre></dt>
   <dd>
     
     
@@ -366,7 +369,7 @@
   </dd>
 </div>
 <div id="RequestBatch">
-  <dt><pre><a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a> <span class="Other">=</span> <span class="Keyword">object</span></pre></dt>
+  <dt><pre><a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a> <span class="Other">=</span> <span class="Keyword">object</span></pre></dt>
   <dd>
     
     
@@ -376,7 +379,7 @@
   </dd>
 </div>
 <div id="RequestInfo">
-  <dt><pre><a href="curly.html#RequestInfo"><span class="Identifier">RequestInfo</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <dt><pre><a href="#RequestInfo"><span class="Identifier">RequestInfo</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">verb</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>              <span class="Comment">## HTTP method / verb of the request</span>
   <span class="Identifier">url</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>               <span class="Comment">## Intitial request URL, before any redirects</span>
   <span class="Identifier">tag</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>               <span class="Comment">## Arbtitrary user-provided data when batching requests</span></pre></dt>
@@ -389,12 +392,12 @@
   </dd>
 </div>
 <div id="Response">
-  <dt><pre><a href="curly.html#Response"><span class="Identifier">Response</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <dt><pre><a href="#Response"><span class="Identifier">Response</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">code</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>                 <span class="Comment">## HTTP status code of the response</span>
   <span class="Identifier">url</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>               <span class="Comment">## Final URL, after any redirects</span>
   <span class="Identifier">headers</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">HttpHeaders</span>
   <span class="Identifier">body</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>              <span class="Comment">## The response body (uncompressed if gzip'ed)</span>
-  <span class="Identifier">request</span><span class="Operator">*</span><span class="Other">:</span> <a href="curly.html#RequestInfo"><span class="Identifier">RequestInfo</span></a>      <span class="Comment">## Info about the request this response is for</span></pre></dt>
+  <span class="Identifier">request</span><span class="Operator">*</span><span class="Other">:</span> <a href="#RequestInfo"><span class="Identifier">RequestInfo</span></a>      <span class="Comment">## Info about the request this response is for</span></pre></dt>
   <dd>
     
     
@@ -404,7 +407,7 @@
   </dd>
 </div>
 <div id="ResponseBatch">
-  <dt><pre><a href="curly.html#ResponseBatch"><span class="Identifier">ResponseBatch</span></a> <span class="Other">=</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">response</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a><span class="Other">,</span> <span class="Identifier">error</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">]</span><span class="Other">]</span></pre></dt>
+  <dt><pre><a href="#ResponseBatch"><span class="Identifier">ResponseBatch</span></a> <span class="Other">=</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">response</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a><span class="Other">,</span> <span class="Identifier">error</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">]</span><span class="Other">]</span></pre></dt>
   <dd>
     
     
@@ -414,11 +417,11 @@
   </dd>
 </div>
 <div id="ResponseStream">
-  <dt><pre><a href="curly.html#ResponseStream"><span class="Identifier">ResponseStream</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <dt><pre><a href="#ResponseStream"><span class="Identifier">ResponseStream</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">code</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>                 <span class="Comment">## HTTP status code of the response</span>
   <span class="Identifier">url</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>               <span class="Comment">## Final URL, after any redirects</span>
   <span class="Identifier">headers</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">HttpHeaders</span>
-  <span class="Identifier">request</span><span class="Operator">*</span><span class="Other">:</span> <a href="curly.html#RequestInfo"><span class="Identifier">RequestInfo</span></a>      <span class="Comment">## Info about the request this response is for</span></pre></dt>
+  <span class="Identifier">request</span><span class="Operator">*</span><span class="Other">:</span> <a href="#RequestInfo"><span class="Identifier">RequestInfo</span></a>      <span class="Comment">## Info about the request this response is for</span></pre></dt>
   <dd>
     
     
@@ -435,13 +438,13 @@
   <dl class="item">
     <div id="[]-procs-all">
   <div id="[],RequestBatch,int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#%5B%5D%2CRequestBatch%2Cint"><span class="Identifier">`[]`</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">lent</span> <a href="curly.html#BatchedRequest"><span class="Identifier">BatchedRequest</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#%5B%5D%2CRequestBatch%2Cint"><span class="Identifier">`[]`</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">lent</span> <a href="#BatchedRequest"><span class="Identifier">BatchedRequest</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L765" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L765" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L767" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L767" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -449,15 +452,15 @@
 </div>
 <div id="addRequest-procs-all">
   <div id="addRequest,RequestBatch,sinkstring,sinkstring,sinkHttpHeaders,sinkstring,sinkstring">
-  <dt><pre><span class="Keyword">proc</span> <a href="#addRequest%2CRequestBatch%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring"><span class="Identifier">addRequest</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">verb</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#addRequest%2CRequestBatch%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring"><span class="Identifier">addRequest</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">verb</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
                 <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
                 <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">;</span> <span class="Identifier">tag</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L768" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L768" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L770" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L770" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -465,13 +468,13 @@
 </div>
 <div id="borrow-procs-all">
   <div id="borrow,CurlPool">
-  <dt><pre><span class="Keyword">proc</span> <a href="#borrow%2CCurlPool"><span class="Identifier">borrow</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">PCurl</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#borrow%2CCurlPool"><span class="Identifier">borrow</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">PCurl</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
                                      <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Removes a libcurl handle from the pool. This call blocks until it can take a handle. Remember to add the handle back to the pool with recycle when you're finished with it.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L951" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L951" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L953" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L953" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -479,12 +482,12 @@
 </div>
 <div id="clearQueue-procs-all">
   <div id="clearQueue,Curly">
-  <dt><pre><span class="Keyword">proc</span> <a href="#clearQueue%2CCurly"><span class="Identifier">clearQueue</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#clearQueue%2CCurly"><span class="Identifier">clearQueue</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Clears the request queue, unblocking any threads waiting on responses. All queued requests are completed with an error.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L493" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L493" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L495" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L495" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -492,32 +495,32 @@
 </div>
 <div id="close-procs-all">
   <div id="close,Curly">
-  <dt><pre><span class="Keyword">proc</span> <a href="#close%2CCurly"><span class="Identifier">close</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#close%2CCurly"><span class="Identifier">close</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Blocks until all in-flight and queued requests complete, then closes all libcurl handles and deallocates the Curly object.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L460" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L460" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L462" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L462" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="close,CurlPool">
-  <dt><pre><span class="Keyword">proc</span> <a href="#close%2CCurlPool"><span class="Identifier">close</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#close%2CCurlPool"><span class="Identifier">close</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Closes the libcurl handles then deallocates the pool. All libcurl handles should be returned to the pool before it is closed.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L942" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L942" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L944" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L944" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="close,ResponseStream">
-  <dt><pre><span class="Keyword">proc</span> <a href="#close%2CResponseStream"><span class="Identifier">close</span></a><span class="Other">(</span><span class="Identifier">stream</span><span class="Other">:</span> <a href="curly.html#ResponseStream"><span class="Identifier">ResponseStream</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#close%2CResponseStream"><span class="Identifier">close</span></a><span class="Other">(</span><span class="Identifier">stream</span><span class="Other">:</span> <a href="#ResponseStream"><span class="Identifier">ResponseStream</span></a><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Frees the resources held by the stream. This must be called when done with the stream. It is safe to call <tt class="docutils literal"><span class="pre"><span class="Identifier">close</span></span></tt> at any time (either when fully read or before the stream has finished to terminate it). After <tt class="docutils literal"><span class="pre"><span class="Identifier">close</span></span></tt> has been called on a stream it is not safe to call <tt class="docutils literal"><span class="pre"><span class="Identifier">read</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">close</span></span></tt> again.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L587" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L587" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L589" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L589" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -525,50 +528,50 @@
 </div>
 <div id="delete-procs-all">
   <div id="delete,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring">
-  <dt><pre><span class="Keyword">proc</span> <a href="#delete%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring"><span class="Identifier">delete</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#delete%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring"><span class="Identifier">delete</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
             <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
             <span class="Identifier">tag</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L819" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L819" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L821" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L821" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="delete,Curly,string,sinkHttpHeaders,int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#delete%2CCurly%2Cstring%2CsinkHttpHeaders%2Cint"><span class="Identifier">delete</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
-            <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+  <dt><pre><span class="Keyword">proc</span> <a href="#delete%2CCurly%2Cstring%2CsinkHttpHeaders%2Cint"><span class="Identifier">delete</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
+            <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L677" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L677" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L679" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L679" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="delete,PCurl,string,float32">
   <dt><pre><span class="Keyword">proc</span> <a href="#delete%2CPCurl%2Cstring%2Cfloat32"><span class="Identifier">delete</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <span class="Identifier">PCurl</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-            <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+            <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1168" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1168" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1170" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1170" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="delete,CurlPool,string,float32">
-  <dt><pre><span class="Keyword">proc</span> <a href="#delete%2CCurlPool%2Cstring%2Cfloat32"><span class="Identifier">delete</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-            <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+  <dt><pre><span class="Keyword">proc</span> <a href="#delete%2CCurlPool%2Cstring%2Cfloat32"><span class="Identifier">delete</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
+            <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1223" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1223" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1225" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1225" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -576,50 +579,50 @@
 </div>
 <div id="get-procs-all">
   <div id="get,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring">
-  <dt><pre><span class="Keyword">proc</span> <a href="#get%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring"><span class="Identifier">get</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#get%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring"><span class="Identifier">get</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
          <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">tag</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L784" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L784" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L786" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L786" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="get,Curly,sinkstring,sinkHttpHeaders,int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#get%2CCurly%2Csinkstring%2CsinkHttpHeaders%2Cint"><span class="Identifier">get</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
-         <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+  <dt><pre><span class="Keyword">proc</span> <a href="#get%2CCurly%2Csinkstring%2CsinkHttpHeaders%2Cint"><span class="Identifier">get</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
+         <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L642" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L642" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L644" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L644" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="get,PCurl,string,float32">
   <dt><pre><span class="Keyword">proc</span> <a href="#get%2CPCurl%2Cstring%2Cfloat32"><span class="Identifier">get</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <span class="Identifier">PCurl</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-         <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+         <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1133" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1133" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1135" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1135" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="get,CurlPool,string,float32">
-  <dt><pre><span class="Keyword">proc</span> <a href="#get%2CCurlPool%2Cstring%2Cfloat32"><span class="Identifier">get</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-         <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+  <dt><pre><span class="Keyword">proc</span> <a href="#get%2CCurlPool%2Cstring%2Cfloat32"><span class="Identifier">get</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
+         <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1184" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1184" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1186" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1186" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -627,12 +630,12 @@
 </div>
 <div id="hasRequests-procs-all">
   <div id="hasRequests,Curly">
-  <dt><pre><span class="Keyword">proc</span> <a href="#hasRequests%2CCurly"><span class="Identifier">hasRequests</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#hasRequests%2CCurly"><span class="Identifier">hasRequests</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Returns true if there are requests in-flight or queued.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L477" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L477" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L479" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L479" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -640,50 +643,50 @@
 </div>
 <div id="head-procs-all">
   <div id="head,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring">
-  <dt><pre><span class="Keyword">proc</span> <a href="#head%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring"><span class="Identifier">head</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#head%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring"><span class="Identifier">head</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
           <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">tag</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L827" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L827" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L829" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L829" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="head,Curly,string,sinkHttpHeaders,int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#head%2CCurly%2Cstring%2CsinkHttpHeaders%2Cint"><span class="Identifier">head</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
-          <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+  <dt><pre><span class="Keyword">proc</span> <a href="#head%2CCurly%2Cstring%2CsinkHttpHeaders%2Cint"><span class="Identifier">head</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
+          <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L685" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L685" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L687" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L687" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="head,PCurl,string,float32">
   <dt><pre><span class="Keyword">proc</span> <a href="#head%2CPCurl%2Cstring%2Cfloat32"><span class="Identifier">head</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <span class="Identifier">PCurl</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-          <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+          <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1176" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1176" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1178" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1178" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="head,CurlPool,string,float32">
-  <dt><pre><span class="Keyword">proc</span> <a href="#head%2CCurlPool%2Cstring%2Cfloat32"><span class="Identifier">head</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-          <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+  <dt><pre><span class="Keyword">proc</span> <a href="#head%2CCurlPool%2Cstring%2Cfloat32"><span class="Identifier">head</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
+          <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1232" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1232" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1234" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1234" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -691,12 +694,12 @@
 </div>
 <div id="len-procs-all">
   <div id="len,RequestBatch">
-  <dt><pre><span class="Keyword">proc</span> <a href="#len%2CRequestBatch"><span class="Identifier">len</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#len%2CRequestBatch"><span class="Identifier">len</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L762" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L762" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L764" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L764" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -704,15 +707,15 @@
 </div>
 <div id="makeRequest-procs-all">
   <div id="makeRequest,Curly,sinkstring,sinkstring,sinkHttpHeaders,openArray[char],int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#makeRequest%2CCurly%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint"><span class="Identifier">makeRequest</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">verb</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#makeRequest%2CCurly%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint"><span class="Identifier">makeRequest</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">verb</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
                  <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-                 <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+                 <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Makes the HTTP request and blocks until the response is received. If a response cannot be received (due to timeout, DNS failure, broken connection, etc), an exception is raised.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L597" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L597" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L599" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L599" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -720,13 +723,13 @@
   <dt><pre><span class="Keyword">proc</span> <a href="#makeRequest%2CPCurl%2Cstring%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32"><span class="Identifier">makeRequest</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <span class="Identifier">PCurl</span><span class="Other">;</span> <span class="Identifier">verb</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
                  <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
                  <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span>
-                 <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+                 <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1010" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1010" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1012" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1012" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -734,13 +737,13 @@
 </div>
 <div id="makeRequests-procs-all">
   <div id="makeRequests,Curly,RequestBatch,int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#makeRequests%2CCurly%2CRequestBatch%2Cint"><span class="Identifier">makeRequests</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">batch</span><span class="Other">:</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#ResponseBatch"><span class="Identifier">ResponseBatch</span></a> {.
+  <dt><pre><span class="Keyword">proc</span> <a href="#makeRequests%2CCurly%2CRequestBatch%2Cint"><span class="Identifier">makeRequests</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">batch</span><span class="Other">:</span> <a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="#ResponseBatch"><span class="Identifier">ResponseBatch</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Make multiple HTTP requests in parallel. This proc blocks until all requests have either received a response or are unable to complete. The return value seq is in the same order as the request batch. Each request will have either a response or an error in the return seq. If <tt class="docutils literal"><span class="pre"><span class="Identifier">error</span> <span class="Operator">!=</span> <span class="StringLit">&quot;&quot;</span></span></tt> then something prevented the request from completing. This may be a timeout, DNS error, connection interruption, etc. The error string provides more information.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L711" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L711" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L713" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L713" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -748,13 +751,13 @@
 </div>
 <div id="newCurlPool-procs-all">
   <div id="newCurlPool,int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#newCurlPool%2Cint"><span class="Identifier">newCurlPool</span></a><span class="Other">(</span><span class="Identifier">size</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#newCurlPool%2Cint"><span class="Identifier">newCurlPool</span></a><span class="Other">(</span><span class="Identifier">size</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="#CurlPool"><span class="Identifier">CurlPool</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
                                         <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Creates a new thead-safe pool of libcurl handles.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L968" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L968" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L970" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L970" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -762,13 +765,13 @@
 </div>
 <div id="newCurly-procs-all">
   <div id="newCurly,int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#newCurly%2Cint"><span class="Identifier">newCurly</span></a><span class="Other">(</span><span class="Identifier">maxInFlight</span> <span class="Other">=</span> <span class="DecNumber">16</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ResourceExhaustedError</span><span class="Other">]</span><span class="Other">,</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#newCurly%2Cint"><span class="Identifier">newCurly</span></a><span class="Other">(</span><span class="Identifier">maxInFlight</span> <span class="Other">=</span> <span class="DecNumber">16</span><span class="Other">)</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ResourceExhaustedError</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Creates a new Curly instance that will run up to <tt class="docutils literal"><span class="pre"><span class="Identifier">maxInFlight</span></span></tt> HTTP requests in parallel.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L442" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L442" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L444" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L444" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -776,12 +779,12 @@
 </div>
 <div id="numInFlight-procs-all">
   <div id="numInFlight,Curly">
-  <dt><pre><span class="Keyword">proc</span> <a href="#numInFlight%2CCurly"><span class="Identifier">numInFlight</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#numInFlight%2CCurly"><span class="Identifier">numInFlight</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Returns the number of requests currently in-flight.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L483" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L483" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L485" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L485" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -789,54 +792,54 @@
 </div>
 <div id="patch-procs-all">
   <div id="patch,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring,sinkstring">
-  <dt><pre><span class="Keyword">proc</span> <a href="#patch%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring"><span class="Identifier">patch</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#patch%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring"><span class="Identifier">patch</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
            <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
            <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">;</span> <span class="Identifier">tag</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L810" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L810" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L812" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L812" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="patch,Curly,string,sinkHttpHeaders,openArray[char],int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#patch%2CCurly%2Cstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint"><span class="Identifier">patch</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#patch%2CCurly%2Cstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint"><span class="Identifier">patch</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
            <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-           <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+           <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L668" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L668" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L670" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L670" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="patch,PCurl,string,openArray[char],float32">
   <dt><pre><span class="Keyword">proc</span> <a href="#patch%2CPCurl%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32"><span class="Identifier">patch</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <span class="Identifier">PCurl</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
            <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span>
-           <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+           <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1159" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1159" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1161" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1161" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="patch,CurlPool,string,openArray[char],float32">
-  <dt><pre><span class="Keyword">proc</span> <a href="#patch%2CCurlPool%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32"><span class="Identifier">patch</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#patch%2CCurlPool%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32"><span class="Identifier">patch</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
            <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span>
-           <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+           <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1213" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1213" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1215" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1215" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -844,13 +847,13 @@
 </div>
 <div id="pollForResponse-procs-all">
   <div id="pollForResponse,Curly">
-  <dt><pre><span class="Keyword">proc</span> <a href="#pollForResponse%2CCurly"><span class="Identifier">pollForResponse</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Option</span><span class="Other">[</span><span class="Identifier">RequestResult</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">gcsafe</span><span class="Other">,</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#pollForResponse%2CCurly"><span class="Identifier">pollForResponse</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Option</span><span class="Other">[</span><span class="Identifier">RequestResult</span><span class="Other">]</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">gcsafe</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Returns a response to an HTTP request started by either <tt class="docutils literal"><span class="pre"><span class="Identifier">startRequest</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">startRequests</span></span></tt> if one is available. Responses returned by this proc are in the order the responses are received, NOT in the order the requests were started.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L911" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L911" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L913" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L913" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -858,52 +861,52 @@
 </div>
 <div id="post-procs-all">
   <div id="post,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring,sinkstring">
-  <dt><pre><span class="Keyword">proc</span> <a href="#post%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring"><span class="Identifier">post</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#post%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring"><span class="Identifier">post</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
           <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
           <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">;</span> <span class="Identifier">tag</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L792" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L792" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L794" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L794" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="post,Curly,string,sinkHttpHeaders,openArray[char],int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#post%2CCurly%2Cstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint"><span class="Identifier">post</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#post%2CCurly%2Cstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint"><span class="Identifier">post</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
           <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-          <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+          <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L650" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L650" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L652" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L652" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="post,PCurl,string,openArray[char],float32">
   <dt><pre><span class="Keyword">proc</span> <a href="#post%2CPCurl%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32"><span class="Identifier">post</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <span class="Identifier">PCurl</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-          <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+          <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1141" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1141" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1143" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1143" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="post,CurlPool,string,openArray[char],float32">
-  <dt><pre><span class="Keyword">proc</span> <a href="#post%2CCurlPool%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32"><span class="Identifier">post</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-          <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+  <dt><pre><span class="Keyword">proc</span> <a href="#post%2CCurlPool%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32"><span class="Identifier">post</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
+          <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1193" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1193" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1195" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1195" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -911,51 +914,51 @@
 </div>
 <div id="put-procs-all">
   <div id="put,RequestBatch,sinkstring,sinkHttpHeaders,sinkstring,sinkstring">
-  <dt><pre><span class="Keyword">proc</span> <a href="#put%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring"><span class="Identifier">put</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#put%2CRequestBatch%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Csinkstring"><span class="Identifier">put</span></a><span class="Other">(</span><span class="Identifier">batch</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
          <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">;</span>
          <span class="Identifier">tag</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L801" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L801" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L803" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L803" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="put,Curly,string,sinkHttpHeaders,openArray[char],int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#put%2CCurly%2Cstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint"><span class="Identifier">put</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#put%2CCurly%2Cstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint"><span class="Identifier">put</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
          <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-         <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+         <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L659" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L659" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L661" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L661" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="put,PCurl,string,openArray[char],float32">
   <dt><pre><span class="Keyword">proc</span> <a href="#put%2CPCurl%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32"><span class="Identifier">put</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <span class="Identifier">PCurl</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-         <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+         <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1150" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1150" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1152" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1152" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="put,CurlPool,string,openArray[char],float32">
-  <dt><pre><span class="Keyword">proc</span> <a href="#put%2CCurlPool%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32"><span class="Identifier">put</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-         <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a> {.
+  <dt><pre><span class="Keyword">proc</span> <a href="#put%2CCurlPool%2Cstring%2CopenArray%5Bchar%5D%2Cfloat32"><span class="Identifier">put</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">headers</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
+         <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">=</span> <span class="FloatNumber">60.0</span><span class="Other">)</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ZippyError</span><span class="Other">,</span> <span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1203" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1203" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L1205" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L1205" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -963,12 +966,12 @@
 </div>
 <div id="queueLen-procs-all">
   <div id="queueLen,Curly">
-  <dt><pre><span class="Keyword">proc</span> <a href="#queueLen%2CCurly"><span class="Identifier">queueLen</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#queueLen%2CCurly"><span class="Identifier">queueLen</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Returns the number of queued requests.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L488" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L488" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L490" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L490" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -976,13 +979,13 @@
 </div>
 <div id="read-procs-all">
   <div id="read,ResponseStream,string">
-  <dt><pre><span class="Keyword">proc</span> <a href="#read%2CResponseStream%2Cstring"><span class="Identifier">read</span></a><span class="Other">(</span><span class="Identifier">stream</span><span class="Other">:</span> <a href="curly.html#ResponseStream"><span class="Identifier">ResponseStream</span></a><span class="Other">;</span> <span class="Identifier">buffer</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#read%2CResponseStream%2Cstring"><span class="Identifier">read</span></a><span class="Other">(</span><span class="Identifier">stream</span><span class="Other">:</span> <a href="#ResponseStream"><span class="Identifier">ResponseStream</span></a><span class="Other">;</span> <span class="Identifier">buffer</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span>
     <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Adds new bytes received to <tt class="docutils literal"><span class="pre"><span class="Identifier">buffer</span></span></tt>. Returns how many bytes were added. Blocks until bytes are received, an error occurs or the stream is finished.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L558" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L558" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L560" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L560" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -990,13 +993,13 @@
 </div>
 <div id="recycle-procs-all">
   <div id="recycle,CurlPool,PCurl">
-  <dt><pre><span class="Keyword">proc</span> <a href="#recycle%2CCurlPool%2CPCurl"><span class="Identifier">recycle</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">handle</span><span class="Other">:</span> <span class="Identifier">PCurl</span><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">gcsafe</span><span class="Other">,</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#recycle%2CCurlPool%2CPCurl"><span class="Identifier">recycle</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">handle</span><span class="Other">:</span> <span class="Identifier">PCurl</span><span class="Other">)</span> {.<span class="Identifier">inline</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">gcsafe</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Returns a libcurl handle to the pool.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L961" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L961" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L963" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L963" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1004,15 +1007,15 @@
 </div>
 <div id="request-procs-all">
   <div id="request,Curly,sinkstring,sinkstring,sinkHttpHeaders,openArray[char],int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#request%2CCurly%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint"><span class="Identifier">request</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">verb</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#request%2CCurly%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2CopenArray%5Bchar%5D%2Cint"><span class="Identifier">request</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">verb</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
              <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
-             <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="curly.html#ResponseStream"><span class="Identifier">ResponseStream</span></a> {.
+             <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">.</span><span class="Identifier">toOpenArray</span><span class="Other">(</span><span class="DecNumber">0</span><span class="Other">,</span> <span class="DecNumber">-1</span><span class="Other">)</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span><span class="Other">:</span> <a href="#ResponseStream"><span class="Identifier">ResponseStream</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CatchableError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Starts a new HTTP request with a streamed response body. When this proc returns, the status code and headers are available. The response body should then be received by calls to <tt class="docutils literal"><span class="pre"><span class="Identifier">read</span></span></tt> until the stream is finished. The timeout parameter is the maximum amount of time to spend waiting for this call to return. The timeout counter is then reset for each <tt class="docutils literal"><span class="pre"><span class="Identifier">read</span></span></tt> call and is the maximum amount of time waiting for a <tt class="docutils literal"><span class="pre"><span class="Identifier">read</span></span></tt> call to return. Remember to call <tt class="docutils literal"><span class="pre"><span class="Identifier">close</span></span></tt> on the return value of this proc when you are done with it.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L505" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L505" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L507" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L507" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1020,15 +1023,15 @@
 </div>
 <div id="startRequest-procs-all">
   <div id="startRequest,Curly,sinkstring,sinkstring,sinkHttpHeaders,sinkstring,int,sinkstring">
-  <dt><pre><span class="Keyword">proc</span> <a href="#startRequest%2CCurly%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Cint%2Csinkstring"><span class="Identifier">startRequest</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">verb</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
+  <dt><pre><span class="Keyword">proc</span> <a href="#startRequest%2CCurly%2Csinkstring%2Csinkstring%2CsinkHttpHeaders%2Csinkstring%2Cint%2Csinkstring"><span class="Identifier">startRequest</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">verb</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span><span class="Other">;</span>
                   <span class="Identifier">headers</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">HttpHeaders</span> <span class="Other">=</span> <span class="Identifier">emptyHttpHeaders</span><span class="Other">(</span><span class="Other">)</span><span class="Other">;</span>
                   <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">;</span> <span class="Identifier">tag</span><span class="Other">:</span> <span class="Identifier">sink</span> <span class="Identifier">string</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Starts an HTTP request. These requests are run in parallel. This proc does not block waiting for a response. NOTE: When the request completes, a response is stored until it is removed by a call to <tt class="docutils literal"><span class="pre"><span class="Identifier">waitForResponse</span></span></tt>. If the responses are never removed, they will accumulate in memory.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L872" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L872" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L874" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L874" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1036,13 +1039,13 @@
 </div>
 <div id="startRequests-procs-all">
   <div id="startRequests,Curly,sinkRequestBatch,int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#startRequests%2CCurly%2CsinkRequestBatch%2Cint"><span class="Identifier">startRequests</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">batch</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="curly.html#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span> {.
+  <dt><pre><span class="Keyword">proc</span> <a href="#startRequests%2CCurly%2CsinkRequestBatch%2Cint"><span class="Identifier">startRequests</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">;</span> <span class="Identifier">batch</span><span class="Other">:</span> <span class="Identifier">sink</span> <a href="#RequestBatch"><span class="Identifier">RequestBatch</span></a><span class="Other">;</span> <span class="Identifier">timeout</span> <span class="Other">=</span> <span class="DecNumber">60</span><span class="Other">)</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Starts one or more HTTP requests. These requests are run in parallel. This proc does not block waiting for responses. NOTE: When each request completes, a response is stored until it is removed by a call to <tt class="docutils literal"><span class="pre"><span class="Identifier">waitForResponse</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">pollForResponse</span></span></tt>. If the responses are never removed, they will accumulate in memory.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L835" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L835" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L837" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L837" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1050,13 +1053,13 @@
 </div>
 <div id="waitForResponse-procs-all">
   <div id="waitForResponse,Curly">
-  <dt><pre><span class="Keyword">proc</span> <a href="#waitForResponse%2CCurly"><span class="Identifier">waitForResponse</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="curly.html#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">response</span><span class="Other">:</span> <a href="curly.html#Response"><span class="Identifier">Response</span></a><span class="Other">,</span> <span class="Identifier">error</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">]</span> {.
+  <dt><pre><span class="Keyword">proc</span> <a href="#waitForResponse%2CCurly"><span class="Identifier">waitForResponse</span></a><span class="Other">(</span><span class="Identifier">curl</span><span class="Other">:</span> <a href="#Curly"><span class="Identifier">Curly</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">response</span><span class="Other">:</span> <a href="#Response"><span class="Identifier">Response</span></a><span class="Other">,</span> <span class="Identifier">error</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">]</span> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">gcsafe</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Blocks waiting for a response to an HTTP request started by either <tt class="docutils literal"><span class="pre"><span class="Identifier">startRequest</span></span></tt> or <tt class="docutils literal"><span class="pre"><span class="Identifier">startRequests</span></span></tt>. Responses returned by this proc are in the order the responses are received, NOT in the order the requests were started.
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L890" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L890" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L892" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L892" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1070,12 +1073,12 @@
   <dl class="item">
     <div id="withHandle-templates-all">
   <div id="withHandle.t,CurlPool,,">
-  <dt><pre><span class="Keyword">template</span> <a href="#withHandle.t%2CCurlPool%2C%2C"><span class="Identifier">withHandle</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="curly.html#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">handle</span><span class="Other">,</span> <span class="Identifier">body</span><span class="Other">)</span></pre></dt>
+  <dt><pre><span class="Keyword">template</span> <a href="#withHandle.t%2CCurlPool%2C%2C"><span class="Identifier">withHandle</span></a><span class="Other">(</span><span class="Identifier">pool</span><span class="Other">:</span> <a href="#CurlPool"><span class="Identifier">CurlPool</span></a><span class="Other">;</span> <span class="Identifier">handle</span><span class="Other">,</span> <span class="Identifier">body</span><span class="Other">)</span></pre></dt>
   <dd>
     
     
-    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L985" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L985" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/guzba/curly/tree/master/src/curly.nim#L987" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/guzba/curly/edit/devel/src/curly.nim#L987" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1091,7 +1094,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2024-10-07 06:07:38 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2026-09-08 21:06:27 UTC</small>
       </div>
     </div>
   </div>
