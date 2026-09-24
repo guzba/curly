@@ -926,6 +926,7 @@ proc pollForResponse*(
   if rw != nil:
     var (response, error) = unwrapResponse(rw)
     result = some(RequestResult(response: move response, error: move error))
+    destroy rw
 
 # Older CurlPool implementation
 
